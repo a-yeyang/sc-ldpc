@@ -61,6 +61,17 @@
   <p class="cap"><b>R≈0.92</b>：极高码率（仅核 4 行），观察大 L 是否仍能压低错误地板。</p></div>
 </div>
 
+<h2>波形级信道：PAM4 + RRC 成形（β=0.1, span=10, sps=4），码率 0.5–0.9 × 链长 30–300</h2>
+<p class="cap">更贴近实际的链路：编码比特 → PAM4(Gray) → 上采样×4 → RRC 成形 → 波形加 AWGN
+→ RRC 匹配滤波 → 降采样 → 软解调(LLR) → 滑窗 BP。每码率一张图，曲线为不同耦合链长 L。</p>
+<div class="grid">
+  <div class="card"><img src="exp_pam4_50.svg" alt="pam4_50"><p class="cap"><b>R≈0.5</b></p></div>
+  <div class="card"><img src="exp_pam4_60.svg" alt="pam4_60"><p class="cap"><b>R≈0.6</b></p></div>
+  <div class="card"><img src="exp_pam4_70.svg" alt="pam4_70"><p class="cap"><b>R≈0.7</b></p></div>
+  <div class="card"><img src="exp_pam4_80.svg" alt="pam4_80"><p class="cap"><b>R≈0.8</b></p></div>
+  <div class="card"><img src="exp_pam4_90.svg" alt="pam4_90"><p class="cap"><b>R≈0.9</b></p></div>
+</div>
+
 <p style="margin-top:24px;color:#777;font-size:13px">
 原始数据见 <code>results*.json</code> / <code>results.csv</code>；构造与方法见 <code>README.md</code>。
 </p>

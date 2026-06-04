@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
+<rect width="760" height="520" fill="white"/>
+<text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">SC-LDPC over PAM4+RRC, R=0.8 (BG1, windowed)</text>
+<line x1="78" y1="401.0" x2="590" y2="401.0" stroke="#e0e0e0"/>
+<text x="70" y="405.0" text-anchor="end">1e-5</text>
+<line x1="78" y1="318.4" x2="590" y2="318.4" stroke="#e0e0e0"/>
+<text x="70" y="322.4" text-anchor="end">1e-4</text>
+<line x1="78" y1="235.8" x2="590" y2="235.8" stroke="#e0e0e0"/>
+<text x="70" y="239.8" text-anchor="end">1e-3</text>
+<line x1="78" y1="153.2" x2="590" y2="153.2" stroke="#e0e0e0"/>
+<text x="70" y="157.2" text-anchor="end">1e-2</text>
+<line x1="78" y1="70.6" x2="590" y2="70.6" stroke="#e0e0e0"/>
+<text x="70" y="74.6" text-anchor="end">1e-1</text>
+<line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#eee"/>
+<text x="78.0" y="480.0" text-anchor="middle">4.5</text>
+<line x1="163.3" y1="48" x2="163.3" y2="460" stroke="#eee"/>
+<text x="163.3" y="480.0" text-anchor="middle">5.0</text>
+<line x1="248.7" y1="48" x2="248.7" y2="460" stroke="#eee"/>
+<text x="248.7" y="480.0" text-anchor="middle">5.5</text>
+<line x1="334.0" y1="48" x2="334.0" y2="460" stroke="#eee"/>
+<text x="334.0" y="480.0" text-anchor="middle">6.0</text>
+<line x1="419.3" y1="48" x2="419.3" y2="460" stroke="#eee"/>
+<text x="419.3" y="480.0" text-anchor="middle">6.5</text>
+<line x1="504.7" y1="48" x2="504.7" y2="460" stroke="#eee"/>
+<text x="504.7" y="480.0" text-anchor="middle">7.0</text>
+<line x1="590.0" y1="48" x2="590.0" y2="460" stroke="#eee"/>
+<text x="590.0" y="480.0" text-anchor="middle">7.5</text>
+<rect x="78" y="48" width="512" height="412" fill="none" stroke="#333"/>
+<text x="334.0" y="504" text-anchor="middle">Eb/N0 [dB]</text>
+<text x="20" y="254.0" text-anchor="middle" transform="rotate(-90 20 254.0)">BER</text>
+<path d="M78.0,63.7 L163.3,68.9 L248.7,75.7 L334.0,98.4 L419.3,204.9" fill="none" stroke="#1f77b4" stroke-width="2.2"/>
+<circle cx="78.0" cy="63.7" r="3.3" fill="#1f77b4"/>
+<circle cx="163.3" cy="68.9" r="3.3" fill="#1f77b4"/>
+<circle cx="248.7" cy="75.7" r="3.3" fill="#1f77b4"/>
+<circle cx="334.0" cy="98.4" r="3.3" fill="#1f77b4"/>
+<circle cx="419.3" cy="204.9" r="3.3" fill="#1f77b4"/>
+<line x1="604" y1="66" x2="624" y2="66" stroke="#1f77b4" stroke-width="2.2"/>
+<text x="628" y="70">L=30</text>
+<path d="M78.0,62.9 L163.3,67.3 L248.7,72.9 L334.0,86.8 L419.3,192.6 L504.7,441.7" fill="none" stroke="#d62728" stroke-width="2.2"/>
+<circle cx="78.0" cy="62.9" r="3.3" fill="#d62728"/>
+<circle cx="163.3" cy="67.3" r="3.3" fill="#d62728"/>
+<circle cx="248.7" cy="72.9" r="3.3" fill="#d62728"/>
+<circle cx="334.0" cy="86.8" r="3.3" fill="#d62728"/>
+<circle cx="419.3" cy="192.6" r="3.3" fill="#d62728"/>
+<circle cx="504.7" cy="441.7" r="3.3" fill="#d62728"/>
+<line x1="604" y1="88" x2="624" y2="88" stroke="#d62728" stroke-width="2.2"/>
+<text x="628" y="92">L=100</text>
+<path d="M78.0,62.6 L163.3,66.6 L248.7,71.9 L334.0,83.7 L419.3,230.4 L504.7,394.6" fill="none" stroke="#2ca02c" stroke-width="2.2"/>
+<circle cx="78.0" cy="62.6" r="3.3" fill="#2ca02c"/>
+<circle cx="163.3" cy="66.6" r="3.3" fill="#2ca02c"/>
+<circle cx="248.7" cy="71.9" r="3.3" fill="#2ca02c"/>
+<circle cx="334.0" cy="83.7" r="3.3" fill="#2ca02c"/>
+<circle cx="419.3" cy="230.4" r="3.3" fill="#2ca02c"/>
+<circle cx="504.7" cy="394.6" r="3.3" fill="#2ca02c"/>
+<line x1="604" y1="110" x2="624" y2="110" stroke="#2ca02c" stroke-width="2.2"/>
+<text x="628" y="114">L=200</text>
+<path d="M78.0,62.5 L163.3,66.3 L248.7,71.4 L334.0,83.0 L419.3,216.5 L504.7,368.9" fill="none" stroke="#9467bd" stroke-width="2.2"/>
+<circle cx="78.0" cy="62.5" r="3.3" fill="#9467bd"/>
+<circle cx="163.3" cy="66.3" r="3.3" fill="#9467bd"/>
+<circle cx="248.7" cy="71.4" r="3.3" fill="#9467bd"/>
+<circle cx="334.0" cy="83.0" r="3.3" fill="#9467bd"/>
+<circle cx="419.3" cy="216.5" r="3.3" fill="#9467bd"/>
+<circle cx="504.7" cy="368.9" r="3.3" fill="#9467bd"/>
+<line x1="604" y1="132" x2="624" y2="132" stroke="#9467bd" stroke-width="2.2"/>
+<text x="628" y="136">L=300</text>
+</svg>
