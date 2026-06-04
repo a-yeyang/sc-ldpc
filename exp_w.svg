@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
+<rect width="760" height="520" fill="white"/>
+<text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">Effect of coupling depth w (BG2, Z=16, L=30)</text>
+<line x1="78" y1="388.6" x2="590" y2="388.6" stroke="#e0e0e0"/>
+<text x="70" y="392.6" text-anchor="end">1e-5</text>
+<line x1="78" y1="313.9" x2="590" y2="313.9" stroke="#e0e0e0"/>
+<text x="70" y="317.9" text-anchor="end">1e-4</text>
+<line x1="78" y1="239.1" x2="590" y2="239.1" stroke="#e0e0e0"/>
+<text x="70" y="243.1" text-anchor="end">1e-3</text>
+<line x1="78" y1="164.4" x2="590" y2="164.4" stroke="#e0e0e0"/>
+<text x="70" y="168.4" text-anchor="end">1e-2</text>
+<line x1="78" y1="89.7" x2="590" y2="89.7" stroke="#e0e0e0"/>
+<text x="70" y="93.7" text-anchor="end">1e-1</text>
+<line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#eee"/>
+<text x="78.0" y="480.0" text-anchor="middle">0.0</text>
+<line x1="220.2" y1="48" x2="220.2" y2="460" stroke="#eee"/>
+<text x="220.2" y="480.0" text-anchor="middle">0.5</text>
+<line x1="362.4" y1="48" x2="362.4" y2="460" stroke="#eee"/>
+<text x="362.4" y="480.0" text-anchor="middle">1.0</text>
+<line x1="504.7" y1="48" x2="504.7" y2="460" stroke="#eee"/>
+<text x="504.7" y="480.0" text-anchor="middle">1.5</text>
+<rect x="78" y="48" width="512" height="412" fill="none" stroke="#333"/>
+<text x="334.0" y="504" text-anchor="middle">Eb/N0 [dB]</text>
+<text x="20" y="254.0" text-anchor="middle" transform="rotate(-90 20 254.0)">BER</text>
+<path d="M248.7,79.6 L334.0,96.4 L419.3,135.5 L504.7,156.5" fill="none" stroke="#1f77b4" stroke-width="2.2"/>
+<circle cx="248.7" cy="79.6" r="3.3" fill="#1f77b4"/>
+<circle cx="334.0" cy="96.4" r="3.3" fill="#1f77b4"/>
+<circle cx="419.3" cy="135.5" r="3.3" fill="#1f77b4"/>
+<circle cx="504.7" cy="156.5" r="3.3" fill="#1f77b4"/>
+<line x1="604" y1="66" x2="624" y2="66" stroke="#1f77b4" stroke-width="2.2"/>
+<text x="628" y="70">component BG2 Z=16 (R=0.20)</text>
+<path d="M78.0,61.6 L163.3,76.1 L220.2,106.0 L277.1,151.7 L334.0,241.1" fill="none" stroke="#d62728" stroke-width="2.2"/>
+<circle cx="78.0" cy="61.6" r="3.3" fill="#d62728"/>
+<circle cx="163.3" cy="76.1" r="3.3" fill="#d62728"/>
+<circle cx="220.2" cy="106.0" r="3.3" fill="#d62728"/>
+<circle cx="277.1" cy="151.7" r="3.3" fill="#d62728"/>
+<circle cx="334.0" cy="241.1" r="3.3" fill="#d62728"/>
+<line x1="604" y1="88" x2="624" y2="88" stroke="#d62728" stroke-width="2.2"/>
+<text x="628" y="92">SC L=30 w=1</text>
+<path d="M78.0,61.2 L163.3,76.3 L220.2,103.2 L277.1,153.1 L334.0,261.2" fill="none" stroke="#2ca02c" stroke-width="2.2"/>
+<circle cx="78.0" cy="61.2" r="3.3" fill="#2ca02c"/>
+<circle cx="163.3" cy="76.3" r="3.3" fill="#2ca02c"/>
+<circle cx="220.2" cy="103.2" r="3.3" fill="#2ca02c"/>
+<circle cx="277.1" cy="153.1" r="3.3" fill="#2ca02c"/>
+<circle cx="334.0" cy="261.2" r="3.3" fill="#2ca02c"/>
+<line x1="604" y1="110" x2="624" y2="110" stroke="#2ca02c" stroke-width="2.2"/>
+<text x="628" y="114">SC L=30 w=2</text>
+<path d="M78.0,62.5 L163.3,74.8 L220.2,106.0 L277.1,174.0 L334.0,253.1 L390.9,443.4" fill="none" stroke="#9467bd" stroke-width="2.2"/>
+<circle cx="78.0" cy="62.5" r="3.3" fill="#9467bd"/>
+<circle cx="163.3" cy="74.8" r="3.3" fill="#9467bd"/>
+<circle cx="220.2" cy="106.0" r="3.3" fill="#9467bd"/>
+<circle cx="277.1" cy="174.0" r="3.3" fill="#9467bd"/>
+<circle cx="334.0" cy="253.1" r="3.3" fill="#9467bd"/>
+<circle cx="390.9" cy="443.4" r="3.3" fill="#9467bd"/>
+<line x1="604" y1="132" x2="624" y2="132" stroke="#9467bd" stroke-width="2.2"/>
+<text x="628" y="136">SC L=30 w=4</text>
+</svg>

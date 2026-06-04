@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>5G NR -> 空间耦合 LDPC : AWGN 实验结果</title>
+<style>
+  body{font-family:Helvetica,Arial,sans-serif;max-width:1180px;margin:24px auto;color:#222;padding:0 16px}
+  h1{font-size:22px} h2{font-size:18px;margin-top:28px;border-bottom:2px solid #eee;padding-bottom:4px}
+  .grid{display:flex;flex-wrap:wrap;gap:18px}
+  .card{flex:1 1 520px;border:1px solid #e3e3e3;border-radius:8px;padding:10px;box-shadow:0 1px 3px #0001}
+  .card img{width:100%;height:auto}
+  p.cap{color:#555;font-size:14px;margin:6px 2px}
+  code{background:#f5f5f5;padding:1px 5px;border-radius:4px}
+</style>
+</head>
+<body>
+<h1>基于 5G NR 标准 LDPC 的空间耦合 LDPC —— AWGN / BPSK 实验</h1>
+<p>分量码为真实 3GPP TS 38.212 基图（BG2）；空间耦合采用系统位边扩展 + 终止，
+全图置信传播译码。下列每图横轴 <code>Eb/N0 [dB]</code>，纵轴 BER（半对数）。</p>
+
+<h2>主对比：5G NR 分量码 vs 空间耦合（Z=24, L=30, w=2）</h2>
+<div class="grid">
+  <div class="card"><img src="ber_curves.svg" alt="main">
+  <p class="cap">同样达到 BER≈8e-4：分量码需 ~1.8 dB，SC 仅需 0.8 dB → <b>耦合增益 ≈ 1.0 dB</b>；
+  滑窗译码(W=8)以远低于 L 的时延逼近全图 BP。</p></div>
+</div>
+
+<h2>参数实验（四个设计旋钮，AWGN）</h2>
+<div class="grid">
+  <div class="card"><img src="exp_rate.svg" alt="rate">
+  <p class="cap"><b>码率（低/中，BG2）</b> R∈{0.20,0.33,0.50}：每个码率 component vs SC，
+  <b>耦合增益 ~0.9 dB 在各码率上一致保持</b>。</p></div>
+  <div class="card"><img src="exp_rate_high.svg" alt="rate_high">
+  <p class="cap"><b>码率（高，BG1）</b> R∈{0.60,0.71,0.79,0.92}：BG2 上限约 0.83，故高码率改用
+  5G NR BG1（K_b=22）。瀑布随码率整体右移，<b>耦合增益在高码率仍保持</b>。</p></div>
+  <div class="card"><img src="exp_len.svg" alt="len">
+  <p class="cap"><b>码长</b>（提升尺寸 Z∈{16,32,64}）：Z 越大，<b>瀑布越陡、错误地板越低</b>
+  （有限长效应减弱）。</p></div>
+  <div class="card"><img src="exp_L.svg" alt="L">
+  <p class="cap"><b>耦合链长 L</b>∈{8,16,40}：L 越大，<b>错误地板越低、阈值趋于饱和</b>；
+  小 L 终止码率损失更大。</p></div>
+  <div class="card"><img src="exp_w.svg" alt="w">
+  <p class="cap"><b>耦合深度 w</b>∈{1,2,4}：w 越大耦合越强、<b>瀑布越陡</b>，但收益递减且码率损失增大。</p></div>
+</div>
+
+<h2>大耦合链长与阈值饱和（L=30/100/200/300，滑窗译码）</h2>
+<div class="grid">
+  <div class="card"><img src="exp_chain.svg" alt="chain">
+  <p class="cap">大 L 下全图 BP 不可行（译码波需 O(L) 次迭代才能穿过链），故用<b>滑窗译码器</b>
+  （时延/复杂度 ~W，与 L 无关）。<b>L 增大时瀑布收敛到一个极限</b>——这就是<b>阈值饱和</b>：
+  超过某个 L 后再加长链不再改善门限（只继续消除已很小的码率损失）。</p></div>
+</div>
+
+<h2>高码率下的大链长（BG1, R≈0.7/0.8/0.9, L=30/100/200/300, 滑窗）</h2>
+<div class="grid">
+  <div class="card"><img src="exp_chain_high_70.svg" alt="chain_high_70">
+  <p class="cap"><b>R≈0.70</b>：高码率下随 L 增大的阈值饱和（各 L 曲线）。</p></div>
+  <div class="card"><img src="exp_chain_high_80.svg" alt="chain_high_80">
+  <p class="cap"><b>R≈0.78</b>：高码率瀑布更陡、整体右移。</p></div>
+  <div class="card"><img src="exp_chain_high_90.svg" alt="chain_high_90">
+  <p class="cap"><b>R≈0.92</b>：极高码率（仅核 4 行），观察大 L 是否仍能压低错误地板。</p></div>
+</div>
+
+<p style="margin-top:24px;color:#777;font-size:13px">
+原始数据见 <code>results*.json</code> / <code>results.csv</code>；构造与方法见 <code>README.md</code>。
+</p>
+</body>
+</html>

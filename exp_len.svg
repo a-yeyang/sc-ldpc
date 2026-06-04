@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
+<rect width="760" height="520" fill="white"/>
+<text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">Effect of code length / lifting size Z (BG2, w=2, L=24)</text>
+<line x1="78" y1="398.1" x2="590" y2="398.1" stroke="#e0e0e0"/>
+<text x="70" y="402.1" text-anchor="end">1e-5</text>
+<line x1="78" y1="319.3" x2="590" y2="319.3" stroke="#e0e0e0"/>
+<text x="70" y="323.3" text-anchor="end">1e-4</text>
+<line x1="78" y1="240.5" x2="590" y2="240.5" stroke="#e0e0e0"/>
+<text x="70" y="244.5" text-anchor="end">1e-3</text>
+<line x1="78" y1="161.7" x2="590" y2="161.7" stroke="#e0e0e0"/>
+<text x="70" y="165.7" text-anchor="end">1e-2</text>
+<line x1="78" y1="82.9" x2="590" y2="82.9" stroke="#e0e0e0"/>
+<text x="70" y="86.9" text-anchor="end">1e-1</text>
+<line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#eee"/>
+<text x="78.0" y="480.0" text-anchor="middle">0.2</text>
+<line x1="238.0" y1="48" x2="238.0" y2="460" stroke="#eee"/>
+<text x="238.0" y="480.0" text-anchor="middle">0.7</text>
+<line x1="398.0" y1="48" x2="398.0" y2="460" stroke="#eee"/>
+<text x="398.0" y="480.0" text-anchor="middle">1.2</text>
+<line x1="558.0" y1="48" x2="558.0" y2="460" stroke="#eee"/>
+<text x="558.0" y="480.0" text-anchor="middle">1.7</text>
+<rect x="78" y="48" width="512" height="412" fill="none" stroke="#333"/>
+<text x="334.0" y="504" text-anchor="middle">Eb/N0 [dB]</text>
+<text x="20" y="254.0" text-anchor="middle" transform="rotate(-90 20 254.0)">BER</text>
+<path d="M206.0,86.4 L302.0,126.3 L398.0,143.5 L494.0,220.3" fill="none" stroke="#1f77b4" stroke-width="2.2"/>
+<circle cx="206.0" cy="86.4" r="3.3" fill="#1f77b4"/>
+<circle cx="302.0" cy="126.3" r="3.3" fill="#1f77b4"/>
+<circle cx="398.0" cy="143.5" r="3.3" fill="#1f77b4"/>
+<circle cx="494.0" cy="220.3" r="3.3" fill="#1f77b4"/>
+<line x1="604" y1="66" x2="624" y2="66" stroke="#1f77b4" stroke-width="2.2"/>
+<text x="628" y="70">component BG2 Z=32 (R=0.20)</text>
+<path d="M78.0,62.9 L142.0,83.9 L206.0,121.8 L270.0,208.0 L334.0,267.2" fill="none" stroke="#d62728" stroke-width="2.2"/>
+<circle cx="78.0" cy="62.9" r="3.3" fill="#d62728"/>
+<circle cx="142.0" cy="83.9" r="3.3" fill="#d62728"/>
+<circle cx="206.0" cy="121.8" r="3.3" fill="#d62728"/>
+<circle cx="270.0" cy="208.0" r="3.3" fill="#d62728"/>
+<circle cx="334.0" cy="267.2" r="3.3" fill="#d62728"/>
+<line x1="604" y1="88" x2="624" y2="88" stroke="#d62728" stroke-width="2.2"/>
+<text x="628" y="92">SC Z=16 (N/pos=832)</text>
+<path d="M78.0,62.0 L142.0,77.3 L206.0,141.7 L270.0,275.9" fill="none" stroke="#2ca02c" stroke-width="2.2"/>
+<circle cx="78.0" cy="62.0" r="3.3" fill="#2ca02c"/>
+<circle cx="142.0" cy="77.3" r="3.3" fill="#2ca02c"/>
+<circle cx="206.0" cy="141.7" r="3.3" fill="#2ca02c"/>
+<circle cx="270.0" cy="275.9" r="3.3" fill="#2ca02c"/>
+<line x1="604" y1="110" x2="624" y2="110" stroke="#2ca02c" stroke-width="2.2"/>
+<text x="628" y="114">SC Z=32 (N/pos=1664)</text>
+<path d="M78.0,61.9 L142.0,83.7 L206.0,169.1 L270.0,442.5" fill="none" stroke="#9467bd" stroke-width="2.2"/>
+<circle cx="78.0" cy="61.9" r="3.3" fill="#9467bd"/>
+<circle cx="142.0" cy="83.7" r="3.3" fill="#9467bd"/>
+<circle cx="206.0" cy="169.1" r="3.3" fill="#9467bd"/>
+<circle cx="270.0" cy="442.5" r="3.3" fill="#9467bd"/>
+<line x1="604" y1="132" x2="624" y2="132" stroke="#9467bd" stroke-width="2.2"/>
+<text x="628" y="136">SC Z=64 (N/pos=3328)</text>
+</svg>

@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
+<rect width="760" height="520" fill="white"/>
+<text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">Long chains at high rate R=0.92 (BG1 Z=24, w=2, windowed)</text>
+<line x1="78" y1="460.0" x2="590" y2="460.0" stroke="#e0e0e0"/>
+<text x="70" y="464.0" text-anchor="end">1e-7</text>
+<line x1="78" y1="391.3" x2="590" y2="391.3" stroke="#e0e0e0"/>
+<text x="70" y="395.3" text-anchor="end">1e-6</text>
+<line x1="78" y1="322.5" x2="590" y2="322.5" stroke="#e0e0e0"/>
+<text x="70" y="326.5" text-anchor="end">1e-5</text>
+<line x1="78" y1="253.8" x2="590" y2="253.8" stroke="#e0e0e0"/>
+<text x="70" y="257.8" text-anchor="end">1e-4</text>
+<line x1="78" y1="185.0" x2="590" y2="185.0" stroke="#e0e0e0"/>
+<text x="70" y="189.0" text-anchor="end">1e-3</text>
+<line x1="78" y1="116.3" x2="590" y2="116.3" stroke="#e0e0e0"/>
+<text x="70" y="120.3" text-anchor="end">1e-2</text>
+<line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#eee"/>
+<text x="78.0" y="480.0" text-anchor="middle">3.2</text>
+<line x1="228.6" y1="48" x2="228.6" y2="460" stroke="#eee"/>
+<text x="228.6" y="480.0" text-anchor="middle">3.7</text>
+<line x1="379.2" y1="48" x2="379.2" y2="460" stroke="#eee"/>
+<text x="379.2" y="480.0" text-anchor="middle">4.2</text>
+<line x1="529.8" y1="48" x2="529.8" y2="460" stroke="#eee"/>
+<text x="529.8" y="480.0" text-anchor="middle">4.7</text>
+<rect x="78" y="48" width="512" height="412" fill="none" stroke="#333"/>
+<text x="334.0" y="504" text-anchor="middle">Eb/N0 [dB]</text>
+<text x="20" y="254.0" text-anchor="middle" transform="rotate(-90 20 254.0)">BER</text>
+<path d="M78.0,62.1 L198.5,68.5 L288.8,79.7 L349.1,106.9 L409.3,165.2 L499.6,268.6" fill="none" stroke="#1f77b4" stroke-width="2.2"/>
+<circle cx="78.0" cy="62.1" r="3.3" fill="#1f77b4"/>
+<circle cx="198.5" cy="68.5" r="3.3" fill="#1f77b4"/>
+<circle cx="288.8" cy="79.7" r="3.3" fill="#1f77b4"/>
+<circle cx="349.1" cy="106.9" r="3.3" fill="#1f77b4"/>
+<circle cx="409.3" cy="165.2" r="3.3" fill="#1f77b4"/>
+<circle cx="499.6" cy="268.6" r="3.3" fill="#1f77b4"/>
+<line x1="604" y1="66" x2="624" y2="66" stroke="#1f77b4" stroke-width="2.2"/>
+<text x="628" y="70">L=30 (R=0.92)</text>
+<path d="M78.0,60.4 L198.5,66.3 L288.8,74.1 L349.1,93.3 L409.3,142.1 L499.6,252.1 L590.0,413.0" fill="none" stroke="#d62728" stroke-width="2.2"/>
+<circle cx="78.0" cy="60.4" r="3.3" fill="#d62728"/>
+<circle cx="198.5" cy="66.3" r="3.3" fill="#d62728"/>
+<circle cx="288.8" cy="74.1" r="3.3" fill="#d62728"/>
+<circle cx="349.1" cy="93.3" r="3.3" fill="#d62728"/>
+<circle cx="409.3" cy="142.1" r="3.3" fill="#d62728"/>
+<circle cx="499.6" cy="252.1" r="3.3" fill="#d62728"/>
+<circle cx="590.0" cy="413.0" r="3.3" fill="#d62728"/>
+<line x1="604" y1="88" x2="624" y2="88" stroke="#d62728" stroke-width="2.2"/>
+<text x="628" y="92">L=100 (R=0.92)</text>
+<path d="M78.0,60.2 L198.5,65.1 L288.8,74.0 L349.1,87.8 L409.3,147.3 L499.6,210.7 L590.0,323.1" fill="none" stroke="#2ca02c" stroke-width="2.2"/>
+<circle cx="78.0" cy="60.2" r="3.3" fill="#2ca02c"/>
+<circle cx="198.5" cy="65.1" r="3.3" fill="#2ca02c"/>
+<circle cx="288.8" cy="74.0" r="3.3" fill="#2ca02c"/>
+<circle cx="349.1" cy="87.8" r="3.3" fill="#2ca02c"/>
+<circle cx="409.3" cy="147.3" r="3.3" fill="#2ca02c"/>
+<circle cx="499.6" cy="210.7" r="3.3" fill="#2ca02c"/>
+<circle cx="590.0" cy="323.1" r="3.3" fill="#2ca02c"/>
+<line x1="604" y1="110" x2="624" y2="110" stroke="#2ca02c" stroke-width="2.2"/>
+<text x="628" y="114">L=200 (R=0.92)</text>
+<path d="M78.0,60.1 L198.5,65.3 L288.8,73.4 L349.1,88.2 L409.3,139.4 L499.6,254.0 L590.0,446.2" fill="none" stroke="#9467bd" stroke-width="2.2"/>
+<circle cx="78.0" cy="60.1" r="3.3" fill="#9467bd"/>
+<circle cx="198.5" cy="65.3" r="3.3" fill="#9467bd"/>
+<circle cx="288.8" cy="73.4" r="3.3" fill="#9467bd"/>
+<circle cx="349.1" cy="88.2" r="3.3" fill="#9467bd"/>
+<circle cx="409.3" cy="139.4" r="3.3" fill="#9467bd"/>
+<circle cx="499.6" cy="254.0" r="3.3" fill="#9467bd"/>
+<circle cx="590.0" cy="446.2" r="3.3" fill="#9467bd"/>
+<line x1="604" y1="132" x2="624" y2="132" stroke="#9467bd" stroke-width="2.2"/>
+<text x="628" y="136">L=300 (R=0.92)</text>
+</svg>

@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
+<rect width="760" height="520" fill="white"/>
+<text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">Threshold saturation: coupling length L (BG2 Z=16, w=2, windowed)</text>
+<line x1="78" y1="442.4" x2="590" y2="442.4" stroke="#e0e0e0"/>
+<text x="70" y="446.4" text-anchor="end">1e-4</text>
+<line x1="78" y1="330.9" x2="590" y2="330.9" stroke="#e0e0e0"/>
+<text x="70" y="334.9" text-anchor="end">1e-3</text>
+<line x1="78" y1="219.4" x2="590" y2="219.4" stroke="#e0e0e0"/>
+<text x="70" y="223.4" text-anchor="end">1e-2</text>
+<line x1="78" y1="107.8" x2="590" y2="107.8" stroke="#e0e0e0"/>
+<text x="70" y="111.8" text-anchor="end">1e-1</text>
+<line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#eee"/>
+<text x="78.0" y="480.0" text-anchor="middle">0.4</text>
+<line x1="310.7" y1="48" x2="310.7" y2="460" stroke="#eee"/>
+<text x="310.7" y="480.0" text-anchor="middle">0.9</text>
+<line x1="543.5" y1="48" x2="543.5" y2="460" stroke="#eee"/>
+<text x="543.5" y="480.0" text-anchor="middle">1.4</text>
+<rect x="78" y="48" width="512" height="412" fill="none" stroke="#333"/>
+<text x="334.0" y="504" text-anchor="middle">Eb/N0 [dB]</text>
+<text x="20" y="254.0" text-anchor="middle" transform="rotate(-90 20 254.0)">BER</text>
+<path d="M78.0,70.9 L217.6,115.9 L310.7,184.3 L357.3,228.9 L403.8,267.4 L496.9,307.6 L590.0,383.1" fill="none" stroke="#1f77b4" stroke-width="2.2"/>
+<circle cx="78.0" cy="70.9" r="3.3" fill="#1f77b4"/>
+<circle cx="217.6" cy="115.9" r="3.3" fill="#1f77b4"/>
+<circle cx="310.7" cy="184.3" r="3.3" fill="#1f77b4"/>
+<circle cx="357.3" cy="228.9" r="3.3" fill="#1f77b4"/>
+<circle cx="403.8" cy="267.4" r="3.3" fill="#1f77b4"/>
+<circle cx="496.9" cy="307.6" r="3.3" fill="#1f77b4"/>
+<circle cx="590.0" cy="383.1" r="3.3" fill="#1f77b4"/>
+<line x1="604" y1="66" x2="624" y2="66" stroke="#1f77b4" stroke-width="2.2"/>
+<text x="628" y="70">SC L=30 (window W=6)</text>
+<path d="M78.0,67.6 L217.6,138.4 L310.7,235.8 L357.3,268.7 L403.8,289.5 L496.9,368.4 L590.0,421.8" fill="none" stroke="#d62728" stroke-width="2.2"/>
+<circle cx="78.0" cy="67.6" r="3.3" fill="#d62728"/>
+<circle cx="217.6" cy="138.4" r="3.3" fill="#d62728"/>
+<circle cx="310.7" cy="235.8" r="3.3" fill="#d62728"/>
+<circle cx="357.3" cy="268.7" r="3.3" fill="#d62728"/>
+<circle cx="403.8" cy="289.5" r="3.3" fill="#d62728"/>
+<circle cx="496.9" cy="368.4" r="3.3" fill="#d62728"/>
+<circle cx="590.0" cy="421.8" r="3.3" fill="#d62728"/>
+<line x1="604" y1="88" x2="624" y2="88" stroke="#d62728" stroke-width="2.2"/>
+<text x="628" y="92">SC L=100 (window W=6)</text>
+<path d="M78.0,69.1 L217.6,147.3 L310.7,252.7 L357.3,269.1 L403.8,328.2 L496.9,377.2 L590.0,428.2" fill="none" stroke="#2ca02c" stroke-width="2.2"/>
+<circle cx="78.0" cy="69.1" r="3.3" fill="#2ca02c"/>
+<circle cx="217.6" cy="147.3" r="3.3" fill="#2ca02c"/>
+<circle cx="310.7" cy="252.7" r="3.3" fill="#2ca02c"/>
+<circle cx="357.3" cy="269.1" r="3.3" fill="#2ca02c"/>
+<circle cx="403.8" cy="328.2" r="3.3" fill="#2ca02c"/>
+<circle cx="496.9" cy="377.2" r="3.3" fill="#2ca02c"/>
+<circle cx="590.0" cy="428.2" r="3.3" fill="#2ca02c"/>
+<line x1="604" y1="110" x2="624" y2="110" stroke="#2ca02c" stroke-width="2.2"/>
+<text x="628" y="114">SC L=200 (window W=6)</text>
+<path d="M78.0,67.8 L217.6,157.3 L310.7,261.9 L357.3,301.2 L403.8,328.3 L496.9,387.1 L590.0,435.3" fill="none" stroke="#9467bd" stroke-width="2.2"/>
+<circle cx="78.0" cy="67.8" r="3.3" fill="#9467bd"/>
+<circle cx="217.6" cy="157.3" r="3.3" fill="#9467bd"/>
+<circle cx="310.7" cy="261.9" r="3.3" fill="#9467bd"/>
+<circle cx="357.3" cy="301.2" r="3.3" fill="#9467bd"/>
+<circle cx="403.8" cy="328.3" r="3.3" fill="#9467bd"/>
+<circle cx="496.9" cy="387.1" r="3.3" fill="#9467bd"/>
+<circle cx="590.0" cy="435.3" r="3.3" fill="#9467bd"/>
+<line x1="604" y1="132" x2="624" y2="132" stroke="#9467bd" stroke-width="2.2"/>
+<text x="628" y="136">SC L=300 (window W=6)</text>
+</svg>
