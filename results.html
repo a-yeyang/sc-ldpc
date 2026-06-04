@@ -63,13 +63,29 @@
 
 <h2>波形级信道：PAM4 + RRC 成形（β=0.1, span=10, sps=4），码率 0.5–0.9 × 链长 30–300</h2>
 <p class="cap">更贴近实际的链路：编码比特 → PAM4(Gray) → 上采样×4 → RRC 成形 → 波形加 AWGN
-→ RRC 匹配滤波 → 降采样 → 软解调(LLR) → 滑窗 BP。每码率一张图，曲线为不同耦合链长 L。</p>
+→ RRC 匹配滤波 → 降采样 → 软解调(LLR) → 滑窗 BP。每码率一张图：含<b>普通 5G NR LDPC 对照组</b>
+（同码率同码长、全图 BP）+ 不同耦合链长 L 的 SC 曲线。</p>
 <div class="grid">
   <div class="card"><img src="exp_pam4_50.svg" alt="pam4_50"><p class="cap"><b>R≈0.5</b></p></div>
   <div class="card"><img src="exp_pam4_60.svg" alt="pam4_60"><p class="cap"><b>R≈0.6</b></p></div>
   <div class="card"><img src="exp_pam4_70.svg" alt="pam4_70"><p class="cap"><b>R≈0.7</b></p></div>
   <div class="card"><img src="exp_pam4_80.svg" alt="pam4_80"><p class="cap"><b>R≈0.8</b></p></div>
   <div class="card"><img src="exp_pam4_90.svg" alt="pam4_90"><p class="cap"><b>R≈0.9</b></p></div>
+</div>
+
+<h2>超参数热力图：码长 Z × 链长 L × 深度 w（PAM4，码率 0.7/0.8/0.9）</h2>
+<p class="cap">每格 = 在该码率工作点 Eb/N0 处的 BER（绿=低/更好，红=高）；行=码长 Z（3GPP 提升尺寸），
+列=耦合链长 L + <b>plain（普通5G LDPC对照）</b>。每个「码率×深度 w」一张图。</p>
+<div class="grid">
+  <div class="card"><img src="exp_hm_70_w1.svg" alt="hm7w1"><p class="cap">R=0.7, w=1</p></div>
+  <div class="card"><img src="exp_hm_70_w2.svg" alt="hm7w2"><p class="cap">R=0.7, w=2</p></div>
+  <div class="card"><img src="exp_hm_70_w3.svg" alt="hm7w3"><p class="cap">R=0.7, w=3</p></div>
+  <div class="card"><img src="exp_hm_80_w1.svg" alt="hm8w1"><p class="cap">R=0.8, w=1</p></div>
+  <div class="card"><img src="exp_hm_80_w2.svg" alt="hm8w2"><p class="cap">R=0.8, w=2</p></div>
+  <div class="card"><img src="exp_hm_80_w3.svg" alt="hm8w3"><p class="cap">R=0.8, w=3</p></div>
+  <div class="card"><img src="exp_hm_90_w1.svg" alt="hm9w1"><p class="cap">R=0.9, w=1</p></div>
+  <div class="card"><img src="exp_hm_90_w2.svg" alt="hm9w2"><p class="cap">R=0.9, w=2</p></div>
+  <div class="card"><img src="exp_hm_90_w3.svg" alt="hm9w3"><p class="cap">R=0.9, w=3</p></div>
 </div>
 
 <p style="margin-top:24px;color:#777;font-size:13px">

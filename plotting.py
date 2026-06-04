@@ -84,6 +84,52 @@ def semilogy(curves, xlabel="Eb/N0 [dB]", ylabel="BER", title="",
         f.write("\n".join(s))
 
 
+def heatmap(M, row_labels, col_labels, title="", path="heatmap.svg",
+            vmin=-5.0, vmax=-0.7, cell=66, note=""):
+    """Block heatmap of log10(BER). M[r][c] is a BER (0 -> best). Green=low, red=high."""
+    nr, nc = len(row_labels), len(col_labels)
+    ml, mt = 92, 56
+    W = ml + nc * cell + 30
+    H = mt + nr * cell + 64
+
+    def color(ber):
+        if ber is None:
+            return "#dddddd", "-"
+        v = math.log10(ber) if ber > 0 else vmin
+        f = max(0.0, min(1.0, (v - vmin) / (vmax - vmin)))   # 0=good ->1=bad
+        if f < 0.5:                       # green -> yellow
+            r, g, b = int(2 * f * 255), 180, 40
+        else:                             # yellow -> red
+            r, g, b = 220, int(180 * (1 - (f - 0.5) * 2)), 30
+        txt = "0" if ber == 0 else (f"{ber:.0e}".replace("e-0", "e-"))
+        return f"rgb({r},{g},{b})", txt
+
+    s = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" '
+         f'font-family="Helvetica,Arial,sans-serif" font-size="12">',
+         f'<rect width="{W}" height="{H}" fill="white"/>']
+    if title:
+        s.append(f'<text x="{ml + nc*cell/2}" y="24" text-anchor="middle" '
+                 f'font-size="15" font-weight="bold">{title}</text>')
+    for c, cl in enumerate(col_labels):
+        s.append(f'<text x="{ml + c*cell + cell/2}" y="{mt-8}" text-anchor="middle" '
+                 f'font-weight="bold">{cl}</text>')
+    for r, rl in enumerate(row_labels):
+        s.append(f'<text x="{ml-8}" y="{mt + r*cell + cell/2 + 4}" text-anchor="end" '
+                 f'font-weight="bold">{rl}</text>')
+        for c in range(nc):
+            x, y = ml + c*cell, mt + r*cell
+            col, txt = color(M[r][c])
+            s.append(f'<rect x="{x}" y="{y}" width="{cell-2}" height="{cell-2}" '
+                     f'fill="{col}" stroke="#fff"/>')
+            s.append(f'<text x="{x+cell/2}" y="{y+cell/2+4}" text-anchor="middle" '
+                     f'fill="#000">{txt}</text>')
+    if note:
+        s.append(f'<text x="{ml}" y="{H-18}" font-size="11" fill="#555">{note}</text>')
+    s.append('</svg>')
+    with open(path, "w") as f:
+        f.write("\n".join(s))
+
+
 def write_csv(curves, path="results.csv"):
     with open(path, "w") as f:
         for c in curves:
