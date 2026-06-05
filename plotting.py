@@ -84,6 +84,64 @@ def semilogy(curves, xlabel="Eb/N0 [dB]", ylabel="BER", title="",
         f.write("\n".join(s))
 
 
+def linear(curves, xlabel="x", ylabel="y", title="", path="plot.svg",
+           width=760, height=520):
+    """Linear-axis line plot (same curve dict format as `semilogy`)."""
+    ml, mr, mt, mb = 78, 200, 48, 60
+    pw, ph = width - ml - mr, height - mt - mb
+    xs = [x for c in curves for x in c["x"]]
+    ys = [y for c in curves for y in c["y"]]
+    if not xs or not ys:
+        return
+    xmin, xmax = min(xs), max(xs)
+    if xmax == xmin:
+        xmax = xmin + 1
+    ymin, ymax = min(ys), max(ys)
+    pad = (ymax - ymin) * 0.1 or 0.5
+    ymin, ymax = ymin - pad, ymax + pad
+
+    def X(v): return ml + (v - xmin) / (xmax - xmin) * pw
+    def Y(v): return mt + (ymax - v) / (ymax - ymin) * ph
+
+    s = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
+         f'font-family="Helvetica,Arial,sans-serif" font-size="13">',
+         f'<rect width="{width}" height="{height}" fill="white"/>']
+    if title:
+        s.append(f'<text x="{ml+pw/2}" y="26" text-anchor="middle" '
+                 f'font-size="16" font-weight="bold">{title}</text>')
+    for k in range(6):                                   # y grid
+        v = ymin + (ymax - ymin) * k / 5
+        y = Y(v)
+        s.append(f'<line x1="{ml}" y1="{y:.1f}" x2="{ml+pw}" y2="{y:.1f}" stroke="#e8e8e8"/>')
+        s.append(f'<text x="{ml-8}" y="{y+4:.1f}" text-anchor="end">{v:.2f}</text>')
+    xt = xmin
+    step = max(0.05, round((xmax - xmin) / 6, 2))
+    while xt <= xmax + 1e-9:
+        x = X(xt)
+        s.append(f'<line x1="{x:.1f}" y1="{mt}" x2="{x:.1f}" y2="{mt+ph}" stroke="#f0f0f0"/>')
+        s.append(f'<text x="{x:.1f}" y="{mt+ph+20:.1f}" text-anchor="middle">{xt:.2f}</text>')
+        xt += step
+    s.append(f'<rect x="{ml}" y="{mt}" width="{pw}" height="{ph}" fill="none" stroke="#333"/>')
+    s.append(f'<text x="{ml+pw/2}" y="{height-16}" text-anchor="middle">{xlabel}</text>')
+    s.append(f'<text x="20" y="{mt+ph/2}" text-anchor="middle" '
+             f'transform="rotate(-90 20 {mt+ph/2})">{ylabel}</text>')
+    for k, c in enumerate(curves):
+        col = c.get("color", "#1f77b4")
+        pts = [(X(x), Y(y)) for x, y in zip(c["x"], c["y"])]
+        if pts:
+            s.append(f'<path d="M' + " L".join(f"{x:.1f},{y:.1f}" for x, y in pts)
+                     + f'" fill="none" stroke="{col}" stroke-width="2.2"/>')
+            for x, y in pts:
+                s.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.3" fill="{col}"/>')
+        ly = mt + 18 + k * 22
+        s.append(f'<line x1="{ml+pw+14}" y1="{ly}" x2="{ml+pw+34}" y2="{ly}" '
+                 f'stroke="{col}" stroke-width="2.2"/>')
+        s.append(f'<text x="{ml+pw+38}" y="{ly+4}">{c["label"]}</text>')
+    s.append('</svg>')
+    with open(path, "w") as f:
+        f.write("\n".join(s))
+
+
 def heatmap(M, row_labels, col_labels, title="", path="heatmap.svg",
             vmin=-5.0, vmax=-0.7, cell=66, note=""):
     """Block heatmap of log10(BER). M[r][c] is a BER (0 -> best). Green=low, red=high."""

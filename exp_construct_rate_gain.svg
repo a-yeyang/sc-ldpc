@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
+<rect width="760" height="520" fill="white"/>
+<text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">RL-optimized SC-LDPC construction across rates 0.5-0.9</text>
+<line x1="78" y1="392.6" x2="590" y2="392.6" stroke="#e0e0e0"/>
+<text x="70" y="396.6" text-anchor="end">1e-2</text>
+<line x1="78" y1="223.2" x2="590" y2="223.2" stroke="#e0e0e0"/>
+<text x="70" y="227.2" text-anchor="end">1e-1</text>
+<line x1="78" y1="53.8" x2="590" y2="53.8" stroke="#e0e0e0"/>
+<text x="70" y="57.8" text-anchor="end">1e0</text>
+<line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#eee"/>
+<text x="78.0" y="480.0" text-anchor="middle">0.5</text>
+<rect x="78" y="48" width="512" height="412" fill="none" stroke="#333"/>
+<text x="334.0" y="504" text-anchor="middle">code rate R</text>
+<text x="20" y="254.0" text-anchor="middle" transform="rotate(-90 20 254.0)">FER @ operating SNR</text>
+<path d="M78.0,193.4 L226.9,246.0 L333.4,422.4 L426.9,132.7 L590.0,188.6" fill="none" stroke="#d62728" stroke-width="2.2"/>
+<circle cx="78.0" cy="193.4" r="3.3" fill="#d62728"/>
+<circle cx="226.9" cy="246.0" r="3.3" fill="#d62728"/>
+<circle cx="333.4" cy="422.4" r="3.3" fill="#d62728"/>
+<circle cx="426.9" cy="132.7" r="3.3" fill="#d62728"/>
+<circle cx="590.0" cy="188.6" r="3.3" fill="#d62728"/>
+<line x1="604" y1="66" x2="624" y2="66" stroke="#d62728" stroke-width="2.2"/>
+<text x="628" y="70">RL optimized [ours]</text>
+<path d="M78.0,211.1 L226.9,174.7 L333.4,360.1 L426.9,130.8 L590.0,159.8" fill="none" stroke="#1f77b4" stroke-width="2.2"/>
+<circle cx="78.0" cy="211.1" r="3.3" fill="#1f77b4"/>
+<circle cx="226.9" cy="174.7" r="3.3" fill="#1f77b4"/>
+<circle cx="333.4" cy="360.1" r="3.3" fill="#1f77b4"/>
+<circle cx="426.9" cy="130.8" r="3.3" fill="#1f77b4"/>
+<circle cx="590.0" cy="159.8" r="3.3" fill="#1f77b4"/>
+<line x1="604" y1="88" x2="624" y2="88" stroke="#1f77b4" stroke-width="2.2"/>
+<text x="628" y="92">random search</text>
+<path d="M78.0,86.1 L226.9,84.6 L333.4,422.4 L426.9,104.9 L590.0,140.7" fill="none" stroke="#8c564b" stroke-width="2.2"/>
+<circle cx="78.0" cy="86.1" r="3.3" fill="#8c564b"/>
+<circle cx="226.9" cy="84.6" r="3.3" fill="#8c564b"/>
+<circle cx="333.4" cy="422.4" r="3.3" fill="#8c564b"/>
+<circle cx="426.9" cy="104.9" r="3.3" fill="#8c564b"/>
+<circle cx="590.0" cy="140.7" r="3.3" fill="#8c564b"/>
+<line x1="604" y1="110" x2="624" y2="110" stroke="#8c564b" stroke-width="2.2"/>
+<text x="628" y="114">round-robin</text>
+<path d="M78.0,101.7 L226.9,77.8 L333.4,239.6 L426.9,82.0 L590.0,142.6" fill="none" stroke="#7f7f7f" stroke-width="2.2"/>
+<circle cx="78.0" cy="101.7" r="3.3" fill="#7f7f7f"/>
+<circle cx="226.9" cy="77.8" r="3.3" fill="#7f7f7f"/>
+<circle cx="333.4" cy="239.6" r="3.3" fill="#7f7f7f"/>
+<circle cx="426.9" cy="82.0" r="3.3" fill="#7f7f7f"/>
+<circle cx="590.0" cy="142.6" r="3.3" fill="#7f7f7f"/>
+<line x1="604" y1="132" x2="624" y2="132" stroke="#7f7f7f" stroke-width="2.2"/>
+<text x="628" y="136">random default (seed0)</text>
+</svg>

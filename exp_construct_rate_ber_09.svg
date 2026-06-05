@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
+<rect width="760" height="520" fill="white"/>
+<text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">Construction at R=0.91 (bg1, windowed)</text>
+<line x1="78" y1="426.3" x2="590" y2="426.3" stroke="#e0e0e0"/>
+<text x="70" y="430.3" text-anchor="end">1e-6</text>
+<line x1="78" y1="349.1" x2="590" y2="349.1" stroke="#e0e0e0"/>
+<text x="70" y="353.1" text-anchor="end">1e-5</text>
+<line x1="78" y1="271.9" x2="590" y2="271.9" stroke="#e0e0e0"/>
+<text x="70" y="275.9" text-anchor="end">1e-4</text>
+<line x1="78" y1="194.8" x2="590" y2="194.8" stroke="#e0e0e0"/>
+<text x="70" y="198.8" text-anchor="end">1e-3</text>
+<line x1="78" y1="117.6" x2="590" y2="117.6" stroke="#e0e0e0"/>
+<text x="70" y="121.6" text-anchor="end">1e-2</text>
+<line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#eee"/>
+<text x="78.0" y="480.0" text-anchor="middle">3.5</text>
+<line x1="206.0" y1="48" x2="206.0" y2="460" stroke="#eee"/>
+<text x="206.0" y="480.0" text-anchor="middle">4.0</text>
+<line x1="334.0" y1="48" x2="334.0" y2="460" stroke="#eee"/>
+<text x="334.0" y="480.0" text-anchor="middle">4.5</text>
+<line x1="462.0" y1="48" x2="462.0" y2="460" stroke="#eee"/>
+<text x="462.0" y="480.0" text-anchor="middle">5.0</text>
+<line x1="590.0" y1="48" x2="590.0" y2="460" stroke="#eee"/>
+<text x="590.0" y="480.0" text-anchor="middle">5.5</text>
+<rect x="78" y="48" width="512" height="412" fill="none" stroke="#333"/>
+<text x="334.0" y="504" text-anchor="middle">Eb/N0 [dB]</text>
+<text x="20" y="254.0" text-anchor="middle" transform="rotate(-90 20 254.0)">info BER</text>
+<path d="M78.0,63.6 L206.0,89.6 L334.0,205.8 L462.0,442.9" fill="none" stroke="#d62728" stroke-width="2.2"/>
+<circle cx="78.0" cy="63.6" r="3.3" fill="#d62728"/>
+<circle cx="206.0" cy="89.6" r="3.3" fill="#d62728"/>
+<circle cx="334.0" cy="205.8" r="3.3" fill="#d62728"/>
+<circle cx="462.0" cy="442.9" r="3.3" fill="#d62728"/>
+<line x1="604" y1="66" x2="624" y2="66" stroke="#d62728" stroke-width="2.2"/>
+<text x="628" y="70">RL optimized [ours]</text>
+<path d="M78.0,62.7 L206.0,83.5 L334.0,170.5 L462.0,355.3" fill="none" stroke="#1f77b4" stroke-width="2.2"/>
+<circle cx="78.0" cy="62.7" r="3.3" fill="#1f77b4"/>
+<circle cx="206.0" cy="83.5" r="3.3" fill="#1f77b4"/>
+<circle cx="334.0" cy="170.5" r="3.3" fill="#1f77b4"/>
+<circle cx="462.0" cy="355.3" r="3.3" fill="#1f77b4"/>
+<line x1="604" y1="88" x2="624" y2="88" stroke="#1f77b4" stroke-width="2.2"/>
+<text x="628" y="92">random search</text>
+<path d="M78.0,62.2 L206.0,82.3 L334.0,167.6 L462.0,336.9" fill="none" stroke="#8c564b" stroke-width="2.2"/>
+<circle cx="78.0" cy="62.2" r="3.3" fill="#8c564b"/>
+<circle cx="206.0" cy="82.3" r="3.3" fill="#8c564b"/>
+<circle cx="334.0" cy="167.6" r="3.3" fill="#8c564b"/>
+<circle cx="462.0" cy="336.9" r="3.3" fill="#8c564b"/>
+<line x1="604" y1="110" x2="624" y2="110" stroke="#8c564b" stroke-width="2.2"/>
+<text x="628" y="114">round-robin</text>
+<path d="M78.0,61.6 L206.0,84.7 L334.0,180.4 L462.0,325.4" fill="none" stroke="#7f7f7f" stroke-width="2.2"/>
+<circle cx="78.0" cy="61.6" r="3.3" fill="#7f7f7f"/>
+<circle cx="206.0" cy="84.7" r="3.3" fill="#7f7f7f"/>
+<circle cx="334.0" cy="180.4" r="3.3" fill="#7f7f7f"/>
+<circle cx="462.0" cy="325.4" r="3.3" fill="#7f7f7f"/>
+<line x1="604" y1="132" x2="624" y2="132" stroke="#7f7f7f" stroke-width="2.2"/>
+<text x="628" y="136">random default (seed0)</text>
+</svg>

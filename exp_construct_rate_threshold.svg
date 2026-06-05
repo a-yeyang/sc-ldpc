@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
+<rect width="760" height="520" fill="white"/>
+<text x="319.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">RL-optimized SC-LDPC construction across rates (lower=better)</text>
+<line x1="78" y1="460.0" x2="560" y2="460.0" stroke="#e8e8e8"/>
+<text x="70" y="464.0" text-anchor="end">1.77</text>
+<line x1="78" y1="377.6" x2="560" y2="377.6" stroke="#e8e8e8"/>
+<text x="70" y="381.6" text-anchor="end">2.40</text>
+<line x1="78" y1="295.2" x2="560" y2="295.2" stroke="#e8e8e8"/>
+<text x="70" y="299.2" text-anchor="end">3.03</text>
+<line x1="78" y1="212.8" x2="560" y2="212.8" stroke="#e8e8e8"/>
+<text x="70" y="216.8" text-anchor="end">3.67</text>
+<line x1="78" y1="130.4" x2="560" y2="130.4" stroke="#e8e8e8"/>
+<text x="70" y="134.4" text-anchor="end">4.30</text>
+<line x1="78" y1="48.0" x2="560" y2="48.0" stroke="#e8e8e8"/>
+<text x="70" y="52.0" text-anchor="end">4.93</text>
+<line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#f0f0f0"/>
+<text x="78.0" y="480.0" text-anchor="middle">0.48</text>
+<line x1="157.1" y1="48" x2="157.1" y2="460" stroke="#f0f0f0"/>
+<text x="157.1" y="480.0" text-anchor="middle">0.55</text>
+<line x1="236.2" y1="48" x2="236.2" y2="460" stroke="#f0f0f0"/>
+<text x="236.2" y="480.0" text-anchor="middle">0.62</text>
+<line x1="315.4" y1="48" x2="315.4" y2="460" stroke="#f0f0f0"/>
+<text x="315.4" y="480.0" text-anchor="middle">0.69</text>
+<line x1="394.5" y1="48" x2="394.5" y2="460" stroke="#f0f0f0"/>
+<text x="394.5" y="480.0" text-anchor="middle">0.76</text>
+<line x1="473.6" y1="48" x2="473.6" y2="460" stroke="#f0f0f0"/>
+<text x="473.6" y="480.0" text-anchor="middle">0.83</text>
+<line x1="552.7" y1="48" x2="552.7" y2="460" stroke="#f0f0f0"/>
+<text x="552.7" y="480.0" text-anchor="middle">0.90</text>
+<rect x="78" y="48" width="482" height="412" fill="none" stroke="#333"/>
+<text x="319.0" y="504" text-anchor="middle">code rate R</text>
+<text x="20" y="254.0" text-anchor="middle" transform="rotate(-90 20 254.0)">waterfall threshold Eb/N0 @ FER=0.1 [dB]</text>
+<path d="M78.0,420.6 L218.2,371.3 L318.4,339.7 L406.4,284.4 L560.0,98.4" fill="none" stroke="#d62728" stroke-width="2.2"/>
+<circle cx="78.0" cy="420.6" r="3.3" fill="#d62728"/>
+<circle cx="218.2" cy="371.3" r="3.3" fill="#d62728"/>
+<circle cx="318.4" cy="339.7" r="3.3" fill="#d62728"/>
+<circle cx="406.4" cy="284.4" r="3.3" fill="#d62728"/>
+<circle cx="560.0" cy="98.4" r="3.3" fill="#d62728"/>
+<line x1="574" y1="66" x2="594" y2="66" stroke="#d62728" stroke-width="2.2"/>
+<text x="598" y="70">RL optimized [ours]</text>
+<path d="M78.0,425.7 L218.2,351.5 L318.4,339.1 L406.4,281.5 L560.0,90.0" fill="none" stroke="#1f77b4" stroke-width="2.2"/>
+<circle cx="78.0" cy="425.7" r="3.3" fill="#1f77b4"/>
+<circle cx="218.2" cy="351.5" r="3.3" fill="#1f77b4"/>
+<circle cx="318.4" cy="339.1" r="3.3" fill="#1f77b4"/>
+<circle cx="406.4" cy="281.5" r="3.3" fill="#1f77b4"/>
+<circle cx="560.0" cy="90.0" r="3.3" fill="#1f77b4"/>
+<line x1="574" y1="88" x2="594" y2="88" stroke="#1f77b4" stroke-width="2.2"/>
+<text x="598" y="92">random search</text>
+<path d="M78.0,362.2 L218.2,270.2 L318.4,334.4 L406.4,269.0 L560.0,83.8" fill="none" stroke="#8c564b" stroke-width="2.2"/>
+<circle cx="78.0" cy="362.2" r="3.3" fill="#8c564b"/>
+<circle cx="218.2" cy="270.2" r="3.3" fill="#8c564b"/>
+<circle cx="318.4" cy="334.4" r="3.3" fill="#8c564b"/>
+<circle cx="406.4" cy="269.0" r="3.3" fill="#8c564b"/>
+<circle cx="560.0" cy="83.8" r="3.3" fill="#8c564b"/>
+<line x1="574" y1="110" x2="594" y2="110" stroke="#8c564b" stroke-width="2.2"/>
+<text x="598" y="114">round-robin</text>
+<path d="M78.0,352.2 L218.2,252.5 L318.4,298.0 L406.4,251.3 L560.0,82.3" fill="none" stroke="#7f7f7f" stroke-width="2.2"/>
+<circle cx="78.0" cy="352.2" r="3.3" fill="#7f7f7f"/>
+<circle cx="218.2" cy="252.5" r="3.3" fill="#7f7f7f"/>
+<circle cx="318.4" cy="298.0" r="3.3" fill="#7f7f7f"/>
+<circle cx="406.4" cy="251.3" r="3.3" fill="#7f7f7f"/>
+<circle cx="560.0" cy="82.3" r="3.3" fill="#7f7f7f"/>
+<line x1="574" y1="132" x2="594" y2="132" stroke="#7f7f7f" stroke-width="2.2"/>
+<text x="598" y="136">random default (seed0)</text>
+</svg>

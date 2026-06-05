@@ -103,6 +103,22 @@
   round-robin —— 说明学到的是结构性规则、而非对单一码的过拟合。</p></div>
 </div>
 
+<h2>RL 构造优化 · 全码率扫描 0.5–0.9（BG2 低 / BG1 高）</h2>
+<p class="cap">每码率自动选工作 SNR、训练 RL 特征策略 + 同预算随机搜索 + round-robin + 默认 seed0。
+<b>构造增益（RL vs 默认 seed0）在中码率 R≈0.6 最大（~0.9 dB），向高码率单调缩小</b>——与 BP–MAP
+门限差的理论一致（高码率本就接近 MAP）。</p>
+<div class="grid">
+  <div class="card"><img src="exp_construct_rate_threshold.svg" alt="rate_threshold">
+  <p class="cap"><b>FER=0.1 瀑布门限 vs 码率</b>（越低越好）：RL/随机优化两条线在 round-robin/默认之下，
+  间隙（增益）随码率收窄。</p></div>
+  <div class="card"><img src="exp_construct_rate_ber_06.svg" alt="rate_ber_06">
+  <p class="cap"><b>R≈0.60 BER</b>：默认 seed0 有错误地板，RL 构造消除之（增益最大处 ~0.9 dB）。</p></div>
+  <div class="card"><img src="exp_construct_rate_ber_05.svg" alt="rate_ber_05"><p class="cap"><b>R≈0.48</b></p></div>
+  <div class="card"><img src="exp_construct_rate_ber_07.svg" alt="rate_ber_07"><p class="cap"><b>R≈0.69</b></p></div>
+  <div class="card"><img src="exp_construct_rate_ber_08.svg" alt="rate_ber_08"><p class="cap"><b>R≈0.77</b></p></div>
+  <div class="card"><img src="exp_construct_rate_ber_09.svg" alt="rate_ber_09"><p class="cap"><b>R≈0.91</b>（高码率增益小）</p></div>
+</div>
+
 <p style="margin-top:24px;color:#777;font-size:13px">
 原始数据见 <code>results*.json</code> / <code>results.csv</code>；构造与方法见 <code>README.md</code>。
 </p>
