@@ -70,14 +70,15 @@ class WindowBP:
         self.total = self.llr.copy()                  # current posterior LLR
         self.hard = (self.llr < 0).astype(np.uint8)
         self.iters = 0
-        self.unsat = self._unsat()                    # current # unsatisfied checks
+        self.unsat = self._compute_syn()              # current # unsatisfied checks
         self.prev_unsat = self.unsat
 
-    def _unsat(self) -> int:
+    def _compute_syn(self) -> int:
+        """Per-check syndrome (stored in self.syn) and its weight."""
         t = self.tan
-        syn = np.bincount(t.e_chk, weights=self.hard[t.e_var].astype(np.float64),
-                          minlength=t.num_chk).astype(np.int64) & 1
-        return int(syn.sum())
+        self.syn = np.bincount(t.e_chk, weights=self.hard[t.e_var].astype(np.float64),
+                               minlength=t.num_chk).astype(np.int64) & 1
+        return int(self.syn.sum())
 
     def step(self, alpha: float):
         """One flooding BP iteration with scaling `alpha` (check update + var update)."""
@@ -91,7 +92,7 @@ class WindowBP:
         self.m_vc[t.V_tab[t.V_mask]] = new_vc[t.V_mask]
         self.iters += 1
         self.prev_unsat = self.unsat
-        self.unsat = self._unsat()
+        self.unsat = self._compute_syn()
 
 
 # --------------------------------------------------------------------------- #
@@ -101,18 +102,21 @@ class SCWindowEnv:
     """Windowed SC-LDPC decoding as an MDP (see module docstring)."""
 
     def __init__(self, sc, W=6, alpha_set=(0.5, 0.7, 0.9),
-                 ebn0_range=(2.0, 3.5), max_iter_cap=20,
-                 iter_cost=1.0, err_cost=60.0, rel_tau=1.0):
+                 ebn0_range=(2.0, 3.5), max_iter_cap=20, min_iter=1,
+                 iter_cost=1.0, err_cost=60.0, shape_cost=8.0, rel_tau=1.0):
         self.sc = sc
         self.W = W
+        self.min_iter = min_iter                         # forbid committing too early
         self.alpha_set = tuple(alpha_set)
         self.n_actions = 1 + len(self.alpha_set)         # COMMIT + CONTINUE@alpha
         self.ebn0_range = ebn0_range
         self.max_iter_cap = max_iter_cap
         self.iter_cost = iter_cost
         self.err_cost = err_cost
+        self.shape_cost = shape_cost                     # potential-based progress reward
         self.rel_tau = rel_tau
         self.blk = sc.nb * sc.Z
+        self.mbZ = sc.mb * sc.Z          # size of one check block (the "frozen" block)
         self.windows = sc._window_layout(W)              # cached (tan, v_lo, v_hi) per t
         self.engines = [WindowBP(self.windows[t][0]) for t in range(sc.L)]
         self.n_state_features = 6
@@ -153,19 +157,43 @@ class SCWindowEnv:
         self.target_hi = self.target_lo + blk
         self.eng = self.engines[t]
         self.eng.reset(llr_loc)
+        # target-symbol tracking (the decoder only OUTPUTS this block, so its
+        # reliability -- not the whole-window syndrome -- is what should gate the
+        # commit decision; see the per-position diagnostic)
+        self.targ_hard = self.eng.hard[self.target_lo:self.target_hi].copy()
+        self.cur_targrel = self._targrel()
+        self.cur_targmin = self._targmin()
+        self.streak = 0                                   # consecutive stable iterations
 
     # ---- state ------------------------------------------------------------- #
+    def _targrel(self):
+        """Fraction of target-block posteriors that are still unreliable (|LLR|<tau)."""
+        tgt = self.eng.total[self.target_lo:self.target_hi]
+        return float(np.mean(np.abs(tgt) < self.rel_tau))
+
+    def _targmin(self):
+        """Confidence of the *weakest* target bit (normalised min |LLR|).  A single
+        weak/wrong high-confidence bit is what causes a committed error, so this is
+        the decisive ground-truth-free predictor of 'target block is correct'."""
+        tgt = self.eng.total[self.target_lo:self.target_hi]
+        return float(min(np.abs(tgt).min(), 16.0) / 16.0)
+
+    def _leftsyn(self):
+        """Unsatisfied fraction of the leftmost check block -- the checks that get
+        *frozen* when the window advances (they constrain the target against the
+        already-finalised left context).  This is the principled, ground-truth-free
+        commit criterion for window decoding."""
+        return self.eng.syn[:self.mbZ].sum() / self.mbZ
+
     def _state(self):
-        eng, tan = self.eng, self.windows[self.t][0]
-        nchk = max(1, tan.num_chk)
-        f_unsat = eng.unsat / nchk
-        f_prog = (eng.prev_unsat - eng.unsat) / nchk     # >0 = improving last iter
-        tgt = eng.total[self.target_lo:self.target_hi]
-        f_targrel = float(np.mean(np.abs(tgt) < self.rel_tau))   # fraction unreliable
-        f_iter = eng.iters / self.max_iter_cap
-        f_ep = self.ep_flag
-        f_pos = self.t / self.sc.L
-        return np.array([f_unsat, f_prog, f_targrel, f_iter, f_ep, f_pos],
+        eng = self.eng
+        f_leftsyn = self._leftsyn()                      # frozen-check consistency
+        f_targmin = self.cur_targmin                     # weakest target bit (key predictor)
+        f_streak = min(self.streak, 4) / 4.0             # target stability over iters
+        f_iter = eng.iters / self.max_iter_cap           # budget used on this position
+        f_ep = self.ep_flag                              # error-propagation risk
+        f_pos = self.t / self.sc.L                       # boundary vs bulk
+        return np.array([f_leftsyn, f_targmin, f_streak, f_iter, f_ep, f_pos],
                         dtype=np.float64)
 
     # ---- transition -------------------------------------------------------- #
@@ -173,12 +201,28 @@ class SCWindowEnv:
         """action: COMMIT(0) or CONTINUE with alpha_set[action-1]."""
         sc, blk = self.sc, self.blk
         force_commit = self.eng.iters >= self.max_iter_cap
-        if action != COMMIT and not force_commit:
+        force_continue = self.eng.iters < self.min_iter   # too early to commit
+        if (action != COMMIT or force_continue) and not force_commit:
             # ---- CONTINUE: one more BP iteration -----------------------------
-            alpha = self.alpha_set[action - 1]
+            # (if commit was forced into a continue, use the middle alpha)
+            ai = action - 1 if action != COMMIT else len(self.alpha_set) // 2
+            alpha = self.alpha_set[ai]
+            old_targrel = self.cur_targrel
+            old_hard = self.targ_hard
             self.eng.step(alpha)
             self.total_iters += 1
-            return self._state(), -self.iter_cost, False, {"commit": False}
+            new_hard = self.eng.hard[self.target_lo:self.target_hi]
+            self.streak = self.streak + 1 if np.array_equal(old_hard, new_hard) else 0
+            self.targ_hard = new_hard.copy()
+            self.cur_targrel = self._targrel()
+            self.cur_targmin = self._targmin()
+            # potential-based shaping on TARGET reliability: reward making the
+            # output block more reliable.  Once the target stabilises, further
+            # iterations earn ~0 shaping but still cost iter_cost, so the agent
+            # learns to commit -- it does NOT chase the (often never-zero) window
+            # syndrome the way the fixed decoder does.
+            reward = -self.iter_cost + self.shape_cost * (old_targrel - self.cur_targrel)
+            return self._state(), reward, False, {"commit": False}
 
         # ---- COMMIT: finalise the target position and advance ----------------
         hard_loc = self.eng.hard
@@ -189,9 +233,9 @@ class SCWindowEnv:
         tgt_true = self.cw[g0:g0 + blk]
         n_err = int((tgt_hat != tgt_true).sum())
         reward = -self.err_cost * (n_err / blk)
-        # error-propagation flag handed to the next position: did we commit while
-        # the window still had unsatisfied checks?  (cheap, ground-truth-free)
-        self.ep_flag = 1.0 if self.eng.unsat > 0 else 0.0
+        # error-propagation flag handed to the next position: did we commit while the
+        # frozen check block was still unsatisfied?  (ground-truth-free EP risk signal)
+        self.ep_flag = 1.0 if self.eng.syn[:self.mbZ].sum() > 0 else 0.0
         # advance
         if self.t + 1 >= sc.L:
             return self._state(), reward, True, {"commit": True, "n_err": n_err}
@@ -226,6 +270,35 @@ def fixed_controller(max_iter, alpha=0.8):
         # pick the CONTINUE action whose alpha is closest to the requested alpha
         k = int(np.argmin([abs(a - alpha) for a in env.alpha_set]))
         return k + 1
+    return ctrl
+
+
+def threshold_controller(T, alpha=0.8):
+    """Early-commit heuristic (this work): commit as soon as the weakest target bit
+    exceeds confidence T, i.e. min |LLR_target| > T.  A fixed-T sweep already
+    Pareto-beats fixed_controller; the RL policy adapts T per state."""
+    def ctrl(state, env):
+        if env.eng.iters >= env.max_iter_cap:
+            return COMMIT
+        tmin = np.abs(env.eng.total[env.target_lo:env.target_hi]).min()
+        if tmin > T:
+            return COMMIT
+        return 1 + int(np.argmin([abs(a - alpha) for a in env.alpha_set]))
+    return ctrl
+
+
+def oracle_controller(alpha=0.8):
+    """Upper bound on adaptive stopping: commit the instant the target block equals
+    the ground-truth codeword (uses env.cw -- evaluation/analysis only, not deployable)."""
+    def ctrl(state, env):
+        if env.eng.iters >= env.max_iter_cap:
+            return COMMIT
+        g0 = env.t * env.blk
+        true = env.cw[g0:g0 + env.blk]
+        hard = env.eng.hard[env.target_lo:env.target_hi]
+        if env.eng.iters >= 1 and np.array_equal(hard, true):
+            return COMMIT
+        return 1 + int(np.argmin([abs(a - alpha) for a in env.alpha_set]))
     return ctrl
 
 
@@ -277,12 +350,12 @@ class TabularQAgent:
 def default_bins():
     """Discretisation of the 6 state features (see SCWindowEnv._state)."""
     return [
-        np.array([1e-6, 0.02, 0.06, 0.15]),   # f_unsat   -> {0,>0 small,...,large}
-        np.array([-1e-9, 0.01, 0.05]),         # f_prog    -> {worse, flat, small+, big+}
-        np.array([0.05, 0.2, 0.4]),            # f_targrel -> reliability of target
-        np.array([0.15, 0.35, 0.6, 0.85]),     # f_iter    -> budget used
-        np.array([0.5]),                       # f_ep      -> {0,1}
-        np.array([0.1, 0.5, 0.9]),             # f_pos     -> {head, bulk, tail-ish, tail}
+        np.array([1e-6, 0.01, 0.05]),          # f_leftsyn  -> {satisfied, small, med, large}
+        np.array([0.3, 0.45, 0.6, 0.75]),      # f_targmin  -> weakest target bit (|LLR|~4.8,7.2,9.6,12)
+        np.array([0.1, 0.4, 0.6, 0.9]),        # f_streak   -> {0,1,2,3,>=4} stable iters
+        np.array([0.15, 0.35, 0.6, 0.85]),     # f_iter     -> budget used
+        np.array([0.5]),                       # f_ep       -> {0,1}
+        np.array([0.1, 0.5, 0.9]),             # f_pos      -> {head, bulk, tail-ish, tail}
     ]
 
 

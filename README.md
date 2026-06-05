@@ -4,6 +4,11 @@
 > 构造空间耦合 LDPC（SC-LDPC / LDPC 卷积码），并在 BPSK + AWGN 信道下完成
 > **发射机编码** 与 **接收机译码**（全图置信传播 + 滑窗译码）。
 
+> 📎 **Polar 对应版本见 [README_POLAR.md](README_POLAR.md)**：以 3GPP TS 38.212 的 5G NR
+> **Polar 码**为分量码，用**部分信息耦合（PIC）**构造空间耦合 Polar 码，并在 AWGN 下做
+> SC / CA-SCL / 窗口化 BP 译码实验（`nr_polar.py` / `sc_polar.py` / `polar_decoder.py` /
+> `polar_bp.py` / `experiments_polar.py`）。
+
 ---
 
 ## 一、空间耦合 LDPC 是怎么回事（调研）
@@ -175,6 +180,9 @@ L → ∞ 时，R_L → R           （码率损失 ∝ w/L，随 L 增大而消
 | `demo.py`      | 端到端演示（带状结构、编码校验、收发译码、译码波）|
 | `analyze_bg.py`| 在真实 BG1/BG2 上**验证** 5G 校验结构假设 |
 | `data/`        | 5G NR 基矩阵（BG2 iLS=1/0/6、BG1 iLS=1）|
+| `rl_decoder.py`| **强化学习译码**：把滑窗译码建成 MDP（`WindowBP` 单步 BP 引擎 + `SCWindowEnv` 环境 + 表格 Q-learning 智能体），见 [RL_SC_LDPC.md](RL_SC_LDPC.md) |
+| `experiments_rl.py`| RL 控制译码器 vs 固定窗口译码器的复杂度/BER 对比实验与出图 |
+| `tests_rl.py`  | RL 模块自检（`WindowBP` 与 `Tanner.decode` 逐比特一致等）|
 
 ---
 
