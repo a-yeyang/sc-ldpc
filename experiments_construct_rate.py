@@ -45,12 +45,12 @@ RATE_PLAN = [
      [3.5, 4.0, 4.5, 5.0, 5.5, 6.0]),
 ]
 
-# budgets (kept modest: the optimized-vs-default effect is ~5-10x, easily visible)
-RL_STEPS, RL_BATCH, RL_FRAMES = 18, 20, 28
-VAL_FRAMES, FINAL_FRAMES = 100, 900
-PROBE_FRAMES, PROBE_N = 28, 6
-BER_OFFSETS = [-1.0, -0.5, 0.0, 0.5, 1.0]
-BER_FRAMES = [200, 280, 380, 500, 650]
+# budgets -- generous (run on a 64-core node): clean RL/CEM/per-edge training per rate
+RL_STEPS, RL_BATCH, RL_FRAMES = 40, 24, 40
+VAL_FRAMES, FINAL_FRAMES = 200, 1500
+PROBE_FRAMES, PROBE_N = 32, 8
+BER_OFFSETS = [-1.2, -0.8, -0.4, 0.0, 0.4, 0.8, 1.2]
+BER_FRAMES = [300, 400, 550, 700, 900, 1100, 1300]
 
 
 def _arr(a):
@@ -91,13 +91,23 @@ def run_one_rate(label, cfg, candidates, pool, transfer_theta=None):
     pol = R.FeaturePolicy(cfg, lr=0.15, ent=0.02, seed=0)
     _, best_rl = R.train_reinforce(cfg, pol, snr, RL_STEPS, RL_BATCH, RL_FRAMES,
                                    pool=pool, val_frames=VAL_FRAMES, val_seed=99,
-                                   base_seed=1000, log_every=11)
+                                   base_seed=1000, log_every=20)
+    # RL per-edge-logit policy
+    pol_e = R.PerEdgePolicy(E, cfg.w + 1, lr=0.2, ent=0.01, seed=0)
+    _, best_e = R.train_reinforce(cfg, pol_e, snr, RL_STEPS, RL_BATCH, RL_FRAMES,
+                                  pool=pool, val_frames=VAL_FRAMES, val_seed=99,
+                                  base_seed=4000, log_every=20)
+    # CEM (cross-entropy method)
+    _, best_c = R.train_cem(cfg, snr, RL_STEPS, RL_BATCH, RL_FRAMES, pool=pool,
+                            val_frames=VAL_FRAMES, val_seed=99, base_seed=2000, log_every=20)
     # equal-budget random search
     _, best_rnd = R.train_random(cfg, snr, RL_STEPS, RL_BATCH, RL_FRAMES, pool=pool,
                                  val_frames=VAL_FRAMES, val_seed=99, base_seed=3000,
-                                 log_every=11)
+                                 log_every=20)
     champions = {
         "rl": best_rl["assign"],
+        "rl_peredge": best_e["assign"],
+        "cem": best_c["assign"],
         "random_search": best_rnd["assign"],
         "round_robin": R.round_robin_assign(cfg),
         "seed0_default": R.random_assign(cfg, np.random.default_rng(0)),
@@ -116,7 +126,7 @@ def run_one_rate(label, cfg, candidates, pool, transfer_theta=None):
         finals[name] = {"fer": m["fer"], "ber": m["ber"]}
         st = R.construction_stats(cfg, a)
         stats[name] = {"n4": st["n4"], "comp_load": st["comp_load"]}
-        if name != "rl_transfer":               # transfer is a finals-only bonus column
+        if name not in ("rl_transfer", "rl_peredge"):   # finals-only bonus columns
             curves[name] = ber_curve(cfg, a, snrs, pool)
         print(f"  {name:14s} FER={m['fer']:.4f} BER={m['ber']:.3e} n4={st['n4']}", flush=True)
     return {"rate": rate, "bg": cfg.bg, "mp": cfg.mp, "E": int(E), "train_snr": snr,
@@ -146,11 +156,14 @@ def run_sweep():
     print(f"\nsaved results_construct_rate.json + figures ({time.time()-t0:.0f}s)")
 
 
-LAB = {"rl": "RL optimized [ours]", "rl_transfer": "RL zero-shot (R~0.6 policy)",
+LAB = {"rl": "RL feature [ours]", "rl_peredge": "RL per-edge [ours]",
+       "cem": "CEM", "rl_transfer": "RL zero-shot (R~0.6 policy)",
        "random_search": "random search", "round_robin": "round-robin",
        "seed0_default": "random default (seed0)"}
-COL = {"rl": "#d62728", "rl_transfer": "#ff7f0e", "random_search": "#1f77b4",
+COL = {"rl": "#d62728", "rl_peredge": "#ff7f0e", "cem": "#9467bd",
+       "rl_transfer": "#e377c2", "random_search": "#1f77b4",
        "round_robin": "#8c564b", "seed0_default": "#7f7f7f"}
+SUMMARY_METHODS = ["rl", "cem", "random_search", "round_robin", "seed0_default"]
 
 
 def _thr(curve, lvl=0.1, key="fer"):
@@ -172,7 +185,7 @@ def make_plots(out=None):
     # primary summary: waterfall threshold (Eb/N0 @ FER=0.1) vs code rate -- robust
     # across rates (single-point FER mixes different operating SNRs).
     thr_series = []
-    for name in ["rl", "random_search", "round_robin", "seed0_default"]:
+    for name in SUMMARY_METHODS:
         thr_series.append({"x": xrate,
                            "y": [_thr(rates_d[l]["curves"][name], 0.1) or float("nan")
                                  for l in labels],
@@ -183,7 +196,7 @@ def make_plots(out=None):
                     path="exp_construct_rate_threshold.svg")
     # secondary: FER @ each rate's operating SNR
     series = []
-    for name in ["rl", "random_search", "round_robin", "seed0_default"]:
+    for name in SUMMARY_METHODS:
         y = [max(rates_d[l]["finals"][name]["fer"], 5e-4) for l in labels]
         series.append({"x": xrate, "y": y, "label": LAB[name], "color": COL[name]})
     plotting.semilogy(series, xlabel="code rate R", ylabel="FER @ operating SNR",
@@ -193,7 +206,7 @@ def make_plots(out=None):
     for l in labels:
         cur = rates_d[l]["curves"]
         ser = [{"x": cur[n]["x"], "y": cur[n]["y"], "label": LAB[n], "color": COL[n]}
-               for n in ["rl", "random_search", "round_robin", "seed0_default"] if n in cur]
+               for n in SUMMARY_METHODS if n in cur]
         r = rates_d[l]["rate"]
         plotting.semilogy(ser, xlabel="Eb/N0 [dB]", ylabel="info BER",
                           title=f"Construction at R={r:.2f} (bg{rates_d[l]['bg']}, windowed)",

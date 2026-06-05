@@ -133,8 +133,12 @@ def _worker(task):
 
 
 def n_workers():
-    """Use all cores: the main process is blocked in pool.map during evaluation,
-    and each worker is pinned to one thread, so there is no oversubscription."""
+    """Worker-process count for the evaluation pool.  Honour EXP_WORKERS when set
+    (e.g. inside a cgroup-limited container whose CPU *quota* < visible CPUs, where
+    os.cpu_count() would over-subscribe); otherwise use all visible cores."""
+    env = os.environ.get("EXP_WORKERS")
+    if env:
+        return max(1, int(env))
     return max(1, os.cpu_count() or 8)
 
 
