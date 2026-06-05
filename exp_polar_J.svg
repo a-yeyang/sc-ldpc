@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
+<rect width="760" height="520" fill="white"/>
+<text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">PIC coupling depth J at matched rate (windowed BP, L=30)</text>
+<line x1="78" y1="371.1" x2="590" y2="371.1" stroke="#e0e0e0"/>
+<text x="70" y="375.1" text-anchor="end">1e-3</text>
+<line x1="78" y1="211.8" x2="590" y2="211.8" stroke="#e0e0e0"/>
+<text x="70" y="215.8" text-anchor="end">1e-2</text>
+<line x1="78" y1="52.4" x2="590" y2="52.4" stroke="#e0e0e0"/>
+<text x="70" y="56.4" text-anchor="end">1e-1</text>
+<line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#eee"/>
+<text x="78.0" y="480.0" text-anchor="middle">2.5</text>
+<line x1="206.0" y1="48" x2="206.0" y2="460" stroke="#eee"/>
+<text x="206.0" y="480.0" text-anchor="middle">3.0</text>
+<line x1="334.0" y1="48" x2="334.0" y2="460" stroke="#eee"/>
+<text x="334.0" y="480.0" text-anchor="middle">3.5</text>
+<line x1="462.0" y1="48" x2="462.0" y2="460" stroke="#eee"/>
+<text x="462.0" y="480.0" text-anchor="middle">4.0</text>
+<line x1="590.0" y1="48" x2="590.0" y2="460" stroke="#eee"/>
+<text x="590.0" y="480.0" text-anchor="middle">4.5</text>
+<rect x="78" y="48" width="512" height="412" fill="none" stroke="#333"/>
+<text x="334.0" y="504" text-anchor="middle">Eb/N0 [dB]</text>
+<text x="20" y="254.0" text-anchor="middle" transform="rotate(-90 20 254.0)">BER</text>
+<path d="M78.0,76.1 L206.0,220.2 L334.0,196.3 L462.0,253.5 L590.0,416.2" fill="none" stroke="#1f77b4" stroke-width="2.2"/>
+<circle cx="78.0" cy="76.1" r="3.3" fill="#1f77b4"/>
+<circle cx="206.0" cy="220.2" r="3.3" fill="#1f77b4"/>
+<circle cx="334.0" cy="196.3" r="3.3" fill="#1f77b4"/>
+<circle cx="462.0" cy="253.5" r="3.3" fill="#1f77b4"/>
+<circle cx="590.0" cy="416.2" r="3.3" fill="#1f77b4"/>
+<line x1="604" y1="66" x2="624" y2="66" stroke="#1f77b4" stroke-width="2.2"/>
+<text x="628" y="70">uncoupled BP (R=0.25)</text>
+<path d="M78.0,91.2 L206.0,154.5 L334.0,224.6 L462.0,294.4 L590.0,416.8" fill="none" stroke="#d62728" stroke-width="2.2"/>
+<circle cx="78.0" cy="91.2" r="3.3" fill="#d62728"/>
+<circle cx="206.0" cy="154.5" r="3.3" fill="#d62728"/>
+<circle cx="334.0" cy="224.6" r="3.3" fill="#d62728"/>
+<circle cx="462.0" cy="294.4" r="3.3" fill="#d62728"/>
+<circle cx="590.0" cy="416.8" r="3.3" fill="#d62728"/>
+<line x1="604" y1="88" x2="624" y2="88" stroke="#d62728" stroke-width="2.2"/>
+<text x="628" y="92">PIC J=1 c=8 (R=0.25)</text>
+<path d="M78.0,101.4 L206.0,168.7 L334.0,264.2 L462.0,336.3 L590.0,380.0" fill="none" stroke="#2ca02c" stroke-width="2.2"/>
+<circle cx="78.0" cy="101.4" r="3.3" fill="#2ca02c"/>
+<circle cx="206.0" cy="168.7" r="3.3" fill="#2ca02c"/>
+<circle cx="334.0" cy="264.2" r="3.3" fill="#2ca02c"/>
+<circle cx="462.0" cy="336.3" r="3.3" fill="#2ca02c"/>
+<circle cx="590.0" cy="380.0" r="3.3" fill="#2ca02c"/>
+<line x1="604" y1="110" x2="624" y2="110" stroke="#2ca02c" stroke-width="2.2"/>
+<text x="628" y="114">PIC J=2 c=4 (R=0.25)</text>
+<path d="M78.0,132.0 L206.0,189.2 L334.0,236.3 L462.0,317.3 L590.0,424.7" fill="none" stroke="#9467bd" stroke-width="2.2"/>
+<circle cx="78.0" cy="132.0" r="3.3" fill="#9467bd"/>
+<circle cx="206.0" cy="189.2" r="3.3" fill="#9467bd"/>
+<circle cx="334.0" cy="236.3" r="3.3" fill="#9467bd"/>
+<circle cx="462.0" cy="317.3" r="3.3" fill="#9467bd"/>
+<circle cx="590.0" cy="424.7" r="3.3" fill="#9467bd"/>
+<line x1="604" y1="132" x2="624" y2="132" stroke="#9467bd" stroke-width="2.2"/>
+<text x="628" y="136">PIC J=4 c=2 (R=0.24)</text>
+</svg>
