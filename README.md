@@ -9,6 +9,12 @@
 > SC / CA-SCL / 窗口化 BP 译码实验（`nr_polar.py` / `sc_polar.py` / `polar_decoder.py` /
 > `polar_bp.py` / `experiments_polar.py`）。
 
+> 📎 **RL 端到端构造优化见 [RL_CONSTRUCTION.md](RL_CONSTRUCTION.md)**：把 SC-LDPC 的"边扩展"
+> 构造建成 MDP，用策略梯度（REINFORCE）以真实收发链的误帧率为奖励端到端优化（`rl_construct.py` /
+> `experiments_construct.py`）。实测仅优化这一个旋钮就把 FER 降约 5–11×、并消除错误地板；RL 自动学出
+> "同列边散开（避免 4 环）"这一**可解释、可零样本迁移**的规则。（与"RL 译码" [RL_SC_LDPC.md](RL_SC_LDPC.md)
+> 互补：一边学怎么造、一边学怎么译。）
+
 ---
 
 ## 一、空间耦合 LDPC 是怎么回事（调研）
@@ -183,6 +189,9 @@ L → ∞ 时，R_L → R           （码率损失 ∝ w/L，随 L 增大而消
 | `rl_decoder.py`| **强化学习译码**：把滑窗译码建成 MDP（`WindowBP` 单步 BP 引擎 + `SCWindowEnv` 环境 + 表格 Q-learning 智能体），见 [RL_SC_LDPC.md](RL_SC_LDPC.md) |
 | `experiments_rl.py`| RL 控制译码器 vs 固定窗口译码器的复杂度/BER 对比实验与出图 |
 | `tests_rl.py`  | RL 模块自检（`WindowBP` 与 `Tanner.decode` 逐比特一致等）|
+| `rl_construct.py`| **强化学习构造优化**：把边扩展建成 MDP（特征/逐边两种策略 + REINFORCE + CEM/随机搜索基线 + 短环/围长分析），见 [RL_CONSTRUCTION.md](RL_CONSTRUCTION.md) |
+| `experiments_construct.py`| RL 构造优化 vs 同预算随机搜索/CEM：搜索、BER 曲线、4 环机理、零样本迁移实验与出图 |
+| `tests_construct.py`| RL 构造模块自检（编码合法性、CRN 确定性、多进程一致、**两种策略梯度的有限差分校验**）|
 
 ---
 

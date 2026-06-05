@@ -88,6 +88,21 @@
   <div class="card"><img src="exp_hm_90_w3.svg" alt="hm9w3"><p class="cap">R=0.9, w=3</p></div>
 </div>
 
+<h2>RL 端到端构造优化（边扩展，BG2 Z=16 mp=8 L=30 w=2，详见 <code>RL_CONSTRUCTION.md</code>）</h2>
+<p class="cap">用策略梯度 RL 学习"系统位边 → 分量 B0..Bw"的边扩展分配，奖励 = 真实收发链的误帧率。
+<b>仅这一个构造旋钮</b>，FER 从 0.70（仓库默认随机 / 朴素均衡）降到 0.06–0.13（优化后，约 5–11×），
+并消除错误地板；RL 自动学出"同列边散开（避免 4 环）"这一可解释、可零样本迁移的规则。</p>
+<div class="grid">
+  <div class="card"><img src="exp_construct_ber.svg" alt="construct_ber">
+  <p class="cap"><b>BER vs Eb/N0</b>：优化构造（RL/CEM/随机搜索，均 <b>0 个 4 环</b>）无错误地板；仓库默认 seed0
+  与朴素 round-robin（<b>~930 个 4 环</b>）在 ~5e-5 起翘出现地板。未耦合 5G NR 分量码作参照。</p></div>
+  <div class="card"><img src="exp_construct_learn.svg" alt="construct_learn">
+  <p class="cap"><b>样本效率</b>：同预算下随机搜索 ~140 次评估后卡在 FER≈0.09；RL/CEM 持续下探到 0.035–0.06。</p></div>
+  <div class="card"><img src="exp_construct_transfer.svg" alt="construct_transfer">
+  <p class="cap"><b>零样本迁移</b>：把学到的 8 维权重原封搬到新码（Z=24 / mp=6）贪心造码，低于典型随机与
+  round-robin —— 说明学到的是结构性规则、而非对单一码的过拟合。</p></div>
+</div>
+
 <p style="margin-top:24px;color:#777;font-size:13px">
 原始数据见 <code>results*.json</code> / <code>results.csv</code>；构造与方法见 <code>README.md</code>。
 </p>

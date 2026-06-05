@@ -31,7 +31,12 @@ from decoder import Tanner
 
 
 class SCLDPCCode:
-    def __init__(self, component: NRLDPCCode, w: int = 2, L: int = 40, seed: int = 0):
+    def __init__(self, component: NRLDPCCode, w: int = 2, L: int = 40, seed: int = 0,
+                 assign=None):
+        """`assign` (length = #systematic base edges, entries in [0, w]) explicitly
+        chooses the component B_0..B_w for each systematic edge -- this is the
+        construction knob optimised by RL.  If None, a random spreading (seeded by
+        `seed`) is used, reproducing the original behaviour exactly."""
         self.comp = component
         self.w = w
         self.L = L
@@ -40,22 +45,33 @@ class SCLDPCCode:
         self.nb = component.nb
         self.Kb = component.Kb
         self.seed = seed
-        self._edge_spread(seed)
+        self._edge_spread(seed, assign)
         self._build_coupled_entries()
         self._build_masks()
 
     # ------------------------------------------------------------------ #
     #  edge spreading
     # ------------------------------------------------------------------ #
-    def _edge_spread(self, seed):
+    def _edge_spread(self, seed, assign=None):
         B, Kb, w = self.comp.B, self.Kb, self.w
-        rng = np.random.default_rng(seed)
+        # canonical systematic-edge order (row-major); RL `assign` indexes into this
+        ri, cj = np.nonzero(B[:, :Kb] >= 0)
+        self.sys_edge_rc = (ri, cj)
+        self.n_sys_edges = int(ri.size)
+        if assign is None:
+            rng = np.random.default_rng(seed)
+            assign = rng.integers(0, w + 1, size=ri.size)
+        else:
+            assign = np.asarray(assign, dtype=np.int64)
+            assert assign.shape == (ri.size,), \
+                f"assign must have length {ri.size} (got {assign.shape})"
+            assert assign.min() >= 0 and assign.max() <= w, \
+                f"assign entries must be in [0, {w}]"
+        self.assign = assign
         comps = [np.full_like(B, -1) for _ in range(w + 1)]
         # parity part -> component 0
         comps[0][:, Kb:] = B[:, Kb:]
-        # systematic part -> spread over components 0..w
-        ri, cj = np.nonzero(B[:, :Kb] >= 0)
-        assign = rng.integers(0, w + 1, size=ri.size)
+        # systematic part -> spread over components 0..w per `assign`
         for e in range(ri.size):
             comps[assign[e]][ri[e], cj[e]] = B[ri[e], cj[e]]
         # sanity: spreading reconstructs B's systematic part exactly
