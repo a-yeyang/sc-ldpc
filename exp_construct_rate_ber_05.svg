@@ -1,16 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
 <rect width="760" height="520" fill="white"/>
 <text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">Construction at R=0.48 (bg2, windowed)</text>
-<line x1="78" y1="428.4" x2="590" y2="428.4" stroke="#e0e0e0"/>
-<text x="70" y="432.4" text-anchor="end">1e-5</text>
-<line x1="78" y1="341.5" x2="590" y2="341.5" stroke="#e0e0e0"/>
-<text x="70" y="345.5" text-anchor="end">1e-4</text>
-<line x1="78" y1="254.6" x2="590" y2="254.6" stroke="#e0e0e0"/>
-<text x="70" y="258.6" text-anchor="end">1e-3</text>
-<line x1="78" y1="167.7" x2="590" y2="167.7" stroke="#e0e0e0"/>
-<text x="70" y="171.7" text-anchor="end">1e-2</text>
-<line x1="78" y1="80.8" x2="590" y2="80.8" stroke="#e0e0e0"/>
-<text x="70" y="84.8" text-anchor="end">1e-1</text>
+<line x1="78" y1="458.1" x2="590" y2="458.1" stroke="#e0e0e0"/>
+<text x="70" y="462.1" text-anchor="end">1e-6</text>
+<line x1="78" y1="381.9" x2="590" y2="381.9" stroke="#e0e0e0"/>
+<text x="70" y="385.9" text-anchor="end">1e-5</text>
+<line x1="78" y1="305.7" x2="590" y2="305.7" stroke="#e0e0e0"/>
+<text x="70" y="309.7" text-anchor="end">1e-4</text>
+<line x1="78" y1="229.5" x2="590" y2="229.5" stroke="#e0e0e0"/>
+<text x="70" y="233.5" text-anchor="end">1e-3</text>
+<line x1="78" y1="153.2" x2="590" y2="153.2" stroke="#e0e0e0"/>
+<text x="70" y="157.2" text-anchor="end">1e-2</text>
+<line x1="78" y1="77.0" x2="590" y2="77.0" stroke="#e0e0e0"/>
+<text x="70" y="81.0" text-anchor="end">1e-1</text>
 <line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#eee"/>
 <text x="78.0" y="480.0" text-anchor="middle">1.0</text>
 <line x1="206.0" y1="48" x2="206.0" y2="460" stroke="#eee"/>
@@ -24,34 +26,45 @@
 <rect x="78" y="48" width="512" height="412" fill="none" stroke="#333"/>
 <text x="334.0" y="504" text-anchor="middle">Eb/N0 [dB]</text>
 <text x="20" y="254.0" text-anchor="middle" transform="rotate(-90 20 254.0)">info BER</text>
-<path d="M78.0,63.9 L206.0,123.4 L334.0,276.7 L462.0,396.6" fill="none" stroke="#d62728" stroke-width="2.2"/>
-<circle cx="78.0" cy="63.9" r="3.3" fill="#d62728"/>
-<circle cx="206.0" cy="123.4" r="3.3" fill="#d62728"/>
-<circle cx="334.0" cy="276.7" r="3.3" fill="#d62728"/>
-<circle cx="462.0" cy="396.6" r="3.3" fill="#d62728"/>
+<path d="M78.0,63.2 L180.4,97.8 L282.8,204.4 L385.2,326.8 L487.6,443.1" fill="none" stroke="#d62728" stroke-width="2.2"/>
+<circle cx="78.0" cy="63.2" r="3.3" fill="#d62728"/>
+<circle cx="180.4" cy="97.8" r="3.3" fill="#d62728"/>
+<circle cx="282.8" cy="204.4" r="3.3" fill="#d62728"/>
+<circle cx="385.2" cy="326.8" r="3.3" fill="#d62728"/>
+<circle cx="487.6" cy="443.1" r="3.3" fill="#d62728"/>
 <line x1="604" y1="66" x2="624" y2="66" stroke="#d62728" stroke-width="2.2"/>
-<text x="628" y="70">RL optimized [ours]</text>
-<path d="M78.0,64.0 L206.0,137.9 L334.0,278.1 L462.0,422.8" fill="none" stroke="#1f77b4" stroke-width="2.2"/>
-<circle cx="78.0" cy="64.0" r="3.3" fill="#1f77b4"/>
-<circle cx="206.0" cy="137.9" r="3.3" fill="#1f77b4"/>
-<circle cx="334.0" cy="278.1" r="3.3" fill="#1f77b4"/>
-<circle cx="462.0" cy="422.8" r="3.3" fill="#1f77b4"/>
-<line x1="604" y1="88" x2="624" y2="88" stroke="#1f77b4" stroke-width="2.2"/>
-<text x="628" y="92">random search</text>
-<path d="M78.0,63.3 L206.0,107.0 L334.0,234.9 L462.0,344.3 L590.0,440.7" fill="none" stroke="#8c564b" stroke-width="2.2"/>
-<circle cx="78.0" cy="63.3" r="3.3" fill="#8c564b"/>
-<circle cx="206.0" cy="107.0" r="3.3" fill="#8c564b"/>
-<circle cx="334.0" cy="234.9" r="3.3" fill="#8c564b"/>
-<circle cx="462.0" cy="344.3" r="3.3" fill="#8c564b"/>
-<circle cx="590.0" cy="440.7" r="3.3" fill="#8c564b"/>
-<line x1="604" y1="110" x2="624" y2="110" stroke="#8c564b" stroke-width="2.2"/>
-<text x="628" y="114">round-robin</text>
-<path d="M78.0,66.7 L206.0,137.3 L334.0,272.3 L462.0,349.1 L590.0,413.7" fill="none" stroke="#7f7f7f" stroke-width="2.2"/>
-<circle cx="78.0" cy="66.7" r="3.3" fill="#7f7f7f"/>
-<circle cx="206.0" cy="137.3" r="3.3" fill="#7f7f7f"/>
-<circle cx="334.0" cy="272.3" r="3.3" fill="#7f7f7f"/>
-<circle cx="462.0" cy="349.1" r="3.3" fill="#7f7f7f"/>
-<circle cx="590.0" cy="413.7" r="3.3" fill="#7f7f7f"/>
-<line x1="604" y1="132" x2="624" y2="132" stroke="#7f7f7f" stroke-width="2.2"/>
-<text x="628" y="136">random default (seed0)</text>
+<text x="628" y="70">RL feature [ours]</text>
+<path d="M78.0,64.7 L180.4,103.7 L282.8,209.8 L385.2,335.3 L487.6,438.0" fill="none" stroke="#9467bd" stroke-width="2.2"/>
+<circle cx="78.0" cy="64.7" r="3.3" fill="#9467bd"/>
+<circle cx="180.4" cy="103.7" r="3.3" fill="#9467bd"/>
+<circle cx="282.8" cy="209.8" r="3.3" fill="#9467bd"/>
+<circle cx="385.2" cy="335.3" r="3.3" fill="#9467bd"/>
+<circle cx="487.6" cy="438.0" r="3.3" fill="#9467bd"/>
+<line x1="604" y1="88" x2="624" y2="88" stroke="#9467bd" stroke-width="2.2"/>
+<text x="628" y="92">CEM</text>
+<path d="M78.0,63.6 L180.4,99.4 L282.8,210.5 L385.2,360.3" fill="none" stroke="#1f77b4" stroke-width="2.2"/>
+<circle cx="78.0" cy="63.6" r="3.3" fill="#1f77b4"/>
+<circle cx="180.4" cy="99.4" r="3.3" fill="#1f77b4"/>
+<circle cx="282.8" cy="210.5" r="3.3" fill="#1f77b4"/>
+<circle cx="385.2" cy="360.3" r="3.3" fill="#1f77b4"/>
+<line x1="604" y1="110" x2="624" y2="110" stroke="#1f77b4" stroke-width="2.2"/>
+<text x="628" y="114">random search</text>
+<path d="M78.0,61.4 L180.4,85.3 L282.8,162.5 L385.2,254.6 L487.6,325.6 L590.0,385.7" fill="none" stroke="#8c564b" stroke-width="2.2"/>
+<circle cx="78.0" cy="61.4" r="3.3" fill="#8c564b"/>
+<circle cx="180.4" cy="85.3" r="3.3" fill="#8c564b"/>
+<circle cx="282.8" cy="162.5" r="3.3" fill="#8c564b"/>
+<circle cx="385.2" cy="254.6" r="3.3" fill="#8c564b"/>
+<circle cx="487.6" cy="325.6" r="3.3" fill="#8c564b"/>
+<circle cx="590.0" cy="385.7" r="3.3" fill="#8c564b"/>
+<line x1="604" y1="132" x2="624" y2="132" stroke="#8c564b" stroke-width="2.2"/>
+<text x="628" y="136">round-robin</text>
+<path d="M78.0,64.8 L180.4,103.1 L282.8,207.8 L385.2,277.0 L487.6,328.2 L590.0,378.0" fill="none" stroke="#7f7f7f" stroke-width="2.2"/>
+<circle cx="78.0" cy="64.8" r="3.3" fill="#7f7f7f"/>
+<circle cx="180.4" cy="103.1" r="3.3" fill="#7f7f7f"/>
+<circle cx="282.8" cy="207.8" r="3.3" fill="#7f7f7f"/>
+<circle cx="385.2" cy="277.0" r="3.3" fill="#7f7f7f"/>
+<circle cx="487.6" cy="328.2" r="3.3" fill="#7f7f7f"/>
+<circle cx="590.0" cy="378.0" r="3.3" fill="#7f7f7f"/>
+<line x1="604" y1="154" x2="624" y2="154" stroke="#7f7f7f" stroke-width="2.2"/>
+<text x="628" y="158">random default (seed0)</text>
 </svg>

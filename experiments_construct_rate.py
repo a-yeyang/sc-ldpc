@@ -45,12 +45,14 @@ RATE_PLAN = [
      [3.5, 4.0, 4.5, 5.0, 5.5, 6.0]),
 ]
 
-# budgets -- generous (run on a 64-core node): clean RL/CEM/per-edge training per rate
-RL_STEPS, RL_BATCH, RL_FRAMES = 40, 24, 40
-VAL_FRAMES, FINAL_FRAMES = 200, 1500
-PROBE_FRAMES, PROBE_N = 32, 8
-BER_OFFSETS = [-1.2, -0.8, -0.4, 0.0, 0.4, 0.8, 1.2]
-BER_FRAMES = [300, 400, 550, 700, 900, 1100, 1300]
+# budgets for a 64-core node: batch == cores so each PG step is one parallel wave
+# (max evaluations per wall-clock).  18 steps x 64 = 1152 evals/method -- 3x the
+# earlier Mac run, enough to train cleanly even on the big high-rate codes.
+RL_STEPS, RL_BATCH, RL_FRAMES = 18, 64, 28
+VAL_FRAMES, FINAL_FRAMES = 150, 1200
+PROBE_FRAMES, PROBE_N = 28, 8
+BER_OFFSETS = [-1.0, -0.6, -0.2, 0.2, 0.6, 1.0]
+BER_FRAMES = [250, 350, 500, 650, 850, 1050]
 
 
 def _arr(a):

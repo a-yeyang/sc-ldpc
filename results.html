@@ -109,8 +109,8 @@
 门限差的理论一致（高码率本就接近 MAP）。</p>
 <div class="grid">
   <div class="card"><img src="exp_construct_rate_threshold.svg" alt="rate_threshold">
-  <p class="cap"><b>FER=0.1 瀑布门限 vs 码率</b>（越低越好）：RL/随机优化两条线在 round-robin/默认之下，
-  间隙（增益）随码率收窄。</p></div>
+  <p class="cap"><b>FER=0.1 瀑布门限 vs 码率</b>（越低越好，集群 64 核跑，含 RL/CEM/随机四优化器）：
+  优化器各线都在 round-robin/默认之下，间隙（增益）随码率收窄（~0.9 dB @ R≈0.6 → ~0.1 dB @ R0.9）。</p></div>
   <div class="card"><img src="exp_construct_rate_ber_06.svg" alt="rate_ber_06">
   <p class="cap"><b>R≈0.60 BER</b>：默认 seed0 有错误地板，RL 构造消除之（增益最大处 ~0.9 dB）。</p></div>
   <div class="card"><img src="exp_construct_rate_ber_05.svg" alt="rate_ber_05"><p class="cap"><b>R≈0.48</b></p></div>
