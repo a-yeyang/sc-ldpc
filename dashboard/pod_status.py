@@ -69,6 +69,7 @@ if os.path.exists(res):
     except Exception:
         pass
 
+loglines = [l[:200] for l in txt.strip().splitlines()[-16:]]
 print(json.dumps({"slice": sl, "total": total, "cells_done": cells_done, "current": cur,
                   "lsweep": "L-sweep" in txt, "alive": alive, "elapsed": elapsed,
-                  "cpu": cpu, "cpu_quota": quota, "done": done, "rows": rows}))
+                  "cpu": cpu, "cpu_quota": quota, "done": done, "rows": rows, "log": loglines}))

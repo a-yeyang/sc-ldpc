@@ -40,8 +40,8 @@ WS = [1, 2, 3]                           # coupling memory values
 
 # budgets: long-code evals are expensive -> modest; batch == pod cores (one PG wave/step)
 OPT_STEPS, OPT_BATCH, OPT_FRAMES = 10, 80, 8
-VAL_FRAMES, FINAL_FRAMES = 48, 300
-PROBE_FRAMES, PROBE_N = 32, 6
+VAL_FRAMES, FINAL_FRAMES = 80, 300       # val_frames=cores so per-step validation is one wave
+PROBE_FRAMES, PROBE_N = 10, 80           # probe also uses all cores (was the idle phase)
 SNR_CAND = {0.5: [0.5, 1.0, 1.5, 2.0, 2.5], 0.667: [1.0, 1.5, 2.0, 2.5, 3.0],
             0.75: [1.5, 2.0, 2.5, 3.0, 3.5], 0.833: [2.0, 2.5, 3.0, 3.5, 4.0],
             0.875: [2.5, 3.0, 3.5, 4.0, 4.5]}

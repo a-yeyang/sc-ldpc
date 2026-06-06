@@ -25,12 +25,15 @@
   .win{color:var(--grn);font-weight:700} .lose{color:var(--amb)}
   .small{font-size:11px;color:var(--mut)} .err{color:var(--red);font-size:12px}
   .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:1px}
+  .logbox{background:#0a0e13;border:1px solid var(--line);border-radius:7px;margin:4px 0 0;
+    padding:8px 10px;height:240px;overflow-y:auto;font:11.5px/1.5 SFMono-Regular,Consolas,monospace;
+    color:#b8c4d0;white-space:pre-wrap;word-break:break-all}
 </style>
 </head>
 <body>
   <h1>空间耦合 LDPC · RL 端到端构造优化 <span id="globalbadge" class="badge live">● LIVE</span></h1>
-  <div class="sub">长码 5G NR BG1 (Z=64, ~1700–2900 bit) · 高码率 {1/2,2/3,3/4,5/6,7/8} · 耦合 w∈{1,2,3} ·
-    2×80 核 pod 并行 · 自动刷新中 <span id="upd"></span></div>
+  <div class="sub">长码 5G NR BG1 (Z=32, ~860–1470 bit；Z=64 几千位由学到的构造另行验证) · 高码率
+    {1/2,2/3,3/4,5/6,7/8} · 耦合 w∈{1,2,3} · 2×80 核 pod 并行 · 自动刷新中 <span id="upd"></span></div>
 
   <div class="overall">
     <div style="display:flex;justify-content:space-between"><b>总进度</b><span id="otext" class="kv"></span></div>
@@ -46,6 +49,14 @@
       <th>RL特征</th><th>RL逐边</th><th>CEM</th><th>随机搜索</th><th>默认seed0</th><th>RL 4环</th><th>RL vs 随机</th></tr></thead>
       <tbody id="restbody"><tr><td colspan="12" class="small">等待第一个单元完成…</td></tr></tbody>
     </table></div>
+  </div>
+
+  <div class="card" style="flex:1 1 100%">
+    <h2>实时日志（pod 内 big_run.log 尾部，每 15s 拉取最后 16 行）</h2>
+    <div style="display:flex;gap:14px;flex-wrap:wrap">
+      <div style="flex:1 1 480px"><div class="kv" id="logname-0">–</div><pre id="log-0" class="logbox"></pre></div>
+      <div style="flex:1 1 480px"><div class="kv" id="logname-1">–</div><pre id="log-1" class="logbox"></pre></div>
+    </div>
   </div>
 
 <script>
@@ -93,6 +104,14 @@ async function tick(){
         <td>${f4(x.rand)}</td><td>${f4(x.seed0)}</td><td>${x.rl_n4}</td>
         <td class="${win?'win':'lose'}">${win?('×'+r.toFixed(2)+' 更优'):('×'+(1/r).toFixed(2)+' 较差')}</td></tr>`;
     }).join('') : '<tr><td colspan="12" class="small">等待第一个单元完成…</td></tr>';
+    pods.forEach((p,i)=>{
+      const nm=document.getElementById('logname-'+i), bx=document.getElementById('log-'+i);
+      if(!nm||!bx) return;
+      nm.textContent=(p.pod||('slice '+p.slice))+' · '+(p.node||'');
+      const atBottom = bx.scrollHeight-bx.scrollTop-bx.clientHeight < 40;
+      bx.textContent=(p.log||[]).join('\n')||'(暂无日志)';
+      if(atBottom) bx.scrollTop=bx.scrollHeight;
+    });
     document.getElementById('upd').textContent='· 更新于 '+new Date((st.ts||Date.now()/1000)*1000).toLocaleTimeString();
   }catch(e){document.getElementById('upd').textContent='· (status.json 暂不可读，重试中)';}
 }
