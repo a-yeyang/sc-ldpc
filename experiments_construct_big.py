@@ -42,7 +42,7 @@ WS = [1, 2, 3]                           # coupling memory values
 # budgets: long-code evals are expensive -> modest; batch == pod cores (one PG wave/step)
 OPT_STEPS, OPT_BATCH, OPT_FRAMES = 10, 80, 8
 VAL_FRAMES, FINAL_FRAMES = 80, 300       # val_frames=cores so per-step validation is one wave
-PROBE_FRAMES, PROBE_N = 10, 80           # probe also uses all cores (was the idle phase)
+PROBE_FRAMES, PROBE_N = 20, 80           # probe uses all cores; 20 frames for a reliable median
 SNR_CAND = {0.5: [0.5, 1.0, 1.5, 2.0, 2.5], 0.667: [1.0, 1.5, 2.0, 2.5, 3.0],
             0.75: [1.5, 2.0, 2.5, 3.0, 3.5], 0.833: [2.0, 2.5, 3.0, 3.5, 4.0],
             0.875: [2.5, 3.0, 3.5, 4.0, 4.5]}
@@ -67,21 +67,19 @@ def _arr(a):
 
 
 def pick_snr(c, candidates, pool):
-    """Operating SNR in the waterfall (median random-construction FER ~ 0.3).  Long strong
-    codes have a sharp waterfall, so if even the lowest candidate is already past it
-    (FER ~ 0), step below the grid -- otherwise every construction scores 0 and RL gets
-    no learning signal."""
+    """Operating SNR with a measurable, *distinguishable* FER.  Strong long codes have a
+    sharp waterfall at low SNR, so a point past it scores FER ~ 0 for EVERY construction
+    (no learning signal -- the bug we hit at R=1/2).  Among candidates we keep only those
+    still in/before the waterfall (median FER >= 0.05) and take the one closest to 0.25;
+    if even the lowest candidate is past the waterfall we step below the grid."""
     rng = np.random.default_rng(0)
     assigns = [R.random_assign(c, rng) for _ in range(PROBE_N)]
-    meds = []
-    for snr in candidates:
-        ms = R.eval_batch(c, assigns, snr, 1, PROBE_FRAMES, pool=pool)
-        meds.append(float(np.median([m["fer"] for m in ms])))
-    if meds[0] < 0.05:                       # waterfall is below the grid -> go lower
+    meds = [float(np.median([m["fer"] for m in R.eval_batch(c, assigns, snr, 1, PROBE_FRAMES, pool=pool)]))
+            for snr in candidates]
+    usable = [i for i, m in enumerate(meds) if m >= 0.05]
+    if not usable:
         return round(candidates[0] - 1.0, 2)
-    if meds[-1] > 0.6:                        # waterfall above the grid -> go higher
-        return round(candidates[-1] + 0.5, 2)
-    return candidates[int(np.argmin([abs(m - 0.3) for m in meds]))]
+    return candidates[min(usable, key=lambda i: abs(meds[i] - 0.25))]
 
 
 def _thr(curve, lvl=0.1, key="fer"):
