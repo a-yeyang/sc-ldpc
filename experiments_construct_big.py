@@ -21,6 +21,7 @@ Distributed across pods by rate slice (each pod uses EXP_WORKERS cores):
 """
 from __future__ import annotations
 import json
+import os
 import sys
 import time
 import multiprocessing as mp
@@ -171,27 +172,49 @@ def run_lsweep(rate, w, out, pool):
     out["lsweep"] = {"rate": rate, "w": w, "data": lsweep}
 
 
+def _save(out, fn):
+    """Atomic save (temp file + rename) so an interrupt mid-write can't corrupt results."""
+    tmp = fn + ".tmp"
+    json.dump(out, open(tmp, "w"))
+    os.replace(tmp, fn)
+
+
 def run_slice(name):
     t0 = time.time()
     sl = SLICES[name]
-    out = {"slice": name, "config": {"bg": BG, "Z": Z, "opt_L": OPT_L, "W": W,
-                                     "rate_mp": RATE_MP, "ws": WS}, "cells": {}}
     fn = f"results_big_{name}.json"
+    # --- resume: reload any existing results and skip the cells already computed ---
+    out = None
+    if os.path.exists(fn):
+        try:
+            out = json.load(open(fn)); out.setdefault("cells", {})
+            print(f"[resume] {fn}: {len(out['cells'])} cells already done {sorted(out['cells'])}",
+                  flush=True)
+        except Exception as e:
+            print(f"[resume] could not read {fn} ({e}); starting fresh", flush=True)
+            out = None
+    if out is None:
+        out = {"slice": name, "config": {"bg": BG, "Z": Z, "opt_L": OPT_L, "W": W,
+                                         "rate_mp": RATE_MP, "ws": WS}, "cells": {}}
     with mp.Pool(R.n_workers()) as pool:
         print(f"slice {name}: rates {sl['rates']} x w {WS}  ({R.n_workers()} workers)", flush=True)
         for rate in sl["rates"]:
             for w in WS:
+                key = f"R{rate}_w{w}"
+                if key in out["cells"]:                       # already computed -> skip
+                    print(f"  [skip] {key} (already done)", flush=True)
+                    continue
                 try:
-                    out["cells"][f"R{rate}_w{w}"] = run_cell(rate, w, pool)
+                    out["cells"][key] = run_cell(rate, w, pool)
                 except Exception as e:
-                    print(f"  !! cell R{rate} w{w} failed: {e}", flush=True)
-                json.dump(out, open(fn, "w"))
-        if sl.get("lsweep"):
+                    print(f"  !! cell {key} failed: {e}", flush=True)
+                _save(out, fn)
+        if sl.get("lsweep") and "lsweep" not in out:          # skip L-sweep if already done
             try:
                 run_lsweep(sl["lsweep"][0], sl["lsweep"][1], out, pool)
             except Exception as e:
                 print(f"  !! lsweep failed: {e}", flush=True)
-            json.dump(out, open(fn, "w"))
+            _save(out, fn)
     print(f"\nslice {name} done in {time.time()-t0:.0f}s -> {fn}", flush=True)
 
 
