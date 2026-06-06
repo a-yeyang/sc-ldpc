@@ -29,23 +29,27 @@ import numpy as np
 import plotting
 import rl_construct as R
 
-BG, ILS, Z, W, MAXIT = 1, 0, 64, 6, 12
-OPT_L = 30                               # chain length during construction optimisation
+# Z=32 long-ish codes (component codeword (Kb+mp)*Z ~ 860-1470 bits).  Z=64 end-to-end
+# Monte-Carlo is ~8 s/frame -> infeasible for RL (thousands of evals); the learned edge
+# spreading is a base-graph property, so the Z=64 "几千位" regime is reached by VALIDATING
+# the learned construction at large Z separately, not by optimising there.
+BG, ILS, Z, W, MAXIT = 1, 0, 32, 5, 12
+OPT_L = 24                               # chain length during construction optimisation
 RATE_MP = {0.5: 24, 0.667: 13, 0.75: 9, 0.833: 6, 0.875: 5}     # BG1 (Kb=22) rate matching
 WS = [1, 2, 3]                           # coupling memory values
 
 # budgets: long-code evals are expensive -> modest; batch == pod cores (one PG wave/step)
-OPT_STEPS, OPT_BATCH, OPT_FRAMES = 16, 80, 12
-VAL_FRAMES, FINAL_FRAMES = 120, 600
-PROBE_FRAMES, PROBE_N = 16, 6
-SNR_CAND = {0.5: [1.0, 1.5, 2.0, 2.5], 0.667: [2.0, 2.5, 3.0, 3.5],
-            0.75: [2.5, 3.0, 3.5, 4.0], 0.833: [3.0, 3.5, 4.0, 4.5, 5.0],
-            0.875: [3.5, 4.0, 4.5, 5.0, 5.5]}
-BER_OFFSETS = [-1.0, -0.5, 0.0, 0.5, 1.0]
-BER_FRAMES = [200, 300, 400, 500, 650]
-LSWEEP_LS = [30, 50, 100, 200, 300]
-LSWEEP_FRAMES = [150, 220, 300]          # per (L, offset) -- kept light (large L is slow)
-LSWEEP_OFFSETS = [-0.5, 0.0, 0.5]
+OPT_STEPS, OPT_BATCH, OPT_FRAMES = 10, 80, 8
+VAL_FRAMES, FINAL_FRAMES = 48, 300
+PROBE_FRAMES, PROBE_N = 32, 6
+SNR_CAND = {0.5: [0.5, 1.0, 1.5, 2.0, 2.5], 0.667: [1.0, 1.5, 2.0, 2.5, 3.0],
+            0.75: [1.5, 2.0, 2.5, 3.0, 3.5], 0.833: [2.0, 2.5, 3.0, 3.5, 4.0],
+            0.875: [2.5, 3.0, 3.5, 4.0, 4.5]}
+BER_OFFSETS = [-0.6, 0.0, 0.6]
+BER_FRAMES = [150, 250, 350]
+LSWEEP_LS = [24, 50, 100, 200]
+LSWEEP_FRAMES = [100, 150]                # per (L, offset) -- kept light (large L is slow)
+LSWEEP_OFFSETS = [0.0]
 
 # balanced by per-position size nb=Kb+mp (R=1/2 mp=24 is the heaviest); L-sweeps put on
 # lighter rates so L=300 stays feasible.  Two 80-core pods run these in parallel.
@@ -62,15 +66,21 @@ def _arr(a):
 
 
 def pick_snr(c, candidates, pool):
+    """Operating SNR in the waterfall (median random-construction FER ~ 0.3).  Long strong
+    codes have a sharp waterfall, so if even the lowest candidate is already past it
+    (FER ~ 0), step below the grid -- otherwise every construction scores 0 and RL gets
+    no learning signal."""
     rng = np.random.default_rng(0)
     assigns = [R.random_assign(c, rng) for _ in range(PROBE_N)]
-    best, best_gap = candidates[len(candidates) // 2], 1e9
+    meds = []
     for snr in candidates:
         ms = R.eval_batch(c, assigns, snr, 1, PROBE_FRAMES, pool=pool)
-        med = float(np.median([m["fer"] for m in ms]))
-        if abs(med - 0.30) < best_gap:
-            best_gap, best = abs(med - 0.30), snr
-    return best
+        meds.append(float(np.median([m["fer"] for m in ms])))
+    if meds[0] < 0.05:                       # waterfall is below the grid -> go lower
+        return round(candidates[0] - 1.0, 2)
+    if meds[-1] > 0.6:                        # waterfall above the grid -> go higher
+        return round(candidates[-1] + 0.5, 2)
+    return candidates[int(np.argmin([abs(m - 0.3) for m in meds]))]
 
 
 def _thr(curve, lvl=0.1, key="fer"):

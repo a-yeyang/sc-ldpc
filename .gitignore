@@ -3,3 +3,5 @@ __pycache__/
 *.log
 .DS_Store
 dashboard/status.json
+.cluster_tunnel.local
+cluster_tunnel.sh

@@ -25,6 +25,29 @@ if cm:
     r, scr, w, e, snr = cm[-1]
     cur = {"rate": float(r), "sc_rate": float(scr), "w": int(w), "E": int(e), "snr": float(snr)}
 
+def _cpu_cores():
+    """Cores actually used by this pod (cgroup v2 usage_usec delta over a short sample)."""
+    try:
+        def usage():
+            for ln in open("/sys/fs/cgroup/cpu.stat"):
+                if ln.startswith("usage_usec"):
+                    return int(ln.split()[1])
+        a = usage(); t0 = time.time(); time.sleep(0.35); b = usage(); t1 = time.time()
+        return round((b - a) / 1e6 / (t1 - t0), 1)
+    except Exception:
+        return None
+
+
+def _cpu_quota():
+    try:
+        q, p = open("/sys/fs/cgroup/cpu.max").read().split()
+        return round(int(q) / int(p)) if q != "max" else None
+    except Exception:
+        return None
+
+
+cpu = _cpu_cores()
+quota = _cpu_quota()
 pid = open("/work/run.pid").read().strip() if os.path.exists("/work/run.pid") else ""
 alive = bool(pid) and os.path.isdir("/proc/" + pid)
 elapsed = int(time.time() - os.path.getmtime("/work/run.pid")) if os.path.exists("/work/run.pid") else 0
@@ -48,4 +71,4 @@ if os.path.exists(res):
 
 print(json.dumps({"slice": sl, "total": total, "cells_done": cells_done, "current": cur,
                   "lsweep": "L-sweep" in txt, "alive": alive, "elapsed": elapsed,
-                  "done": done, "rows": rows}))
+                  "cpu": cpu, "cpu_quota": quota, "done": done, "rows": rows}))

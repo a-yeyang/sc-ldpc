@@ -61,12 +61,17 @@ function podCard(p){
   if(p.current && !p.done){const c=p.current;
     cur=`<div class="kv">当前: <b>R=${c.rate}</b> (SC ${c.sc_rate}) · <b>w=${c.w}</b> · E=${c.E} · 空间 ${c.w+1}^${c.E} · @${c.snr}dB</div>`;}
   if(p.lsweep && !p.done) cur+=`<div class="kv">阶段: <b>L-sweep</b>（链长 30→300 验证）</div>`;
+  const cq=p.cpu_quota||80, cu=(p.cpu==null?null:p.cpu);
+  const cpct=cu==null?0:Math.min(100,Math.round(cu/cq*100));
+  const cpuline = cu==null?'':`<div class="kv" style="margin-top:6px">CPU 占用 <b>${cu}</b>/${cq} 核
+     · <b>${cpct}%</b></div><div class="bar"><i style="width:${cpct}%;background:linear-gradient(90deg,#d29922,#f85149)"></i></div>`;
   return `<div class="card">
     <h2>${p.pod||p.slice} ${status}</h2>
     <div class="kv">节点 <b>${p.node||'?'}</b> · slice <b>${p.slice}</b> · 用时 <b>${fmt(p.elapsed)}</b></div>
     ${p.error?`<div class="err">⚠ ${p.error}</div>`:''}
     <div class="kv">单元 <b>${done}/${total}</b> 完成</div>
     <div class="bar"><i style="width:${pct}%"></i></div>
+    ${cpuline}
     ${cur}</div>`;
 }
 async function tick(){

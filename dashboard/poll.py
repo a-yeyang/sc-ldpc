@@ -38,6 +38,13 @@ def finalize():
 def main():
     while True:
         pods = [pod_status(p, s, n) for p, s, n in PODS]
+        # self-heal: if the bastion tunnel dropped, kubectl errors -> restart it
+        if any("refus" in str(p.get("error", "")).lower() or
+               "connect" in str(p.get("error", "")).lower() for p in pods):
+            try:
+                subprocess.run(["bash", "cluster_tunnel.sh"], cwd=ROOT, timeout=45)
+            except Exception:
+                pass
         alldone = all(p.get("done") for p in pods) and len(pods) == 2
         st = {"ts": int(time.time()), "alldone": alldone, "finalized": False, "pods": pods}
         json.dump(st, open(f"{DIR}/status.json", "w"))
