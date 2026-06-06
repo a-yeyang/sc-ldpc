@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>SC-LDPC RL 构造实验 · 实况</title>
+<style>
+  :root{--bg:#0f1419;--card:#1a2029;--mut:#8b98a5;--fg:#e6edf3;--line:#2a323d;
+        --grn:#2ea043;--red:#f85149;--blu:#388bfd;--amb:#d29922;--pur:#a371f7}
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--fg);
+    font-family:-apple-system,Helvetica,Arial,sans-serif;padding:20px;max-width:1180px;margin:0 auto}
+  h1{font-size:20px;margin:0 0 4px} .sub{color:var(--mut);font-size:13px;margin-bottom:18px}
+  .badge{display:inline-block;padding:2px 10px;border-radius:11px;font-size:12px;font-weight:600}
+  .live{background:rgba(46,160,67,.15);color:var(--grn)} .dead{background:rgba(248,81,73,.15);color:var(--red)}
+  .doneb{background:rgba(56,139,253,.15);color:var(--blu)}
+  .overall{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin-bottom:16px}
+  .bar{height:10px;background:#0c1117;border-radius:6px;overflow:hidden;margin-top:7px}
+  .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--blu),var(--grn));transition:width .5s}
+  .grid{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+  .card{flex:1 1 520px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 18px}
+  .card h2{font-size:15px;margin:0 0 2px} .kv{color:var(--mut);font-size:12.5px;margin:2px 0}
+  .kv b{color:var(--fg);font-weight:600}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px}
+  th,td{padding:5px 8px;text-align:right;border-bottom:1px solid var(--line)}
+  th{color:var(--mut);font-weight:600;text-align:right} td:first-child,th:first-child{text-align:left}
+  .win{color:var(--grn);font-weight:700} .lose{color:var(--amb)}
+  .small{font-size:11px;color:var(--mut)} .err{color:var(--red);font-size:12px}
+  .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:1px}
+</style>
+</head>
+<body>
+  <h1>空间耦合 LDPC · RL 端到端构造优化 <span id="globalbadge" class="badge live">● LIVE</span></h1>
+  <div class="sub">长码 5G NR BG1 (Z=64, ~1700–2900 bit) · 高码率 {1/2,2/3,3/4,5/6,7/8} · 耦合 w∈{1,2,3} ·
+    2×80 核 pod 并行 · 自动刷新中 <span id="upd"></span></div>
+
+  <div class="overall">
+    <div style="display:flex;justify-content:space-between"><b>总进度</b><span id="otext" class="kv"></span></div>
+    <div class="bar"><i id="obar" style="width:0%"></i></div>
+  </div>
+
+  <div class="grid" id="cards"></div>
+
+  <div class="card" style="flex:1 1 100%">
+    <h2>已完成单元结果（FER@工作点，越低越好；<span class="win">绿=RL优于随机搜索</span>）</h2>
+    <div style="overflow-x:auto"><table id="restab">
+      <thead><tr><th>cell</th><th>码率</th><th>w</th><th>E</th><th>SNR</th>
+      <th>RL特征</th><th>RL逐边</th><th>CEM</th><th>随机搜索</th><th>默认seed0</th><th>RL 4环</th><th>RL vs 随机</th></tr></thead>
+      <tbody id="restbody"><tr><td colspan="12" class="small">等待第一个单元完成…</td></tr></tbody>
+    </table></div>
+  </div>
+
+<script>
+function fmt(s){if(s==null)return '–';const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;
+  return (h?h+'h':'')+(m<10&&h?'0':'')+m+'m'+(x<10?'0':'')+x+'s';}
+function f4(v){return (v==null)?'–':(v===0?'0':Number(v).toFixed(v<0.01?4:3));}
+function podCard(p){
+  const total=p.total||0, done=p.cells_done||0, pct=total?Math.round(done/total*100):0;
+  const status = p.error ? `<span class="badge dead">ERR</span>`
+    : p.done ? `<span class="badge doneb">✓ DONE</span>`
+    : `<span class="badge live">● 运行中</span>`;
+  let cur='';
+  if(p.current && !p.done){const c=p.current;
+    cur=`<div class="kv">当前: <b>R=${c.rate}</b> (SC ${c.sc_rate}) · <b>w=${c.w}</b> · E=${c.E} · 空间 ${c.w+1}^${c.E} · @${c.snr}dB</div>`;}
+  if(p.lsweep && !p.done) cur+=`<div class="kv">阶段: <b>L-sweep</b>（链长 30→300 验证）</div>`;
+  return `<div class="card">
+    <h2>${p.pod||p.slice} ${status}</h2>
+    <div class="kv">节点 <b>${p.node||'?'}</b> · slice <b>${p.slice}</b> · 用时 <b>${fmt(p.elapsed)}</b></div>
+    ${p.error?`<div class="err">⚠ ${p.error}</div>`:''}
+    <div class="kv">单元 <b>${done}/${total}</b> 完成</div>
+    <div class="bar"><i style="width:${pct}%"></i></div>
+    ${cur}</div>`;
+}
+async function tick(){
+  try{
+    const r=await fetch('status.json?_='+Date.now()); const st=await r.json();
+    const pods=st.pods||[];
+    document.getElementById('cards').innerHTML=pods.map(podCard).join('');
+    let td=0,tt=0,rows=[]; pods.forEach(p=>{td+=p.cells_done||0;tt+=p.total||0;(p.rows||[]).forEach(x=>rows.push(x));});
+    document.getElementById('otext').textContent=`${td}/${tt} 单元 · ${Math.round(tt?td/tt*100:0)}%` +
+      (st.alldone?(st.finalized?' · 结果已下载✓':' · 收尾中…'):'');
+    document.getElementById('obar').style.width=(tt?td/tt*100:0)+'%';
+    const gb=document.getElementById('globalbadge');
+    if(st.alldone){gb.className='badge doneb';gb.textContent= st.finalized?'✓ 全部完成 · 已下载':'✓ 完成 · 收尾中';}
+    rows.sort((a,b)=>(a.rate-b.rate)||(a.w-b.w));
+    document.getElementById('restbody').innerHTML = rows.length? rows.map(x=>{
+      const win = x.rl < x.rand; const r=(x.rand/Math.max(x.rl,1e-4));
+      return `<tr><td>${x.cell}</td><td>${x.rate}</td><td>${x.w}</td><td>${x.E}</td><td>${x.snr??'–'}</td>
+        <td class="${win?'win':''}">${f4(x.rl)}</td><td>${f4(x.peredge)}</td><td>${f4(x.cem)}</td>
+        <td>${f4(x.rand)}</td><td>${f4(x.seed0)}</td><td>${x.rl_n4}</td>
+        <td class="${win?'win':'lose'}">${win?('×'+r.toFixed(2)+' 更优'):('×'+(1/r).toFixed(2)+' 较差')}</td></tr>`;
+    }).join('') : '<tr><td colspan="12" class="small">等待第一个单元完成…</td></tr>';
+    document.getElementById('upd').textContent='· 更新于 '+new Date((st.ts||Date.now()/1000)*1000).toLocaleTimeString();
+  }catch(e){document.getElementById('upd').textContent='· (status.json 暂不可读，重试中)';}
+}
+tick(); setInterval(tick, 4000);
+</script>
+</body>
+</html>

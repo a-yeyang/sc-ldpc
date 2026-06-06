@@ -265,8 +265,32 @@ def make_plots():
                 plotting.semilogy(ser, xlabel="Eb/N0 [dB]", ylabel="info BER",
                                   title=f"Chain length L sweep ({tag} construction, R={rate} w={w})",
                                   path=f"exp_big_lsweep_{champ}.svg")
+    _export_tables(out)
     json.dump(out, open("results_big_merged.json", "w"))
-    print("wrote exp_big_*.svg and results_big_merged.json")
+    print("wrote exp_big_*.svg, results_big_merged.json, results_big_{finals,hist}.csv")
+
+
+def _export_tables(out):
+    """CSV data tables: final FER/BER/n4 per method, and the full RL training history
+    (loss = mean_reward, plus best_val_fer) per construction evaluation."""
+    import csv
+    cells = out["cells"]
+    with open("results_big_finals.csv", "w", newline="") as f:
+        wr = csv.writer(f); wr.writerow(["cell", "rate", "w", "E", "method", "fer", "ber", "n4"])
+        for k, c in sorted(cells.items()):
+            for m, fv in c["finals"].items():
+                wr.writerow([k, c["rate"], c["w"], c["E"], m, f"{fv['fer']:.5f}",
+                             f"{fv['ber']:.3e}", c["stats"].get(m, {}).get("n4", "")])
+    with open("results_big_hist.csv", "w", newline="") as f:
+        wr = csv.writer(f)
+        wr.writerow(["cell", "rate", "w", "method", "eval", "mean_reward_loss", "best_val_fer"])
+        for k, c in sorted(cells.items()):
+            for m, h in c.get("hist", {}).items():
+                ev = h.get("evals", []); mr = h.get("mean_reward", []); bf = h.get("best_val_fer", [])
+                for i in range(len(ev)):
+                    wr.writerow([k, c["rate"], c["w"], m, ev[i],
+                                 f"{mr[i]:.4f}" if i < len(mr) else "",
+                                 f"{bf[i]:.4f}" if i < len(bf) else ""])
 
 
 if __name__ == "__main__":
