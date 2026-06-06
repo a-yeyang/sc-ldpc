@@ -89,23 +89,26 @@ def run_one_rate(label, cfg, candidates, pool, transfer_theta=None):
     print(f"\n=== {label}: bg{cfg.bg} mp{cfg.mp} rate={rate:.3f}  E={E}  "
           f"train@{snr} dB ===", flush=True)
 
-    # RL feature policy (the transferable, sequential-MDP learner)
+    # RL feature policy (the transferable, sequential-MDP learner).  Keep the full
+    # training history (per-step mean_reward = policy-gradient return, the RL "loss",
+    # and best_val_fer) so the learning curve is persisted, not just the champion.
     pol = R.FeaturePolicy(cfg, lr=0.15, ent=0.02, seed=0)
-    _, best_rl = R.train_reinforce(cfg, pol, snr, RL_STEPS, RL_BATCH, RL_FRAMES,
-                                   pool=pool, val_frames=VAL_FRAMES, val_seed=99,
-                                   base_seed=1000, log_every=20)
+    h_rl, best_rl = R.train_reinforce(cfg, pol, snr, RL_STEPS, RL_BATCH, RL_FRAMES,
+                                      pool=pool, val_frames=VAL_FRAMES, val_seed=99,
+                                      base_seed=1000, log_every=20)
     # RL per-edge-logit policy
     pol_e = R.PerEdgePolicy(E, cfg.w + 1, lr=0.2, ent=0.01, seed=0)
-    _, best_e = R.train_reinforce(cfg, pol_e, snr, RL_STEPS, RL_BATCH, RL_FRAMES,
-                                  pool=pool, val_frames=VAL_FRAMES, val_seed=99,
-                                  base_seed=4000, log_every=20)
+    h_e, best_e = R.train_reinforce(cfg, pol_e, snr, RL_STEPS, RL_BATCH, RL_FRAMES,
+                                    pool=pool, val_frames=VAL_FRAMES, val_seed=99,
+                                    base_seed=4000, log_every=20)
     # CEM (cross-entropy method)
-    _, best_c = R.train_cem(cfg, snr, RL_STEPS, RL_BATCH, RL_FRAMES, pool=pool,
-                            val_frames=VAL_FRAMES, val_seed=99, base_seed=2000, log_every=20)
+    h_c, best_c = R.train_cem(cfg, snr, RL_STEPS, RL_BATCH, RL_FRAMES, pool=pool,
+                              val_frames=VAL_FRAMES, val_seed=99, base_seed=2000, log_every=20)
     # equal-budget random search
-    _, best_rnd = R.train_random(cfg, snr, RL_STEPS, RL_BATCH, RL_FRAMES, pool=pool,
-                                 val_frames=VAL_FRAMES, val_seed=99, base_seed=3000,
-                                 log_every=20)
+    h_rnd, best_rnd = R.train_random(cfg, snr, RL_STEPS, RL_BATCH, RL_FRAMES, pool=pool,
+                                     val_frames=VAL_FRAMES, val_seed=99, base_seed=3000,
+                                     log_every=20)
+    hist = {"rl": h_rl, "rl_peredge": h_e, "cem": h_c, "random": h_rnd}
     champions = {
         "rl": best_rl["assign"],
         "rl_peredge": best_e["assign"],
@@ -132,7 +135,7 @@ def run_one_rate(label, cfg, candidates, pool, transfer_theta=None):
             curves[name] = ber_curve(cfg, a, snrs, pool)
         print(f"  {name:14s} FER={m['fer']:.4f} BER={m['ber']:.3e} n4={st['n4']}", flush=True)
     return {"rate": rate, "bg": cfg.bg, "mp": cfg.mp, "E": int(E), "train_snr": snr,
-            "finals": finals, "stats": stats, "curves": curves,
+            "finals": finals, "stats": stats, "curves": curves, "hist": hist,
             "theta_rl": pol.theta.tolist(),
             "champions": {k: _arr(v) for k, v in champions.items()}}
 
@@ -165,6 +168,8 @@ LAB = {"rl": "RL feature [ours]", "rl_peredge": "RL per-edge [ours]",
 COL = {"rl": "#d62728", "rl_peredge": "#ff7f0e", "cem": "#9467bd",
        "rl_transfer": "#e377c2", "random_search": "#1f77b4",
        "round_robin": "#8c564b", "seed0_default": "#7f7f7f"}
+LAB["random"] = "random search"
+COL["random"] = "#1f77b4"
 SUMMARY_METHODS = ["rl", "cem", "random_search", "round_robin", "seed0_default"]
 
 
@@ -213,7 +218,20 @@ def make_plots(out=None):
         plotting.semilogy(ser, xlabel="Eb/N0 [dB]", ylabel="info BER",
                           title=f"Construction at R={r:.2f} (bg{rates_d[l]['bg']}, windowed)",
                           path=f"exp_construct_rate_ber_{l[1:].replace('.','')}.svg")
-    print("wrote exp_construct_rate_gain.svg + per-rate BER figures")
+    # per-rate learning curves (RL "loss": training trajectory): best validation FER
+    # vs #evaluations for the four optimizers (only if training history was saved)
+    floor = 0.5 / VAL_FRAMES
+    for l in labels:
+        h = rates_d[l].get("hist")
+        if not h:
+            continue
+        ser = [{"x": h[m]["evals"], "y": [max(f, floor) for f in h[m]["best_val_fer"]],
+                "label": LAB.get(m, m), "color": COL.get(m, "#333")}
+               for m in ["rl", "rl_peredge", "cem", "random"] if m in h]
+        plotting.semilogy(ser, xlabel="# construction evaluations", ylabel="best validation FER",
+                          title=f"Learning curves at R={rates_d[l]['rate']:.2f} (sample efficiency)",
+                          path=f"exp_construct_rate_learn_{l[1:].replace('.','')}.svg")
+    print("wrote exp_construct_rate_{gain,threshold,ber_*,learn_*}.svg")
 
 
 def run_check():
