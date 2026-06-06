@@ -278,8 +278,10 @@ RL 学到的是**真正的结构性原理**、而非对单一码的过拟合。�
 优化器**——RL 特征策略、RL 逐边策略、CEM、同预算随机搜索——外加 round-robin / 默认 seed0 基线，
 每种 `batch=64 × 18 步 = 1152` 次评估（约为之前 Mac 精简跑的 3 倍）。用 **FER=0.1 的瀑布门限
 Eb/N0（越低越好）**做跨码率度量。脚本 [experiments_construct_rate.py](experiments_construct_rate.py)，
-数据 `results_construct_rate.json`，图 `exp_construct_rate_threshold.svg`（门限-码率总览）/
-`exp_construct_rate_ber_*.svg`（每码率 BER，含 CEM）。
+数据 `results_construct_rate.json`（含每码率四方法的训练历史 `hist`：`mean_reward`=策略梯度
+回报/"loss"、`best_val_fer`、`evals`），图 `exp_construct_rate_threshold.svg`（门限-码率总览）/
+`exp_construct_rate_ber_*.svg`（每码率 BER，含 CEM）/ `exp_construct_rate_learn_*.svg`（每码率
+四方法的**学习/loss 曲线**：best val FER vs 评估次数）。
 
 **FER @ 工作点（1200 帧）+ 瀑布门限 @FER=0.1（dB）：**
 
