@@ -46,8 +46,20 @@ def _cpu_quota():
         return None
 
 
+def _mem():
+    """(used_GB, limit_GB) from the pod's cgroup."""
+    try:
+        cur = int(open("/sys/fs/cgroup/memory.current").read())
+        mx = open("/sys/fs/cgroup/memory.max").read().strip()
+        lim = int(mx) if mx != "max" else None
+        return round(cur / 1e9, 1), (round(lim / 1e9) if lim else None)
+    except Exception:
+        return None, None
+
+
 cpu = _cpu_cores()
 quota = _cpu_quota()
+mem_used, mem_lim = _mem()
 pid = open("/work/run.pid").read().strip() if os.path.exists("/work/run.pid") else ""
 alive = bool(pid) and os.path.isdir("/proc/" + pid)
 elapsed = int(time.time() - os.path.getmtime("/work/run.pid")) if os.path.exists("/work/run.pid") else 0
@@ -72,4 +84,5 @@ if os.path.exists(res):
 loglines = [l[:200] for l in txt.strip().splitlines()[-16:]]
 print(json.dumps({"slice": sl, "total": total, "cells_done": cells_done, "current": cur,
                   "lsweep": "L-sweep" in txt, "alive": alive, "elapsed": elapsed,
-                  "cpu": cpu, "cpu_quota": quota, "done": done, "rows": rows, "log": loglines}))
+                  "cpu": cpu, "cpu_quota": quota, "mem": mem_used, "mem_quota": mem_lim,
+                  "done": done, "rows": rows, "log": loglines}))

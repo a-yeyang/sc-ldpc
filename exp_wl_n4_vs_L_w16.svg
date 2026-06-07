@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
+<rect width="760" height="520" fill="white"/>
+<text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">4-cycles vs chain length L (w=16)</text>
+<line x1="78" y1="409.7" x2="590" y2="409.7" stroke="#e0e0e0"/>
+<text x="70" y="413.7" text-anchor="end">1e0</text>
+<line x1="78" y1="313.4" x2="590" y2="313.4" stroke="#e0e0e0"/>
+<text x="70" y="317.4" text-anchor="end">1e1</text>
+<line x1="78" y1="217.1" x2="590" y2="217.1" stroke="#e0e0e0"/>
+<text x="70" y="221.1" text-anchor="end">1e2</text>
+<line x1="78" y1="120.9" x2="590" y2="120.9" stroke="#e0e0e0"/>
+<text x="70" y="124.9" text-anchor="end">1e3</text>
+<line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#eee"/>
+<text x="78.0" y="480.0" text-anchor="middle">30.0</text>
+<line x1="141.4" y1="48" x2="141.4" y2="460" stroke="#eee"/>
+<text x="141.4" y="480.0" text-anchor="middle">56.0</text>
+<line x1="204.8" y1="48" x2="204.8" y2="460" stroke="#eee"/>
+<text x="204.8" y="480.0" text-anchor="middle">82.0</text>
+<line x1="268.2" y1="48" x2="268.2" y2="460" stroke="#eee"/>
+<text x="268.2" y="480.0" text-anchor="middle">108.0</text>
+<line x1="331.6" y1="48" x2="331.6" y2="460" stroke="#eee"/>
+<text x="331.6" y="480.0" text-anchor="middle">134.0</text>
+<line x1="395.0" y1="48" x2="395.0" y2="460" stroke="#eee"/>
+<text x="395.0" y="480.0" text-anchor="middle">160.0</text>
+<line x1="458.3" y1="48" x2="458.3" y2="460" stroke="#eee"/>
+<text x="458.3" y="480.0" text-anchor="middle">186.0</text>
+<line x1="521.7" y1="48" x2="521.7" y2="460" stroke="#eee"/>
+<text x="521.7" y="480.0" text-anchor="middle">212.0</text>
+<line x1="585.1" y1="48" x2="585.1" y2="460" stroke="#eee"/>
+<text x="585.1" y="480.0" text-anchor="middle">238.0</text>
+<rect x="78" y="48" width="512" height="412" fill="none" stroke="#333"/>
+<text x="334.0" y="504" text-anchor="middle">chain length L</text>
+<text x="20" y="254.0" text-anchor="middle" transform="rotate(-90 20 254.0)">4-cycles (lower=better)</text>
+<path d="M78.0,438.6 L151.1,438.6 L297.4,438.6 L590.0,438.6" fill="none" stroke="#d62728" stroke-width="2.2"/>
+<circle cx="78.0" cy="438.6" r="3.3" fill="#d62728"/>
+<circle cx="151.1" cy="438.6" r="3.3" fill="#d62728"/>
+<circle cx="297.4" cy="438.6" r="3.3" fill="#d62728"/>
+<circle cx="590.0" cy="438.6" r="3.3" fill="#d62728"/>
+<line x1="604" y1="66" x2="624" y2="66" stroke="#d62728" stroke-width="2.2"/>
+<text x="628" y="70">RL feature [ours]</text>
+<path d="M78.0,438.6 L151.1,438.6 L297.4,438.6 L590.0,438.6" fill="none" stroke="#1f77b4" stroke-width="2.2"/>
+<circle cx="78.0" cy="438.6" r="3.3" fill="#1f77b4"/>
+<circle cx="151.1" cy="438.6" r="3.3" fill="#1f77b4"/>
+<circle cx="297.4" cy="438.6" r="3.3" fill="#1f77b4"/>
+<circle cx="590.0" cy="438.6" r="3.3" fill="#1f77b4"/>
+<line x1="604" y1="88" x2="624" y2="88" stroke="#1f77b4" stroke-width="2.2"/>
+<text x="628" y="92">random search</text>
+<path d="M78.0,154.4 L151.1,124.0 L297.4,94.3 L590.0,65.0" fill="none" stroke="#7f7f7f" stroke-width="2.2"/>
+<circle cx="78.0" cy="154.4" r="3.3" fill="#7f7f7f"/>
+<circle cx="151.1" cy="124.0" r="3.3" fill="#7f7f7f"/>
+<circle cx="297.4" cy="94.3" r="3.3" fill="#7f7f7f"/>
+<circle cx="590.0" cy="65.0" r="3.3" fill="#7f7f7f"/>
+<line x1="604" y1="110" x2="624" y2="110" stroke="#7f7f7f" stroke-width="2.2"/>
+<text x="628" y="114">default seed0</text>
+</svg>

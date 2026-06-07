@@ -76,6 +76,9 @@ function podCard(p){
   const cpct=cu==null?0:Math.min(100,Math.round(cu/cq*100));
   const cpuline = cu==null?'':`<div class="kv" style="margin-top:6px">CPU 占用 <b>${cu}</b>/${cq} 核
      · <b>${cpct}%</b></div><div class="bar"><i style="width:${cpct}%;background:linear-gradient(90deg,#d29922,#f85149)"></i></div>`;
+  const mq=p.mem_quota, mu=(p.mem==null?null:p.mem), mpct=(mu==null||!mq)?0:Math.min(100,Math.round(mu/mq*100));
+  const memline = mu==null?'':`<div class="kv" style="margin-top:6px">内存 <b>${mu}</b>${mq?('/'+mq):''} GB${mq?(' · <b>'+mpct+'%</b>'):''}</div>`+
+     (mq?`<div class="bar"><i style="width:${mpct}%;background:linear-gradient(90deg,#388bfd,#a371f7)"></i></div>`:'');
   return `<div class="card">
     <h2>${p.pod||p.slice} ${status}</h2>
     <div class="kv">节点 <b>${p.node||'?'}</b> · slice <b>${p.slice}</b> · 用时 <b>${fmt(p.elapsed)}</b></div>
@@ -83,6 +86,7 @@ function podCard(p){
     <div class="kv">单元 <b>${done}/${total}</b> 完成</div>
     <div class="bar"><i style="width:${pct}%"></i></div>
     ${cpuline}
+    ${memline}
     ${cur}</div>`;
 }
 async function tick(){
