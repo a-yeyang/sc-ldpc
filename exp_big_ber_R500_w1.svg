@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
+<rect width="760" height="520" fill="white"/>
+<text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">Long SC-LDPC R=0.5 w=1 (BG1 Z=64, L=24)</text>
+<line x1="78" y1="397.3" x2="590" y2="397.3" stroke="#e0e0e0"/>
+<text x="70" y="401.3" text-anchor="end">1e-6</text>
+<line x1="78" y1="333.1" x2="590" y2="333.1" stroke="#e0e0e0"/>
+<text x="70" y="337.1" text-anchor="end">1e-5</text>
+<line x1="78" y1="268.8" x2="590" y2="268.8" stroke="#e0e0e0"/>
+<text x="70" y="272.8" text-anchor="end">1e-4</text>
+<line x1="78" y1="204.5" x2="590" y2="204.5" stroke="#e0e0e0"/>
+<text x="70" y="208.5" text-anchor="end">1e-3</text>
+<line x1="78" y1="140.2" x2="590" y2="140.2" stroke="#e0e0e0"/>
+<text x="70" y="144.2" text-anchor="end">1e-2</text>
+<line x1="78" y1="76.0" x2="590" y2="76.0" stroke="#e0e0e0"/>
+<text x="70" y="80.0" text-anchor="end">1e-1</text>
+<line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#eee"/>
+<text x="78.0" y="480.0" text-anchor="middle">0.9</text>
+<line x1="291.3" y1="48" x2="291.3" y2="460" stroke="#eee"/>
+<text x="291.3" y="480.0" text-anchor="middle">1.4</text>
+<line x1="504.7" y1="48" x2="504.7" y2="460" stroke="#eee"/>
+<text x="504.7" y="480.0" text-anchor="middle">1.9</text>
+<rect x="78" y="48" width="512" height="412" fill="none" stroke="#333"/>
+<text x="334.0" y="504" text-anchor="middle">Eb/N0 [dB]</text>
+<text x="20" y="254.0" text-anchor="middle" transform="rotate(-90 20 254.0)">info BER</text>
+<path d="M78.0,60.6 L334.0,161.1 L590.0,445.7" fill="none" stroke="#d62728" stroke-width="2.2"/>
+<circle cx="78.0" cy="60.6" r="3.3" fill="#d62728"/>
+<circle cx="334.0" cy="161.1" r="3.3" fill="#d62728"/>
+<circle cx="590.0" cy="445.7" r="3.3" fill="#d62728"/>
+<line x1="604" y1="66" x2="624" y2="66" stroke="#d62728" stroke-width="2.2"/>
+<text x="628" y="70">RL feature [ours]</text>
+<path d="M78.0,60.7 L334.0,159.9" fill="none" stroke="#9467bd" stroke-width="2.2"/>
+<circle cx="78.0" cy="60.7" r="3.3" fill="#9467bd"/>
+<circle cx="334.0" cy="159.9" r="3.3" fill="#9467bd"/>
+<line x1="604" y1="88" x2="624" y2="88" stroke="#9467bd" stroke-width="2.2"/>
+<text x="628" y="92">CEM</text>
+<path d="M78.0,60.8 L334.0,157.6 L590.0,387.7" fill="none" stroke="#1f77b4" stroke-width="2.2"/>
+<circle cx="78.0" cy="60.8" r="3.3" fill="#1f77b4"/>
+<circle cx="334.0" cy="157.6" r="3.3" fill="#1f77b4"/>
+<circle cx="590.0" cy="387.7" r="3.3" fill="#1f77b4"/>
+<line x1="604" y1="110" x2="624" y2="110" stroke="#1f77b4" stroke-width="2.2"/>
+<text x="628" y="114">random search</text>
+<path d="M78.0,60.7 L334.0,158.7 L590.0,407.0" fill="none" stroke="#8c564b" stroke-width="2.2"/>
+<circle cx="78.0" cy="60.7" r="3.3" fill="#8c564b"/>
+<circle cx="334.0" cy="158.7" r="3.3" fill="#8c564b"/>
+<circle cx="590.0" cy="407.0" r="3.3" fill="#8c564b"/>
+<line x1="604" y1="132" x2="624" y2="132" stroke="#8c564b" stroke-width="2.2"/>
+<text x="628" y="136">round-robin</text>
+<path d="M78.0,59.3 L334.0,136.0 L590.0,400.8" fill="none" stroke="#7f7f7f" stroke-width="2.2"/>
+<circle cx="78.0" cy="59.3" r="3.3" fill="#7f7f7f"/>
+<circle cx="334.0" cy="136.0" r="3.3" fill="#7f7f7f"/>
+<circle cx="590.0" cy="400.8" r="3.3" fill="#7f7f7f"/>
+<line x1="604" y1="154" x2="624" y2="154" stroke="#7f7f7f" stroke-width="2.2"/>
+<text x="628" y="158">random default (seed0)</text>
+</svg>
