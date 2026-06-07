@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
+<rect width="760" height="520" fill="white"/>
+<text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">PAM4 chain-length L sweep (RL, R=0.75 w=2)</text>
+<line x1="78" y1="426.9" x2="590" y2="426.9" stroke="#e0e0e0"/>
+<text x="70" y="430.9" text-anchor="end">1e-4</text>
+<line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#eee"/>
+<text x="78.0" y="480.0" text-anchor="middle">6.1</text>
+<line x1="398.0" y1="48" x2="398.0" y2="460" stroke="#eee"/>
+<text x="398.0" y="480.0" text-anchor="middle">6.6</text>
+<rect x="78" y="48" width="512" height="412" fill="none" stroke="#333"/>
+<text x="334.0" y="504" text-anchor="middle">info Eb/N0 [dB]</text>
+<text x="20" y="254.0" text-anchor="middle" transform="rotate(-90 20 254.0)">info BER</text>
+<path d="M78.0,163.0" fill="none" stroke="#1f77b4" stroke-width="2.2"/>
+<circle cx="78.0" cy="163.0" r="3.3" fill="#1f77b4"/>
+<line x1="604" y1="66" x2="624" y2="66" stroke="#1f77b4" stroke-width="2.2"/>
+<text x="628" y="70">L=30</text>
+<path d="M78.0,288.8" fill="none" stroke="#2ca02c" stroke-width="2.2"/>
+<circle cx="78.0" cy="288.8" r="3.3" fill="#2ca02c"/>
+<line x1="604" y1="88" x2="624" y2="88" stroke="#2ca02c" stroke-width="2.2"/>
+<text x="628" y="92">L=100</text>
+<path d="M78.0,315.2" fill="none" stroke="#d62728" stroke-width="2.2"/>
+<circle cx="78.0" cy="315.2" r="3.3" fill="#d62728"/>
+<line x1="604" y1="110" x2="624" y2="110" stroke="#d62728" stroke-width="2.2"/>
+<text x="628" y="114">L=200</text>
+</svg>

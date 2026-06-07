@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
+<rect width="760" height="520" fill="white"/>
+<text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">PAM4 learning curves R=0.75 w=1 (sample efficiency)</text>
+<line x1="78" y1="75.5" x2="590" y2="75.5" stroke="#e0e0e0"/>
+<text x="70" y="79.5" text-anchor="end">1e-2</text>
+<line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#eee"/>
+<text x="78.0" y="480.0" text-anchor="middle">40.0</text>
+<line x1="142.0" y1="48" x2="142.0" y2="460" stroke="#eee"/>
+<text x="142.0" y="480.0" text-anchor="middle">95.0</text>
+<line x1="206.0" y1="48" x2="206.0" y2="460" stroke="#eee"/>
+<text x="206.0" y="480.0" text-anchor="middle">150.0</text>
+<line x1="270.0" y1="48" x2="270.0" y2="460" stroke="#eee"/>
+<text x="270.0" y="480.0" text-anchor="middle">205.0</text>
+<line x1="334.0" y1="48" x2="334.0" y2="460" stroke="#eee"/>
+<text x="334.0" y="480.0" text-anchor="middle">260.0</text>
+<line x1="398.0" y1="48" x2="398.0" y2="460" stroke="#eee"/>
+<text x="398.0" y="480.0" text-anchor="middle">315.0</text>
+<line x1="462.0" y1="48" x2="462.0" y2="460" stroke="#eee"/>
+<text x="462.0" y="480.0" text-anchor="middle">370.0</text>
+<line x1="526.0" y1="48" x2="526.0" y2="460" stroke="#eee"/>
+<text x="526.0" y="480.0" text-anchor="middle">425.0</text>
+<line x1="590.0" y1="48" x2="590.0" y2="460" stroke="#eee"/>
+<text x="590.0" y="480.0" text-anchor="middle">480.0</text>
+<rect x="78" y="48" width="512" height="412" fill="none" stroke="#333"/>
+<text x="334.0" y="504" text-anchor="middle"># construction evaluations</text>
+<text x="20" y="254.0" text-anchor="middle" transform="rotate(-90 20 254.0)">best val BER</text>
+<path d="M78.0,163.0 L124.5,176.5 L171.1,301.0 L217.6,301.0 L264.2,368.3 L310.7,368.3 L357.3,368.3 L403.8,368.3 L450.4,368.3 L496.9,368.3 L543.5,368.3 L590.0,368.3" fill="none" stroke="#d62728" stroke-width="2.2"/>
+<circle cx="78.0" cy="163.0" r="3.3" fill="#d62728"/>
+<circle cx="124.5" cy="176.5" r="3.3" fill="#d62728"/>
+<circle cx="171.1" cy="301.0" r="3.3" fill="#d62728"/>
+<circle cx="217.6" cy="301.0" r="3.3" fill="#d62728"/>
+<circle cx="264.2" cy="368.3" r="3.3" fill="#d62728"/>
+<circle cx="310.7" cy="368.3" r="3.3" fill="#d62728"/>
+<circle cx="357.3" cy="368.3" r="3.3" fill="#d62728"/>
+<circle cx="403.8" cy="368.3" r="3.3" fill="#d62728"/>
+<circle cx="450.4" cy="368.3" r="3.3" fill="#d62728"/>
+<circle cx="496.9" cy="368.3" r="3.3" fill="#d62728"/>
+<circle cx="543.5" cy="368.3" r="3.3" fill="#d62728"/>
+<circle cx="590.0" cy="368.3" r="3.3" fill="#d62728"/>
+<line x1="604" y1="66" x2="624" y2="66" stroke="#d62728" stroke-width="2.2"/>
+<text x="628" y="70">RL feature [ours]</text>
+<path d="M78.0,163.0 L124.5,247.0 L171.1,247.0 L217.6,247.0 L264.2,247.0 L310.7,321.9 L357.3,321.9 L403.8,321.9 L450.4,321.9 L496.9,321.9 L543.5,368.9 L590.0,368.9" fill="none" stroke="#ff7f0e" stroke-width="2.2"/>
+<circle cx="78.0" cy="163.0" r="3.3" fill="#ff7f0e"/>
+<circle cx="124.5" cy="247.0" r="3.3" fill="#ff7f0e"/>
+<circle cx="171.1" cy="247.0" r="3.3" fill="#ff7f0e"/>
+<circle cx="217.6" cy="247.0" r="3.3" fill="#ff7f0e"/>
+<circle cx="264.2" cy="247.0" r="3.3" fill="#ff7f0e"/>
+<circle cx="310.7" cy="321.9" r="3.3" fill="#ff7f0e"/>
+<circle cx="357.3" cy="321.9" r="3.3" fill="#ff7f0e"/>
+<circle cx="403.8" cy="321.9" r="3.3" fill="#ff7f0e"/>
+<circle cx="450.4" cy="321.9" r="3.3" fill="#ff7f0e"/>
+<circle cx="496.9" cy="321.9" r="3.3" fill="#ff7f0e"/>
+<circle cx="543.5" cy="368.9" r="3.3" fill="#ff7f0e"/>
+<circle cx="590.0" cy="368.9" r="3.3" fill="#ff7f0e"/>
+<line x1="604" y1="88" x2="624" y2="88" stroke="#ff7f0e" stroke-width="2.2"/>
+<text x="628" y="92">RL per-edge [ours]</text>
+<path d="M78.0,120.3 L124.5,171.9 L171.1,316.8 L217.6,316.8 L264.2,316.9 L310.7,316.9 L357.3,316.9 L403.8,316.9 L450.4,316.9 L496.9,316.9 L543.5,316.9 L590.0,316.9" fill="none" stroke="#9467bd" stroke-width="2.2"/>
+<circle cx="78.0" cy="120.3" r="3.3" fill="#9467bd"/>
+<circle cx="124.5" cy="171.9" r="3.3" fill="#9467bd"/>
+<circle cx="171.1" cy="316.8" r="3.3" fill="#9467bd"/>
+<circle cx="217.6" cy="316.8" r="3.3" fill="#9467bd"/>
+<circle cx="264.2" cy="316.9" r="3.3" fill="#9467bd"/>
+<circle cx="310.7" cy="316.9" r="3.3" fill="#9467bd"/>
+<circle cx="357.3" cy="316.9" r="3.3" fill="#9467bd"/>
+<circle cx="403.8" cy="316.9" r="3.3" fill="#9467bd"/>
+<circle cx="450.4" cy="316.9" r="3.3" fill="#9467bd"/>
+<circle cx="496.9" cy="316.9" r="3.3" fill="#9467bd"/>
+<circle cx="543.5" cy="316.9" r="3.3" fill="#9467bd"/>
+<circle cx="590.0" cy="316.9" r="3.3" fill="#9467bd"/>
+<line x1="604" y1="110" x2="624" y2="110" stroke="#9467bd" stroke-width="2.2"/>
+<text x="628" y="114">CEM</text>
+<path d="M78.0,142.6 L124.5,239.0 L171.1,239.0 L217.6,259.7 L264.2,261.8 L310.7,261.8 L357.3,261.8 L403.8,261.8 L450.4,261.8 L496.9,261.8 L543.5,261.8 L590.0,261.8" fill="none" stroke="#333" stroke-width="2.2"/>
+<circle cx="78.0" cy="142.6" r="3.3" fill="#333"/>
+<circle cx="124.5" cy="239.0" r="3.3" fill="#333"/>
+<circle cx="171.1" cy="239.0" r="3.3" fill="#333"/>
+<circle cx="217.6" cy="259.7" r="3.3" fill="#333"/>
+<circle cx="264.2" cy="261.8" r="3.3" fill="#333"/>
+<circle cx="310.7" cy="261.8" r="3.3" fill="#333"/>
+<circle cx="357.3" cy="261.8" r="3.3" fill="#333"/>
+<circle cx="403.8" cy="261.8" r="3.3" fill="#333"/>
+<circle cx="450.4" cy="261.8" r="3.3" fill="#333"/>
+<circle cx="496.9" cy="261.8" r="3.3" fill="#333"/>
+<circle cx="543.5" cy="261.8" r="3.3" fill="#333"/>
+<circle cx="590.0" cy="261.8" r="3.3" fill="#333"/>
+<line x1="604" y1="132" x2="624" y2="132" stroke="#333" stroke-width="2.2"/>
+<text x="628" y="136">random</text>
+</svg>

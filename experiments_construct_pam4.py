@@ -1,42 +1,47 @@
 """Large-scale RL construction optimisation for LONG, HIGH-RATE SC-LDPC over a
-PAM4 + RRC pulse-shaped waveform channel (the harder, lower-SNR-margin sibling of
-``experiments_construct_big.py``, which optimises over plain BPSK/AWGN).
+PAM4 + RRC pulse-shaped waveform channel -- the harder, lower-margin sibling of
+``experiments_construct_big.py`` (which optimises over plain BPSK/AWGN).
 
 Why PAM4 is harder
 ------------------
-The component code, edge spreading and windowed decoder are identical; only the
+Component code, edge spreading and windowed decoder are identical; only the
 *channel* changes: coded bits -> Gray PAM4 -> upsample sps -> RRC(beta) shaping ->
 AWGN on the waveform -> matched RRC + downsample -> exact (log-sum-exp) soft LLR
 demap -> windowed BP.  4-ary signalling packs 2 bits/symbol, so at a fixed info
-Eb/N0 the per-bit reliability is lower and the waterfall sits ~3-4 dB higher than
-BPSK -- the construction (which systematic edge goes to which coupling component)
-therefore has *more* room to help, which is exactly what we test with RL.
+Eb/N0 per-bit reliability is lower and the waterfall sits ~3-4 dB above BPSK -- the
+construction (which systematic edge -> which coupling component) has *more* room to
+help, which is what we test with RL.
+
+BER-centric optimisation (the key difference from the BPSK big run)
+-------------------------------------------------------------------
+These are LONG codes (Z=64 -> K ~ 1e4 info bits): the FRAME error rate is a near
+step function of SNR (good codes FER~0, bad codes FER~1, almost nothing between),
+so FER gives RL essentially no gradient.  We therefore drive the whole search by
+BIT error rate: reward = -log10(BER); CEM elites / champions ranked by BER; and the
+training SNR is chosen (bisection) where the median random construction sits at
+BER ~ 3e-3 -- deep enough in the waterfall that constructions are clearly separable.
 
 Reuse of the RL machinery
 -------------------------
-All policy-gradient / CEM / random-search training and the end-to-end evaluation
-plumbing live in ``rl_construct`` and are channel-agnostic *except* for the single
-per-construction evaluation worker ``rl_construct._worker`` (hard-wired to BPSK).
-We swap in a PAM4 worker (``R._worker = _worker_pam4``) so every ``R.eval_*`` /
-``R.train_*`` call routes frames through the PAM4+RRC chain with no other change.
-Common-random-numbers (every code in a batch scored on identical frames+noise) is
-preserved by seeding a per-frame RNG deterministically from (frame_seed, idx): the
-transmitted-bit count is constant across constructions of one config, so the same
-waveform noise vector is drawn for every code on a given frame.
+Policies (FeaturePolicy / PerEdgePolicy) and the parallel end-to-end evaluation
+plumbing come from ``rl_construct`` unchanged; we (a) swap in a PAM4 evaluation
+worker (``R._worker = _worker_pam4``) so every ``R.eval_*`` routes frames through
+the PAM4+RRC chain, and (b) re-implement the 3 training loops here BER-centrically.
+Common random numbers (every code in a batch scored on identical frames+noise) is
+preserved by seeding a per-frame RNG from (frame_seed, idx): the transmitted-bit
+count is constant across constructions of a config, so the same waveform noise is
+drawn for every code on a given frame.
 
 Regime (3GPP TS 38.212, BG1, Kb=22):
-  * code length > 1000 for ALL rates  ->  Z=64  (component len (Kb+mp)*Z = 1728..2944)
-  * wireless code rates: 1/2, 2/3, 3/4, 5/6, 7/8  ->  BG1 mp in {24,13,9,6,5}
-  * coupling memory w in {1,2,3}      ->  edge-spreading space (w+1)^E
-  * coupling chain length L: tens-to-hundreds (windowed decode; validated by L-sweep)
+  * code length > 1000 for ALL rates -> Z=64 (component len (Kb+mp)*Z = 1728..2944)
+  * code rates 1/2, 2/3, 3/4, 5/6, 7/8 -> BG1 mp in {24,13,9,6,5}
+  * coupling memory w in {1,2,3};  chain length L tens-to-hundreds (validated by L-sweep)
 
-Distributed across PARALLEL slices on ONE big pod (each slice = its own process +
-pool of EXP_WORKERS cores); the rate x w grid is cost-balanced (LPT) across slices
-so all cores stay busy:
-    python3 experiments_construct_pam4.py slice 0      # ... one cost-balanced cell group
-    ...                                                 #     (run all N_SLICES in parallel)
-    python3 experiments_construct_pam4.py slice 5
-    python3 experiments_construct_pam4.py plot          # merge results_pam4big_*.json -> figures
+Runs as PARALLEL slices on one big pod (each slice = its own process + pool of
+EXP_WORKERS cores); the rate x w grid is cost-balanced (LPT) across slices so all
+cores stay busy:
+    python3 experiments_construct_pam4.py slice 0 ... slice 5     # run all in parallel
+    python3 experiments_construct_pam4.py plot                    # merge -> figures/CSVs
 """
 from __future__ import annotations
 import json
@@ -54,26 +59,30 @@ from sc_ldpc import SCLDPCCode
 #  regime
 # ----------------------------------------------------------------------------- #
 BG, ILS, Z, W_DEC, MAXIT, ALPHA = 1, 0, 64, 6, 12, 0.8     # Z=64 -> all rates >1000 bits
-OPT_L = 30                                                  # chain length while optimising
+OPT_L = 12                                                  # chain length while optimising (edge spreading is L-independent)
 RATE_MP = {0.5: 24, 0.667: 13, 0.75: 9, 0.833: 6, 0.875: 5}    # BG1 (Kb=22) rate matching
 RATES = [0.5, 0.667, 0.75, 0.833, 0.875]
 WS = [1, 2, 3]                                              # coupling memory values
-BETA, SPAN, SPS = 0.1, 10, 4                                # RRC roll-off / span / samples-per-sym
+BETA, SPAN, SPS = 0.1, 10, 4                                # RRC roll-off / span / samples-per-symbol
 
-# budgets: PAM4 frames are expensive -> modest; batch is a few worker-waves per step
+# budgets (tuned so each slice saturates its pool and the whole grid finishes in ~1h;
+# BER at the 3e-3 operating point is well-estimated even with few frames, so frames stay modest)
 OPT_STEPS, OPT_BATCH, OPT_FRAMES = 12, 40, 8
 VAL_FRAMES, FINAL_FRAMES = 40, 300
-PROBE_FRAMES, PROBE_N = 10, 40
-# PAM4 waterfalls sit ~3-4 dB above BPSK -> per-rate info-Eb/N0 candidate grids
-SNR_CAND = {0.5: [3.0, 3.5, 4.0, 4.5, 5.0], 0.667: [3.5, 4.0, 4.5, 5.0, 5.5],
-            0.75: [4.0, 4.5, 5.0, 5.5, 6.0], 0.833: [5.0, 5.5, 6.0, 6.5, 7.0],
-            0.875: [6.0, 6.5, 7.0, 7.5, 8.0]}
-BER_OFFSETS = [-0.6, 0.0, 0.6]
-BER_FRAMES = [150, 250, 350]
-LSWEEP_LS = [30, 50, 100, 200]
-LSWEEP_FRAMES = [120, 160]
-LSWEEP_OFFSETS = [0.0]
-LSWEEP_CELLS = [(0.5, 2), (0.875, 2)]      # (rate,w) whose champions get an L=30..200 sweep
+PROBE_N, PROBE_FRAMES = 36, 10
+BER_FLOOR = 2e-6
+TARGET_BER = 3e-3                                           # operating point: median random-construction BER
+BISECT_ITERS = 5
+SNR_BRACKET = {0.5: (1.0, 5.0), 0.667: (2.0, 6.0), 0.75: (3.0, 7.0),
+               0.833: (4.0, 8.0), 0.875: (5.0, 9.5)}        # Eb/N0 search bracket per rate
+BER_OFFSETS = [-0.6, 0.0, 0.6, 1.2]                         # final BER curve span around op. SNR
+BER_FRAMES = [150, 220, 320, 450]
+LSWEEP_LS = [30, 100, 200]
+LSWEEP_OFFSETS = [0.0, 0.8]
+LSWEEP_FRAMES = [120, 200]
+LSWEEP_CHAMPS = ["rl", "seed0_default"]
+LSWEEP_CELLS = [(0.75, 2), (0.875, 2)]     # (rate,w) whose champions get an L=30..200 sweep
+                                           # (kept off the very slow R=1/2 large-L codes)
 
 N_SLICES = 6                               # parallel slice-processes (sum of pools == pod cores)
 
@@ -111,7 +120,7 @@ def _worker_pam4(task):
     return be, bits, fe, hi - lo
 
 
-R._worker = _worker_pam4        # route ALL R.eval_*/R.train_* through the PAM4 channel
+R._worker = _worker_pam4        # route ALL R.eval_* through the PAM4 channel
 
 
 # ----------------------------------------------------------------------------- #
@@ -123,7 +132,7 @@ def _cells():
 
 def _weight(cell):
     r, w = cell
-    return (22 + RATE_MP[r]) * Z * (1.0 + 0.12 * (w - 1))    # ~ component size x coupling
+    return (22 + RATE_MP[r]) * Z * (1.0 + 0.12 * (w - 1))
 
 
 def _partition(cells, n):
@@ -147,25 +156,137 @@ def _arr(a):
     return np.asarray(a, dtype=np.int64).tolist()
 
 
+def _logber(m):
+    return -np.log10(max(m["ber"], BER_FLOOR))
+
+
+def _validate(c, assign, snr, nframes, seed, pool):
+    """Re-score a champion on a big frame bank, split across all cores."""
+    return R.eval_assignments(c, [assign], snr, seed, nframes, pool=pool,
+                              frame_chunks=R.n_workers())[0]
+
+
 # ----------------------------------------------------------------------------- #
-#  per-construction helpers (mirror experiments_construct_big.py)
+#  operating-point selection: bisection on SNR to median random-construction BER
 # ----------------------------------------------------------------------------- #
-def pick_snr(c, candidates, pool):
-    """Pick the training Eb/N0 where the median random construction sits in the
-    waterfall (FER ~ 0.3) so RL gets a gradient; step off-grid if the grid misses."""
+def pick_snr(c, rate, pool):
+    lo, hi = SNR_BRACKET[rate]
     rng = np.random.default_rng(0)
     assigns = [R.random_assign(c, rng) for _ in range(PROBE_N)]
-    meds = []
-    for snr in candidates:
+
+    def med_ber(snr):
         ms = R.eval_batch(c, assigns, snr, 1, PROBE_FRAMES, pool=pool)
-        meds.append(float(np.median([m["fer"] for m in ms])))
-    if meds[0] < 0.05:
-        return round(candidates[0] - 1.0, 2)
-    if meds[-1] > 0.6:
-        return round(candidates[-1] + 0.5, 2)
-    return candidates[int(np.argmin([abs(m - 0.3) for m in meds]))]
+        return float(np.median([m["ber"] for m in ms]))
+
+    for _ in range(BISECT_ITERS):
+        mid = round((lo + hi) / 2.0, 2)
+        mb = med_ber(mid)
+        if mb < TARGET_BER:        # too clean -> need a lower SNR
+            hi = mid
+        else:                      # too noisy -> need a higher SNR
+            lo = mid
+    snr = round((lo + hi) / 2.0, 2)
+    return snr, med_ber(snr)
 
 
+# ----------------------------------------------------------------------------- #
+#  BER-centric training loops (policies + eval reused from rl_construct)
+# ----------------------------------------------------------------------------- #
+def train_pg(c, policy, snr, steps, batch, frames, pool, val_frames, val_seed,
+             base_seed, tag, log_every=5):
+    feature = isinstance(policy, R.FeaturePolicy)
+    hist = {"evals": [], "mean_reward": [], "best_val_ber": [], "best_val_fer": []}
+    best = {"ber": np.inf, "fer": np.inf, "assign": None}
+    seen = 0
+    for step in range(1, steps + 1):
+        fs = base_seed + step
+        traces, assigns, ps = [], [], []
+        for _ in range(batch):
+            if feature:
+                a, tr = policy.rollout(); traces.append(tr)
+            else:
+                a, p = policy.sample(); ps.append(p)
+            assigns.append(a)
+        ms = R.eval_batch(c, assigns, snr, fs, frames, pool=pool)
+        seen += batch
+        rew = np.array([_logber(m) for m in ms])
+        adv = rew - rew.mean()
+        if adv.std() > 1e-9:
+            adv = adv / (adv.std() + 1e-9)
+        if feature:
+            policy.update(list(zip(traces, adv)))
+        else:
+            policy.update([(assigns[i], ps[i], adv[i]) for i in range(batch)])
+        bi = int(np.argmin([m["ber"] for m in ms]))
+        vm = _validate(c, assigns[bi], snr, val_frames, val_seed, pool)
+        if vm["ber"] < best["ber"]:
+            best = {"ber": vm["ber"], "fer": vm["fer"], "assign": np.asarray(assigns[bi]).copy()}
+        hist["evals"].append(seen); hist["mean_reward"].append(float(rew.mean()))
+        hist["best_val_ber"].append(best["ber"]); hist["best_val_fer"].append(best["fer"])
+        if step % log_every == 0 or step == 1:
+            print(f"  [{tag}] step {step:3d} meanR={rew.mean():+.2f} "
+                  f"batchBER[min={min(m['ber'] for m in ms):.2e}] "
+                  f"bestVAL_BER={best['ber']:.2e} (FER={best['fer']:.2f})", flush=True)
+    return hist, best
+
+
+def train_cem(c, snr, steps, batch, frames, pool, val_frames, val_seed, base_seed,
+              elite_frac=0.3, smooth=0.7, seed=7, log_every=5):
+    _, _, E = R.edge_meta(c); C = R.n_components(c)
+    rng = np.random.default_rng(seed)
+    p = np.full((E, C), 1.0 / C); n_elite = max(2, int(batch * elite_frac))
+    hist = {"evals": [], "best_val_ber": [], "best_val_fer": []}
+    best = {"ber": np.inf, "fer": np.inf, "assign": None}; seen = 0
+    for step in range(1, steps + 1):
+        fs = base_seed + step
+        assigns = [np.array([rng.choice(C, p=p[e]) for e in range(E)]) for _ in range(batch)]
+        ms = R.eval_batch(c, assigns, snr, fs, frames, pool=pool); seen += batch
+        bers = np.array([m["ber"] for m in ms])
+        elite = np.argsort(bers)[:n_elite]
+        freq = np.zeros((E, C))
+        for idx in elite:
+            freq[np.arange(E), assigns[idx]] += 1.0
+        freq /= n_elite
+        p = smooth * p + (1 - smooth) * freq
+        p = np.clip(p, 1e-3, None); p /= p.sum(axis=1, keepdims=True)
+        cand = assigns[int(np.argmin(bers))]
+        vm = _validate(c, cand, snr, val_frames, val_seed, pool)
+        if vm["ber"] < best["ber"]:
+            best = {"ber": vm["ber"], "fer": vm["fer"], "assign": np.asarray(cand).copy()}
+        hist["evals"].append(seen); hist["best_val_ber"].append(best["ber"])
+        hist["best_val_fer"].append(best["fer"])
+        if step % log_every == 0 or step == 1:
+            print(f"  [CEM] step {step:3d} batchBER[min={bers.min():.2e}] "
+                  f"bestVAL_BER={best['ber']:.2e}", flush=True)
+    return hist, best
+
+
+def train_random(c, snr, steps, batch, frames, pool, val_frames, val_seed, base_seed,
+                 seed=11, log_every=5):
+    _, _, E = R.edge_meta(c); C = R.n_components(c)
+    rng = np.random.default_rng(seed)
+    hist = {"evals": [], "best_val_ber": [], "best_val_fer": []}
+    best = {"ber": np.inf, "fer": np.inf, "assign": None}; seen = 0
+    for step in range(1, steps + 1):
+        fs = base_seed + step
+        assigns = [rng.integers(0, C, size=E) for _ in range(batch)]
+        ms = R.eval_batch(c, assigns, snr, fs, frames, pool=pool); seen += batch
+        bers = np.array([m["ber"] for m in ms])
+        cand = assigns[int(np.argmin(bers))]
+        vm = _validate(c, cand, snr, val_frames, val_seed, pool)
+        if vm["ber"] < best["ber"]:
+            best = {"ber": vm["ber"], "fer": vm["fer"], "assign": np.asarray(cand).copy()}
+        hist["evals"].append(seen); hist["best_val_ber"].append(best["ber"])
+        hist["best_val_fer"].append(best["fer"])
+        if step % log_every == 0 or step == 1:
+            print(f"  [RND] step {step:3d} batchBER[min={bers.min():.2e}] "
+                  f"bestVAL_BER={best['ber']:.2e}", flush=True)
+    return hist, best
+
+
+# ----------------------------------------------------------------------------- #
+#  BER curve + one construction-optimisation cell
+# ----------------------------------------------------------------------------- #
 def ber_curve(c, assign, snrs, frames, pool, chunks=None):
     chunks = chunks or R.n_workers()
     xs, bers, fers = [], [], []
@@ -176,27 +297,25 @@ def ber_curve(c, assign, snrs, frames, pool, chunks=None):
 
 
 def run_cell(rate, w, pool):
-    """One (rate,w) construction-optimisation cell over the PAM4 channel."""
+    """One (rate,w) BER-centric construction-optimisation cell over PAM4."""
     t0 = time.time()
     c = cfg(rate, w, OPT_L)
     rt = c.build().rate
     _, _, E = R.edge_meta(c)
-    snr = pick_snr(c, SNR_CAND[rate], pool)
+    snr, med = pick_snr(c, rate, pool)
     print(f"\n=== R={rate} (sc rate {rt:.3f}) w={w} Z={Z}  E={E}  space {w+1}^{E}  "
-          f"L={OPT_L}  PAM4 b{BETA} sps{SPS}  train@{snr}dB ===", flush=True)
+          f"L={OPT_L}  PAM4 b{BETA} sps{SPS}  train@{snr}dB (med random BER {med:.2e}) ===", flush=True)
 
     pol = R.FeaturePolicy(c, lr=0.15, ent=0.02, seed=0)
-    h_rl, best_rl = R.train_reinforce(c, pol, snr, OPT_STEPS, OPT_BATCH, OPT_FRAMES,
-                                      pool=pool, val_frames=VAL_FRAMES, val_seed=99,
-                                      base_seed=1000, log_every=8)
+    h_rl, best_rl = train_pg(c, pol, snr, OPT_STEPS, OPT_BATCH, OPT_FRAMES, pool,
+                             VAL_FRAMES, 99, 1000, "PG")
     pol_e = R.PerEdgePolicy(E, w + 1, lr=0.2, ent=0.01, seed=0)
-    h_e, best_e = R.train_reinforce(c, pol_e, snr, OPT_STEPS, OPT_BATCH, OPT_FRAMES,
-                                    pool=pool, val_frames=VAL_FRAMES, val_seed=99,
-                                    base_seed=4000, log_every=8)
-    h_c, best_c = R.train_cem(c, snr, OPT_STEPS, OPT_BATCH, OPT_FRAMES, pool=pool,
-                              val_frames=VAL_FRAMES, val_seed=99, base_seed=2000, log_every=8)
-    h_r, best_r = R.train_random(c, snr, OPT_STEPS, OPT_BATCH, OPT_FRAMES, pool=pool,
-                                 val_frames=VAL_FRAMES, val_seed=99, base_seed=3000, log_every=8)
+    h_e, best_e = train_pg(c, pol_e, snr, OPT_STEPS, OPT_BATCH, OPT_FRAMES, pool,
+                           VAL_FRAMES, 99, 4000, "PGe")
+    h_c, best_c = train_cem(c, snr, OPT_STEPS, OPT_BATCH, OPT_FRAMES, pool,
+                            VAL_FRAMES, 99, 2000)
+    h_r, best_r = train_random(c, snr, OPT_STEPS, OPT_BATCH, OPT_FRAMES, pool,
+                               VAL_FRAMES, 99, 3000)
     champions = {"rl": best_rl["assign"], "rl_peredge": best_e["assign"],
                  "cem": best_c["assign"], "random_search": best_r["assign"],
                  "round_robin": R.round_robin_assign(c),
@@ -210,9 +329,9 @@ def run_cell(rate, w, pool):
         finals[name] = {"fer": m["fer"], "ber": m["ber"]}
         st = R.construction_stats(c, a)
         stats[name] = {"n4": st["n4"], "comp_load": st["comp_load"]}
-        if name not in ("rl_peredge",):
+        if name != "rl_peredge":
             curves[name] = ber_curve(c, a, snrs, BER_FRAMES, pool)
-        print(f"  {name:14s} FER={m['fer']:.4f} BER={m['ber']:.3e} n4={st['n4']}", flush=True)
+        print(f"  {name:14s} BER={m['ber']:.3e} FER={m['fer']:.3f} n4={st['n4']}", flush=True)
     print(f"  [cell done in {time.time()-t0:.0f}s]", flush=True)
     return {"rate": rate, "sc_rate": rt, "w": w, "Z": Z, "mp": RATE_MP[rate], "E": int(E),
             "train_snr": snr, "finals": finals, "stats": stats, "curves": curves,
@@ -222,7 +341,6 @@ def run_cell(rate, w, pool):
 
 
 def run_lsweep(rate, w, out, pool):
-    """Validate champions across chain lengths L=30..200 (threshold saturation)."""
     key = f"R{rate}_w{w}"
     cell = out["cells"].get(key)
     if cell is None:
@@ -230,13 +348,12 @@ def run_lsweep(rate, w, out, pool):
         return
     snr0 = cell["train_snr"]
     snrs = [snr0 + d for d in LSWEEP_OFFSETS]
-    champs = {n: np.asarray(cell["champions"][n], dtype=np.int64)
-              for n in ["rl", "random_search", "seed0_default"]}
+    champs = {n: np.asarray(cell["champions"][n], dtype=np.int64) for n in LSWEEP_CHAMPS}
     lsweep = {}
     print(f"\n=== L-sweep @ R={rate} w={w} Z={Z} (champions vs L) ===", flush=True)
     for L in LSWEEP_LS:
         cL = cfg(rate, w, L)
-        chunks = min(R.n_workers(), 20)        # bound concurrent heavy (large-L) codes
+        chunks = min(R.n_workers(), 20)
         lsweep[str(L)] = {"rate": cL.build().rate}
         for n, a in champs.items():
             lsweep[str(L)][n] = ber_curve(cL, a, snrs, LSWEEP_FRAMES, pool, chunks=chunks)
@@ -249,14 +366,16 @@ def run_slice(k):
     cells = SLICES[k]
     out = {"slice": k, "config": {"bg": BG, "Z": Z, "opt_L": OPT_L, "W": W_DEC,
                                   "beta": BETA, "span": SPAN, "sps": SPS,
-                                  "rate_mp": RATE_MP, "ws": WS}, "cells": {}}
+                                  "target_ber": TARGET_BER, "rate_mp": RATE_MP, "ws": WS},
+           "cells": {}}
     fn = f"results_pam4big_{k}.json"
     with mp.Pool(R.n_workers()) as pool:
-        print(f"slice {k}: cells {cells}  ({R.n_workers()} workers, PAM4)", flush=True)
+        print(f"slice {k}: cells {cells}  ({R.n_workers()} workers, PAM4, BER-centric)", flush=True)
         for rate, w in cells:
             try:
                 out["cells"][f"R{rate}_w{w}"] = run_cell(rate, w, pool)
             except Exception as e:
+                import traceback; traceback.print_exc()
                 print(f"  !! cell R{rate} w{w} failed: {e}", flush=True)
             json.dump(out, open(fn, "w"))
         for (lr, lw) in LSWEEP_CELLS:
@@ -270,7 +389,7 @@ def run_slice(k):
 
 
 # --------------------------------------------------------------------------- #
-#  plotting (run locally after pulling results_pam4big_*.json)
+#  plotting (run after pulling results_pam4big_*.json)
 # --------------------------------------------------------------------------- #
 def _merge():
     out = {"cells": {}, "lsweeps": []}
@@ -297,7 +416,7 @@ def make_plots():
     if not cells:
         print("no results_pam4big_*.json found"); return
     rates = sorted(set(c["rate"] for c in cells.values()))
-    # Fig 1: RL-vs-equal-budget-random advantage vs rate, one line per w
+    # Fig 1: RL-vs-equal-budget-random BER advantage vs rate, one line per w
     series = []
     for w in WS:
         xs, ys = [], []
@@ -305,15 +424,15 @@ def make_plots():
             c = cells.get(f"R{rate}_w{w}")
             if not c:
                 continue
-            rl = c["finals"]["rl"]["fer"]; rnd = c["finals"]["random_search"]["fer"]
-            xs.append(rate); ys.append(rnd / max(rl, 1e-4))
+            rl = c["finals"]["rl"]["ber"]; rnd = c["finals"]["random_search"]["ber"]
+            xs.append(rate); ys.append(rnd / max(rl, BER_FLOOR))
         if xs:
             series.append({"x": xs, "y": ys, "label": f"w={w}",
                            "color": ["#1f77b4", "#d62728", "#2ca02c"][w - 1]})
-    plotting.linear(series, xlabel="code rate R", ylabel="random_FER / RL_FER  (>1 = RL better)",
+    plotting.linear(series, xlabel="code rate R", ylabel="random_BER / RL_BER  (>1 = RL better)",
                     title="RL vs equal-budget random search over PAM4+RRC (Z=64 long codes)",
                     path="exp_pam4big_rl_vs_random.svg")
-    # Fig 2: per-cell BER curves + learning curves
+    # Fig 2: per-cell BER curves + BER learning curves
     for rate in rates:
         for w in WS:
             c = cells.get(f"R{rate}_w{w}")
@@ -327,14 +446,13 @@ def make_plots():
                               path=f"exp_pam4big_ber_R{int(rate*1000)}_w{w}.svg")
             h = c.get("hist")
             if h:
-                floor = 0.5 / VAL_FRAMES
-                ls = [{"x": h[m]["evals"], "y": [max(f, floor) for f in h[m]["best_val_fer"]],
+                ls = [{"x": h[m]["evals"], "y": [max(b, BER_FLOOR) for b in h[m]["best_val_ber"]],
                        "label": LAB.get(m, m), "color": COL.get(m, "#333")}
                       for m in ["rl", "rl_peredge", "cem", "random"] if m in h]
-                plotting.semilogy(ls, xlabel="# construction evaluations", ylabel="best val FER",
+                plotting.semilogy(ls, xlabel="# construction evaluations", ylabel="best val BER",
                                   title=f"PAM4 learning curves R={rate} w={w} (sample efficiency)",
                                   path=f"exp_pam4big_learn_R{int(rate*1000)}_w{w}.svg")
-    # Fig 3: L-sweep BER (threshold saturation) per available lsweep
+    # Fig 3: L-sweep BER (threshold saturation)
     for ls in out["lsweeps"]:
         data = ls["data"]; rate = ls["rate"]; w = ls["w"]
         for champ, tag in [("rl", "RL"), ("seed0_default", "default")]:
@@ -357,21 +475,21 @@ def _export_tables(out):
     import csv
     cells = out["cells"]
     with open("results_pam4big_finals.csv", "w", newline="") as f:
-        wr = csv.writer(f); wr.writerow(["cell", "rate", "w", "Z", "E", "method", "fer", "ber", "n4"])
+        wr = csv.writer(f); wr.writerow(["cell", "rate", "w", "Z", "E", "train_snr", "method", "ber", "fer", "n4"])
         for k, c in sorted(cells.items()):
             for m, fv in c["finals"].items():
-                wr.writerow([k, c["rate"], c["w"], c.get("Z", Z), c["E"], m, f"{fv['fer']:.5f}",
-                             f"{fv['ber']:.3e}", c["stats"].get(m, {}).get("n4", "")])
+                wr.writerow([k, c["rate"], c["w"], c.get("Z", Z), c["E"], c["train_snr"], m,
+                             f"{fv['ber']:.4e}", f"{fv['fer']:.4f}", c["stats"].get(m, {}).get("n4", "")])
     with open("results_pam4big_hist.csv", "w", newline="") as f:
         wr = csv.writer(f)
-        wr.writerow(["cell", "rate", "w", "method", "eval", "mean_reward_loss", "best_val_fer"])
+        wr.writerow(["cell", "rate", "w", "method", "eval", "mean_reward", "best_val_ber"])
         for k, c in sorted(cells.items()):
             for m, h in c.get("hist", {}).items():
-                ev = h.get("evals", []); mr = h.get("mean_reward", []); bf = h.get("best_val_fer", [])
+                ev = h.get("evals", []); mr = h.get("mean_reward", []); bb = h.get("best_val_ber", [])
                 for i in range(len(ev)):
                     wr.writerow([k, c["rate"], c["w"], m, ev[i],
                                  f"{mr[i]:.4f}" if i < len(mr) else "",
-                                 f"{bf[i]:.4f}" if i < len(bf) else ""])
+                                 f"{bb[i]:.4e}" if i < len(bb) else ""])
 
 
 if __name__ == "__main__":
@@ -380,7 +498,7 @@ if __name__ == "__main__":
         run_slice(int(sys.argv[2]))
     elif cmd == "plot":
         make_plots()
-    elif cmd == "slices":          # print the cost-balanced partition (for launch scripting)
+    elif cmd == "slices":
         for i, s in enumerate(SLICES):
             print(i, s, round(sum(_weight(c) for c in s), 1))
     else:

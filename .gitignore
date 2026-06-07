@@ -2,6 +2,6 @@ __pycache__/
 *.pyc
 *.log
 .DS_Store
-dashboard/status.json
+dashboard/*status.json
 .cluster_tunnel.local
 cluster_tunnel.sh

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
+<rect width="760" height="520" fill="white"/>
+<text x="319.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">RL vs equal-budget random search over PAM4+RRC (Z=64 long codes)</text>
+<line x1="78" y1="460.0" x2="560" y2="460.0" stroke="#e8e8e8"/>
+<text x="70" y="464.0" text-anchor="end">0.54</text>
+<line x1="78" y1="377.6" x2="560" y2="377.6" stroke="#e8e8e8"/>
+<text x="70" y="381.6" text-anchor="end">1.25</text>
+<line x1="78" y1="295.2" x2="560" y2="295.2" stroke="#e8e8e8"/>
+<text x="70" y="299.2" text-anchor="end">1.95</text>
+<line x1="78" y1="212.8" x2="560" y2="212.8" stroke="#e8e8e8"/>
+<text x="70" y="216.8" text-anchor="end">2.66</text>
+<line x1="78" y1="130.4" x2="560" y2="130.4" stroke="#e8e8e8"/>
+<text x="70" y="134.4" text-anchor="end">3.36</text>
+<line x1="78" y1="48.0" x2="560" y2="48.0" stroke="#e8e8e8"/>
+<text x="70" y="52.0" text-anchor="end">4.07</text>
+<line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#f0f0f0"/>
+<text x="78.0" y="480.0" text-anchor="middle">0.50</text>
+<line x1="155.1" y1="48" x2="155.1" y2="460" stroke="#f0f0f0"/>
+<text x="155.1" y="480.0" text-anchor="middle">0.56</text>
+<line x1="232.2" y1="48" x2="232.2" y2="460" stroke="#f0f0f0"/>
+<text x="232.2" y="480.0" text-anchor="middle">0.62</text>
+<line x1="309.4" y1="48" x2="309.4" y2="460" stroke="#f0f0f0"/>
+<text x="309.4" y="480.0" text-anchor="middle">0.68</text>
+<line x1="386.5" y1="48" x2="386.5" y2="460" stroke="#f0f0f0"/>
+<text x="386.5" y="480.0" text-anchor="middle">0.74</text>
+<line x1="463.6" y1="48" x2="463.6" y2="460" stroke="#f0f0f0"/>
+<text x="463.6" y="480.0" text-anchor="middle">0.80</text>
+<line x1="540.7" y1="48" x2="540.7" y2="460" stroke="#f0f0f0"/>
+<text x="540.7" y="480.0" text-anchor="middle">0.86</text>
+<rect x="78" y="48" width="482" height="412" fill="none" stroke="#333"/>
+<text x="319.0" y="504" text-anchor="middle">code rate R</text>
+<text x="20" y="254.0" text-anchor="middle" transform="rotate(-90 20 254.0)">random_BER / RL_BER  (>1 = RL better)</text>
+<path d="M78.0,425.7 L292.7,370.1 L399.3,389.2 L506.0,395.5 L560.0,372.8" fill="none" stroke="#1f77b4" stroke-width="2.2"/>
+<circle cx="78.0" cy="425.7" r="3.3" fill="#1f77b4"/>
+<circle cx="292.7" cy="370.1" r="3.3" fill="#1f77b4"/>
+<circle cx="399.3" cy="389.2" r="3.3" fill="#1f77b4"/>
+<circle cx="506.0" cy="395.5" r="3.3" fill="#1f77b4"/>
+<circle cx="560.0" cy="372.8" r="3.3" fill="#1f77b4"/>
+<line x1="574" y1="66" x2="594" y2="66" stroke="#1f77b4" stroke-width="2.2"/>
+<text x="598" y="70">w=1</text>
+<path d="M78.0,414.1 L292.7,407.6 L399.3,257.8 L506.0,317.3 L560.0,345.4" fill="none" stroke="#d62728" stroke-width="2.2"/>
+<circle cx="78.0" cy="414.1" r="3.3" fill="#d62728"/>
+<circle cx="292.7" cy="407.6" r="3.3" fill="#d62728"/>
+<circle cx="399.3" cy="257.8" r="3.3" fill="#d62728"/>
+<circle cx="506.0" cy="317.3" r="3.3" fill="#d62728"/>
+<circle cx="560.0" cy="345.4" r="3.3" fill="#d62728"/>
+<line x1="574" y1="88" x2="594" y2="88" stroke="#d62728" stroke-width="2.2"/>
+<text x="598" y="92">w=2</text>
+<path d="M78.0,236.6 L292.7,353.8 L399.3,374.7 L506.0,358.4 L560.0,82.3" fill="none" stroke="#2ca02c" stroke-width="2.2"/>
+<circle cx="78.0" cy="236.6" r="3.3" fill="#2ca02c"/>
+<circle cx="292.7" cy="353.8" r="3.3" fill="#2ca02c"/>
+<circle cx="399.3" cy="374.7" r="3.3" fill="#2ca02c"/>
+<circle cx="506.0" cy="358.4" r="3.3" fill="#2ca02c"/>
+<circle cx="560.0" cy="82.3" r="3.3" fill="#2ca02c"/>
+<line x1="574" y1="110" x2="594" y2="110" stroke="#2ca02c" stroke-width="2.2"/>
+<text x="598" y="114">w=3</text>
+</svg>
