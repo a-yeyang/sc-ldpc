@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
+<rect width="760" height="520" fill="white"/>
+<text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">Coded PAS BER: 256-QAM R=0.833 w=4 Z=64</text>
+<line x1="78" y1="310.6" x2="590" y2="310.6" stroke="#e0e0e0"/>
+<text x="70" y="314.6" text-anchor="end">1e-2</text>
+<line x1="78" y1="81.1" x2="590" y2="81.1" stroke="#e0e0e0"/>
+<text x="70" y="85.1" text-anchor="end">1e-1</text>
+<line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#eee"/>
+<text x="78.0" y="480.0" text-anchor="middle">7.7</text>
+<line x1="163.3" y1="48" x2="163.3" y2="460" stroke="#eee"/>
+<text x="163.3" y="480.0" text-anchor="middle">8.2</text>
+<line x1="248.7" y1="48" x2="248.7" y2="460" stroke="#eee"/>
+<text x="248.7" y="480.0" text-anchor="middle">8.7</text>
+<line x1="334.0" y1="48" x2="334.0" y2="460" stroke="#eee"/>
+<text x="334.0" y="480.0" text-anchor="middle">9.2</text>
+<line x1="419.3" y1="48" x2="419.3" y2="460" stroke="#eee"/>
+<text x="419.3" y="480.0" text-anchor="middle">9.7</text>
+<line x1="504.7" y1="48" x2="504.7" y2="460" stroke="#eee"/>
+<text x="504.7" y="480.0" text-anchor="middle">10.2</text>
+<line x1="590.0" y1="48" x2="590.0" y2="460" stroke="#eee"/>
+<text x="590.0" y="480.0" text-anchor="middle">10.7</text>
+<rect x="78" y="48" width="512" height="412" fill="none" stroke="#333"/>
+<text x="334.0" y="504" text-anchor="middle">info Eb/N0 [dB]</text>
+<text x="20" y="254.0" text-anchor="middle" transform="rotate(-90 20 254.0)">info BER</text>
+<path d="M78.0,227.2 L248.7,276.0 L419.3,303.5 L590.0,293.2" fill="none" stroke="#d62728" stroke-width="2.2"/>
+<circle cx="78.0" cy="227.2" r="3.3" fill="#d62728"/>
+<circle cx="248.7" cy="276.0" r="3.3" fill="#d62728"/>
+<circle cx="419.3" cy="303.5" r="3.3" fill="#d62728"/>
+<circle cx="590.0" cy="293.2" r="3.3" fill="#d62728"/>
+<line x1="604" y1="66" x2="624" y2="66" stroke="#d62728" stroke-width="2.2"/>
+<text x="628" y="70">RL-joint (constr+shaping) [ours]</text>
+<path d="M78.0,159.7 L248.7,310.4 L419.3,271.0 L590.0,328.4" fill="none" stroke="#2ca02c" stroke-width="2.2"/>
+<circle cx="78.0" cy="159.7" r="3.3" fill="#2ca02c"/>
+<circle cx="248.7" cy="310.4" r="3.3" fill="#2ca02c"/>
+<circle cx="419.3" cy="271.0" r="3.3" fill="#2ca02c"/>
+<circle cx="590.0" cy="328.4" r="3.3" fill="#2ca02c"/>
+<line x1="604" y1="88" x2="624" y2="88" stroke="#2ca02c" stroke-width="2.2"/>
+<text x="628" y="92">shaped(nu*) + round-robin</text>
+<path d="M78.0,168.3 L248.7,315.7 L419.3,286.6 L590.0,409.1" fill="none" stroke="#1f77b4" stroke-width="2.2"/>
+<circle cx="78.0" cy="168.3" r="3.3" fill="#1f77b4"/>
+<circle cx="248.7" cy="315.7" r="3.3" fill="#1f77b4"/>
+<circle cx="419.3" cy="286.6" r="3.3" fill="#1f77b4"/>
+<circle cx="590.0" cy="409.1" r="3.3" fill="#1f77b4"/>
+<line x1="604" y1="110" x2="624" y2="110" stroke="#1f77b4" stroke-width="2.2"/>
+<text x="628" y="114">shaped + random constr</text>
+<path d="M78.0,88.4 L248.7,157.2 L419.3,143.0 L590.0,157.6" fill="none" stroke="#7f7f7f" stroke-width="2.2"/>
+<circle cx="78.0" cy="88.4" r="3.3" fill="#7f7f7f"/>
+<circle cx="248.7" cy="157.2" r="3.3" fill="#7f7f7f"/>
+<circle cx="419.3" cy="143.0" r="3.3" fill="#7f7f7f"/>
+<circle cx="590.0" cy="157.6" r="3.3" fill="#7f7f7f"/>
+<line x1="604" y1="132" x2="624" y2="132" stroke="#7f7f7f" stroke-width="2.2"/>
+<text x="628" y="136">uniform + round-robin</text>
+</svg>

@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
+<rect width="760" height="520" fill="white"/>
+<text x="319.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">PAS: optimal Maxwell-Boltzmann nu* vs SNR</text>
+<line x1="78" y1="460.0" x2="560" y2="460.0" stroke="#e8e8e8"/>
+<text x="70" y="464.0" text-anchor="end">-0.03</text>
+<line x1="78" y1="377.6" x2="560" y2="377.6" stroke="#e8e8e8"/>
+<text x="70" y="381.6" text-anchor="end">0.04</text>
+<line x1="78" y1="295.2" x2="560" y2="295.2" stroke="#e8e8e8"/>
+<text x="70" y="299.2" text-anchor="end">0.11</text>
+<line x1="78" y1="212.8" x2="560" y2="212.8" stroke="#e8e8e8"/>
+<text x="70" y="216.8" text-anchor="end">0.18</text>
+<line x1="78" y1="130.4" x2="560" y2="130.4" stroke="#e8e8e8"/>
+<text x="70" y="134.4" text-anchor="end">0.25</text>
+<line x1="78" y1="48.0" x2="560" y2="48.0" stroke="#e8e8e8"/>
+<text x="70" y="52.0" text-anchor="end">0.31</text>
+<line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#f0f0f0"/>
+<text x="78.0" y="480.0" text-anchor="middle">2.00</text>
+<line x1="158.3" y1="48" x2="158.3" y2="460" stroke="#f0f0f0"/>
+<text x="158.3" y="480.0" text-anchor="middle">6.33</text>
+<line x1="238.5" y1="48" x2="238.5" y2="460" stroke="#f0f0f0"/>
+<text x="238.5" y="480.0" text-anchor="middle">10.66</text>
+<line x1="318.8" y1="48" x2="318.8" y2="460" stroke="#f0f0f0"/>
+<text x="318.8" y="480.0" text-anchor="middle">14.99</text>
+<line x1="399.1" y1="48" x2="399.1" y2="460" stroke="#f0f0f0"/>
+<text x="399.1" y="480.0" text-anchor="middle">19.32</text>
+<line x1="479.4" y1="48" x2="479.4" y2="460" stroke="#f0f0f0"/>
+<text x="479.4" y="480.0" text-anchor="middle">23.65</text>
+<line x1="559.6" y1="48" x2="559.6" y2="460" stroke="#f0f0f0"/>
+<text x="559.6" y="480.0" text-anchor="middle">27.98</text>
+<rect x="78" y="48" width="482" height="412" fill="none" stroke="#333"/>
+<text x="319.0" y="504" text-anchor="middle">Es/N0 [dB]</text>
+<text x="20" y="254.0" text-anchor="middle" transform="rotate(-90 20 254.0)">optimal MB nu*</text>
+<path d="M78.0,97.7 L115.1,174.4 L152.2,235.7 L189.2,281.7 L226.3,327.6 L263.4,358.3 L300.5,388.9 L337.5,419.7 L374.6,425.7 L411.7,425.7 L448.8,425.7 L485.8,425.7 L522.9,425.7 L560.0,425.7" fill="none" stroke="#1f77b4" stroke-width="2.2"/>
+<circle cx="78.0" cy="97.7" r="3.3" fill="#1f77b4"/>
+<circle cx="115.1" cy="174.4" r="3.3" fill="#1f77b4"/>
+<circle cx="152.2" cy="235.7" r="3.3" fill="#1f77b4"/>
+<circle cx="189.2" cy="281.7" r="3.3" fill="#1f77b4"/>
+<circle cx="226.3" cy="327.6" r="3.3" fill="#1f77b4"/>
+<circle cx="263.4" cy="358.3" r="3.3" fill="#1f77b4"/>
+<circle cx="300.5" cy="388.9" r="3.3" fill="#1f77b4"/>
+<circle cx="337.5" cy="419.7" r="3.3" fill="#1f77b4"/>
+<circle cx="374.6" cy="425.7" r="3.3" fill="#1f77b4"/>
+<circle cx="411.7" cy="425.7" r="3.3" fill="#1f77b4"/>
+<circle cx="448.8" cy="425.7" r="3.3" fill="#1f77b4"/>
+<circle cx="485.8" cy="425.7" r="3.3" fill="#1f77b4"/>
+<circle cx="522.9" cy="425.7" r="3.3" fill="#1f77b4"/>
+<circle cx="560.0" cy="425.7" r="3.3" fill="#1f77b4"/>
+<line x1="574" y1="66" x2="594" y2="66" stroke="#1f77b4" stroke-width="2.2"/>
+<text x="598" y="70">16-QAM</text>
+<path d="M78.0,97.7 L115.1,174.4 L152.2,250.9 L189.2,297.0 L226.3,343.0 L263.4,358.3 L300.5,388.9 L337.5,388.9 L374.6,404.3 L411.7,419.7 L448.8,425.7 L485.8,425.7 L522.9,425.7 L560.0,425.7" fill="none" stroke="#2ca02c" stroke-width="2.2"/>
+<circle cx="78.0" cy="97.7" r="3.3" fill="#2ca02c"/>
+<circle cx="115.1" cy="174.4" r="3.3" fill="#2ca02c"/>
+<circle cx="152.2" cy="250.9" r="3.3" fill="#2ca02c"/>
+<circle cx="189.2" cy="297.0" r="3.3" fill="#2ca02c"/>
+<circle cx="226.3" cy="343.0" r="3.3" fill="#2ca02c"/>
+<circle cx="263.4" cy="358.3" r="3.3" fill="#2ca02c"/>
+<circle cx="300.5" cy="388.9" r="3.3" fill="#2ca02c"/>
+<circle cx="337.5" cy="388.9" r="3.3" fill="#2ca02c"/>
+<circle cx="374.6" cy="404.3" r="3.3" fill="#2ca02c"/>
+<circle cx="411.7" cy="419.7" r="3.3" fill="#2ca02c"/>
+<circle cx="448.8" cy="425.7" r="3.3" fill="#2ca02c"/>
+<circle cx="485.8" cy="425.7" r="3.3" fill="#2ca02c"/>
+<circle cx="522.9" cy="425.7" r="3.3" fill="#2ca02c"/>
+<circle cx="560.0" cy="425.7" r="3.3" fill="#2ca02c"/>
+<line x1="574" y1="88" x2="594" y2="88" stroke="#2ca02c" stroke-width="2.2"/>
+<text x="598" y="92">64-QAM</text>
+<path d="M78.0,82.3 L115.1,174.4 L152.2,250.9 L189.2,297.0 L226.3,343.0 L263.4,373.7 L300.5,388.9 L337.5,404.3 L374.6,404.3 L411.7,419.7 L448.8,419.7 L485.8,419.7 L522.9,425.7 L560.0,425.7" fill="none" stroke="#d62728" stroke-width="2.2"/>
+<circle cx="78.0" cy="82.3" r="3.3" fill="#d62728"/>
+<circle cx="115.1" cy="174.4" r="3.3" fill="#d62728"/>
+<circle cx="152.2" cy="250.9" r="3.3" fill="#d62728"/>
+<circle cx="189.2" cy="297.0" r="3.3" fill="#d62728"/>
+<circle cx="226.3" cy="343.0" r="3.3" fill="#d62728"/>
+<circle cx="263.4" cy="373.7" r="3.3" fill="#d62728"/>
+<circle cx="300.5" cy="388.9" r="3.3" fill="#d62728"/>
+<circle cx="337.5" cy="404.3" r="3.3" fill="#d62728"/>
+<circle cx="374.6" cy="404.3" r="3.3" fill="#d62728"/>
+<circle cx="411.7" cy="419.7" r="3.3" fill="#d62728"/>
+<circle cx="448.8" cy="419.7" r="3.3" fill="#d62728"/>
+<circle cx="485.8" cy="419.7" r="3.3" fill="#d62728"/>
+<circle cx="522.9" cy="425.7" r="3.3" fill="#d62728"/>
+<circle cx="560.0" cy="425.7" r="3.3" fill="#d62728"/>
+<line x1="574" y1="110" x2="594" y2="110" stroke="#d62728" stroke-width="2.2"/>
+<text x="598" y="114">256-QAM</text>
+</svg>

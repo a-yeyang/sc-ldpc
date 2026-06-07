@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
+<rect width="760" height="520" fill="white"/>
+<text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">Joint-RL learning curve: 64-QAM R=0.833 w=4</text>
+<line x1="78" y1="344.4" x2="590" y2="344.4" stroke="#e0e0e0"/>
+<text x="70" y="348.4" text-anchor="end">1e-5</text>
+<line x1="78" y1="218.9" x2="590" y2="218.9" stroke="#e0e0e0"/>
+<text x="70" y="222.9" text-anchor="end">1e-4</text>
+<line x1="78" y1="93.4" x2="590" y2="93.4" stroke="#e0e0e0"/>
+<text x="70" y="97.4" text-anchor="end">1e-3</text>
+<line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#eee"/>
+<text x="78.0" y="480.0" text-anchor="middle">96.0</text>
+<line x1="142.0" y1="48" x2="142.0" y2="460" stroke="#eee"/>
+<text x="142.0" y="480.0" text-anchor="middle">252.0</text>
+<line x1="206.0" y1="48" x2="206.0" y2="460" stroke="#eee"/>
+<text x="206.0" y="480.0" text-anchor="middle">408.0</text>
+<line x1="270.0" y1="48" x2="270.0" y2="460" stroke="#eee"/>
+<text x="270.0" y="480.0" text-anchor="middle">564.0</text>
+<line x1="334.0" y1="48" x2="334.0" y2="460" stroke="#eee"/>
+<text x="334.0" y="480.0" text-anchor="middle">720.0</text>
+<line x1="398.0" y1="48" x2="398.0" y2="460" stroke="#eee"/>
+<text x="398.0" y="480.0" text-anchor="middle">876.0</text>
+<line x1="462.0" y1="48" x2="462.0" y2="460" stroke="#eee"/>
+<text x="462.0" y="480.0" text-anchor="middle">1032.0</text>
+<line x1="526.0" y1="48" x2="526.0" y2="460" stroke="#eee"/>
+<text x="526.0" y="480.0" text-anchor="middle">1188.0</text>
+<line x1="590.0" y1="48" x2="590.0" y2="460" stroke="#eee"/>
+<text x="590.0" y="480.0" text-anchor="middle">1344.0</text>
+<rect x="78" y="48" width="512" height="412" fill="none" stroke="#333"/>
+<text x="334.0" y="504" text-anchor="middle"># joint evaluations</text>
+<text x="20" y="254.0" text-anchor="middle" transform="rotate(-90 20 254.0)">best val BER</text>
+<path d="M78.0,85.6 L117.4,110.3 L156.8,266.9 L196.2,266.9 L235.5,432.2 L274.9,432.2 L314.3,432.2 L353.7,432.2 L393.1,432.2 L432.5,432.2 L471.8,432.2 L511.2,432.2 L550.6,432.2 L590.0,432.2" fill="none" stroke="#d62728" stroke-width="2.2"/>
+<circle cx="78.0" cy="85.6" r="3.3" fill="#d62728"/>
+<circle cx="117.4" cy="110.3" r="3.3" fill="#d62728"/>
+<circle cx="156.8" cy="266.9" r="3.3" fill="#d62728"/>
+<circle cx="196.2" cy="266.9" r="3.3" fill="#d62728"/>
+<circle cx="235.5" cy="432.2" r="3.3" fill="#d62728"/>
+<circle cx="274.9" cy="432.2" r="3.3" fill="#d62728"/>
+<circle cx="314.3" cy="432.2" r="3.3" fill="#d62728"/>
+<circle cx="353.7" cy="432.2" r="3.3" fill="#d62728"/>
+<circle cx="393.1" cy="432.2" r="3.3" fill="#d62728"/>
+<circle cx="432.5" cy="432.2" r="3.3" fill="#d62728"/>
+<circle cx="471.8" cy="432.2" r="3.3" fill="#d62728"/>
+<circle cx="511.2" cy="432.2" r="3.3" fill="#d62728"/>
+<circle cx="550.6" cy="432.2" r="3.3" fill="#d62728"/>
+<circle cx="590.0" cy="432.2" r="3.3" fill="#d62728"/>
+<line x1="604" y1="66" x2="624" y2="66" stroke="#d62728" stroke-width="2.2"/>
+<text x="628" y="70">RL-joint (constr+shaping) [ours]</text>
+<path d="M78.0,70.1 L117.4,70.1 L156.8,70.1 L196.2,85.6 L235.5,207.1 L274.9,207.1 L314.3,207.1 L353.7,207.1 L393.1,207.1 L432.5,207.1 L471.8,207.1 L511.2,207.1 L550.6,207.1 L590.0,207.1" fill="none" stroke="#1f77b4" stroke-width="2.2"/>
+<circle cx="78.0" cy="70.1" r="3.3" fill="#1f77b4"/>
+<circle cx="117.4" cy="70.1" r="3.3" fill="#1f77b4"/>
+<circle cx="156.8" cy="70.1" r="3.3" fill="#1f77b4"/>
+<circle cx="196.2" cy="85.6" r="3.3" fill="#1f77b4"/>
+<circle cx="235.5" cy="207.1" r="3.3" fill="#1f77b4"/>
+<circle cx="274.9" cy="207.1" r="3.3" fill="#1f77b4"/>
+<circle cx="314.3" cy="207.1" r="3.3" fill="#1f77b4"/>
+<circle cx="353.7" cy="207.1" r="3.3" fill="#1f77b4"/>
+<circle cx="393.1" cy="207.1" r="3.3" fill="#1f77b4"/>
+<circle cx="432.5" cy="207.1" r="3.3" fill="#1f77b4"/>
+<circle cx="471.8" cy="207.1" r="3.3" fill="#1f77b4"/>
+<circle cx="511.2" cy="207.1" r="3.3" fill="#1f77b4"/>
+<circle cx="550.6" cy="207.1" r="3.3" fill="#1f77b4"/>
+<circle cx="590.0" cy="207.1" r="3.3" fill="#1f77b4"/>
+<line x1="604" y1="88" x2="624" y2="88" stroke="#1f77b4" stroke-width="2.2"/>
+<text x="628" y="92">shaped + random constr</text>
+</svg>
