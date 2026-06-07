@@ -20,7 +20,7 @@ if mh:
 
 cells_done = txt.count("[cell done")
 cur = None
-cm = re.findall(r"=== R=([\d.]+) \(sc rate ([\d.]+)\) w=(\d)\s+E=(\d+).*?train@([\d.]+)dB", txt)
+cm = re.findall(r"=== R=([\d.]+) \(sc rate ([\d.]+)\) w=(\d+)\s+E=(\d+).*?train@([\d.]+)dB", txt)
 if cm:
     r, scr, w, e, snr = cm[-1]
     cur = {"rate": float(r), "sc_rate": float(scr), "w": int(w), "E": int(e), "snr": float(snr)}
