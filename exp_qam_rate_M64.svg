@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
+<rect width="760" height="520" fill="white"/>
+<text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">SC-LDPC 64-QAM/AWGN  rate sweep  (Z=32,w=3,L=50)</text>
+<line x1="78" y1="441.2" x2="590" y2="441.2" stroke="#e0e0e0"/>
+<text x="70" y="445.2" text-anchor="end">1e-4</text>
+<line x1="78" y1="329.1" x2="590" y2="329.1" stroke="#e0e0e0"/>
+<text x="70" y="333.1" text-anchor="end">1e-3</text>
+<line x1="78" y1="217.0" x2="590" y2="217.0" stroke="#e0e0e0"/>
+<text x="70" y="221.0" text-anchor="end">1e-2</text>
+<line x1="78" y1="104.9" x2="590" y2="104.9" stroke="#e0e0e0"/>
+<text x="70" y="108.9" text-anchor="end">1e-1</text>
+<line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#eee"/>
+<text x="78.0" y="480.0" text-anchor="middle">5.4</text>
+<line x1="141.8" y1="48" x2="141.8" y2="460" stroke="#eee"/>
+<text x="141.8" y="480.0" text-anchor="middle">6.4</text>
+<line x1="205.5" y1="48" x2="205.5" y2="460" stroke="#eee"/>
+<text x="205.5" y="480.0" text-anchor="middle">7.4</text>
+<line x1="269.3" y1="48" x2="269.3" y2="460" stroke="#eee"/>
+<text x="269.3" y="480.0" text-anchor="middle">8.4</text>
+<line x1="333.0" y1="48" x2="333.0" y2="460" stroke="#eee"/>
+<text x="333.0" y="480.0" text-anchor="middle">9.4</text>
+<line x1="396.8" y1="48" x2="396.8" y2="460" stroke="#eee"/>
+<text x="396.8" y="480.0" text-anchor="middle">10.4</text>
+<line x1="460.6" y1="48" x2="460.6" y2="460" stroke="#eee"/>
+<text x="460.6" y="480.0" text-anchor="middle">11.4</text>
+<line x1="524.3" y1="48" x2="524.3" y2="460" stroke="#eee"/>
+<text x="524.3" y="480.0" text-anchor="middle">12.4</text>
+<line x1="588.1" y1="48" x2="588.1" y2="460" stroke="#eee"/>
+<text x="588.1" y="480.0" text-anchor="middle">13.4</text>
+<rect x="78" y="48" width="512" height="412" fill="none" stroke="#333"/>
+<text x="334.0" y="504" text-anchor="middle">info Eb/N0 [dB]</text>
+<text x="20" y="254.0" text-anchor="middle" transform="rotate(-90 20 254.0)">info BER</text>
+<path d="M78.0,67.7 L125.8,75.6 L173.6,207.6" fill="none" stroke="#1f77b4" stroke-width="2.2"/>
+<circle cx="78.0" cy="67.7" r="3.3" fill="#1f77b4"/>
+<circle cx="125.8" cy="75.6" r="3.3" fill="#1f77b4"/>
+<circle cx="173.6" cy="207.6" r="3.3" fill="#1f77b4"/>
+<line x1="604" y1="66" x2="624" y2="66" stroke="#1f77b4" stroke-width="2.2"/>
+<text x="628" y="70">R=0.5</text>
+<path d="M202.3,85.2 L250.2,94.3 L298.0,377.0" fill="none" stroke="#2ca02c" stroke-width="2.2"/>
+<circle cx="202.3" cy="85.2" r="3.3" fill="#2ca02c"/>
+<circle cx="250.2" cy="94.3" r="3.3" fill="#2ca02c"/>
+<circle cx="298.0" cy="377.0" r="3.3" fill="#2ca02c"/>
+<line x1="604" y1="88" x2="624" y2="88" stroke="#2ca02c" stroke-width="2.2"/>
+<text x="628" y="92">R=0.667</text>
+<path d="M255.9,95.4 L303.7,105.7 L351.5,209.2 L396.2,435.1" fill="none" stroke="#ff7f0e" stroke-width="2.2"/>
+<circle cx="255.9" cy="95.4" r="3.3" fill="#ff7f0e"/>
+<circle cx="303.7" cy="105.7" r="3.3" fill="#ff7f0e"/>
+<circle cx="351.5" cy="209.2" r="3.3" fill="#ff7f0e"/>
+<circle cx="396.2" cy="435.1" r="3.3" fill="#ff7f0e"/>
+<line x1="604" y1="110" x2="624" y2="110" stroke="#ff7f0e" stroke-width="2.2"/>
+<text x="628" y="114">R=0.75</text>
+<path d="M308.8,106.5 L356.6,116.7 L404.5,165.2" fill="none" stroke="#9467bd" stroke-width="2.2"/>
+<circle cx="308.8" cy="106.5" r="3.3" fill="#9467bd"/>
+<circle cx="356.6" cy="116.7" r="3.3" fill="#9467bd"/>
+<circle cx="404.5" cy="165.2" r="3.3" fill="#9467bd"/>
+<line x1="604" y1="132" x2="624" y2="132" stroke="#9467bd" stroke-width="2.2"/>
+<text x="628" y="136">R=0.833</text>
+<path d="M354.1,116.4 L401.9,126.2 L449.7,205.0" fill="none" stroke="#d62728" stroke-width="2.2"/>
+<circle cx="354.1" cy="116.4" r="3.3" fill="#d62728"/>
+<circle cx="401.9" cy="126.2" r="3.3" fill="#d62728"/>
+<circle cx="449.7" cy="205.0" r="3.3" fill="#d62728"/>
+<line x1="604" y1="154" x2="624" y2="154" stroke="#d62728" stroke-width="2.2"/>
+<text x="628" y="158">R=0.875</text>
+</svg>

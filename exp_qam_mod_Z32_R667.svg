@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
+<rect width="760" height="520" fill="white"/>
+<text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">SC-LDPC over QAM/AWGN  R=0.667  Z=32  (w=3,L=50)</text>
+<line x1="78" y1="430.0" x2="590" y2="430.0" stroke="#e0e0e0"/>
+<text x="70" y="434.0" text-anchor="end">1e-5</text>
+<line x1="78" y1="342.8" x2="590" y2="342.8" stroke="#e0e0e0"/>
+<text x="70" y="346.8" text-anchor="end">1e-4</text>
+<line x1="78" y1="255.6" x2="590" y2="255.6" stroke="#e0e0e0"/>
+<text x="70" y="259.6" text-anchor="end">1e-3</text>
+<line x1="78" y1="168.4" x2="590" y2="168.4" stroke="#e0e0e0"/>
+<text x="70" y="172.4" text-anchor="end">1e-2</text>
+<line x1="78" y1="81.2" x2="590" y2="81.2" stroke="#e0e0e0"/>
+<text x="70" y="85.2" text-anchor="end">1e-1</text>
+<line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#eee"/>
+<text x="78.0" y="480.0" text-anchor="middle">1.0</text>
+<line x1="134.1" y1="48" x2="134.1" y2="460" stroke="#eee"/>
+<text x="134.1" y="480.0" text-anchor="middle">2.5</text>
+<line x1="190.1" y1="48" x2="190.1" y2="460" stroke="#eee"/>
+<text x="190.1" y="480.0" text-anchor="middle">4.0</text>
+<line x1="246.2" y1="48" x2="246.2" y2="460" stroke="#eee"/>
+<text x="246.2" y="480.0" text-anchor="middle">5.5</text>
+<line x1="302.2" y1="48" x2="302.2" y2="460" stroke="#eee"/>
+<text x="302.2" y="480.0" text-anchor="middle">7.0</text>
+<line x1="358.3" y1="48" x2="358.3" y2="460" stroke="#eee"/>
+<text x="358.3" y="480.0" text-anchor="middle">8.5</text>
+<line x1="414.4" y1="48" x2="414.4" y2="460" stroke="#eee"/>
+<text x="414.4" y="480.0" text-anchor="middle">10.0</text>
+<line x1="470.4" y1="48" x2="470.4" y2="460" stroke="#eee"/>
+<text x="470.4" y="480.0" text-anchor="middle">11.5</text>
+<line x1="526.5" y1="48" x2="526.5" y2="460" stroke="#eee"/>
+<text x="526.5" y="480.0" text-anchor="middle">13.0</text>
+<line x1="582.5" y1="48" x2="582.5" y2="460" stroke="#eee"/>
+<text x="582.5" y="480.0" text-anchor="middle">14.5</text>
+<rect x="78" y="48" width="512" height="412" fill="none" stroke="#333"/>
+<text x="334.0" y="504" text-anchor="middle">info Eb/N0 [dB]</text>
+<text x="20" y="254.0" text-anchor="middle" transform="rotate(-90 20 254.0)">info BER</text>
+<path d="M78.0,63.4 L106.0,72.8 L134.1,195.3" fill="none" stroke="#1f77b4" stroke-width="2.2"/>
+<circle cx="78.0" cy="63.4" r="3.3" fill="#1f77b4"/>
+<circle cx="106.0" cy="72.8" r="3.3" fill="#1f77b4"/>
+<circle cx="134.1" cy="195.3" r="3.3" fill="#1f77b4"/>
+<line x1="604" y1="66" x2="624" y2="66" stroke="#1f77b4" stroke-width="2.2"/>
+<text x="628" y="70">QPSK</text>
+<path d="M182.6,63.4 L210.7,69.8 L238.7,149.8 L264.9,414.4" fill="none" stroke="#2ca02c" stroke-width="2.2"/>
+<circle cx="182.6" cy="63.4" r="3.3" fill="#2ca02c"/>
+<circle cx="210.7" cy="69.8" r="3.3" fill="#2ca02c"/>
+<circle cx="238.7" cy="149.8" r="3.3" fill="#2ca02c"/>
+<circle cx="264.9" cy="414.4" r="3.3" fill="#2ca02c"/>
+<line x1="604" y1="88" x2="624" y2="88" stroke="#2ca02c" stroke-width="2.2"/>
+<text x="628" y="92">16-QAM</text>
+<path d="M316.8,65.8 L344.8,72.9 L372.9,292.9" fill="none" stroke="#ff7f0e" stroke-width="2.2"/>
+<circle cx="316.8" cy="65.8" r="3.3" fill="#ff7f0e"/>
+<circle cx="344.8" cy="72.9" r="3.3" fill="#ff7f0e"/>
+<circle cx="372.9" cy="292.9" r="3.3" fill="#ff7f0e"/>
+<line x1="604" y1="110" x2="624" y2="110" stroke="#ff7f0e" stroke-width="2.2"/>
+<text x="628" y="114">64-QAM</text>
+<path d="M451.7,66.1 L479.8,78.1 L507.8,206.0 L533.9,440.7" fill="none" stroke="#d62728" stroke-width="2.2"/>
+<circle cx="451.7" cy="66.1" r="3.3" fill="#d62728"/>
+<circle cx="479.8" cy="78.1" r="3.3" fill="#d62728"/>
+<circle cx="507.8" cy="206.0" r="3.3" fill="#d62728"/>
+<circle cx="533.9" cy="440.7" r="3.3" fill="#d62728"/>
+<line x1="604" y1="132" x2="624" y2="132" stroke="#d62728" stroke-width="2.2"/>
+<text x="628" y="136">256-QAM</text>
+</svg>

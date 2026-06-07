@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
+<rect width="760" height="520" fill="white"/>
+<text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">64-QAM  R=0.5  code-length (Z) sweep (w=3,L=50)</text>
+<line x1="78" y1="459.4" x2="590" y2="459.4" stroke="#e0e0e0"/>
+<text x="70" y="463.4" text-anchor="end">1e-6</text>
+<line x1="78" y1="384.7" x2="590" y2="384.7" stroke="#e0e0e0"/>
+<text x="70" y="388.7" text-anchor="end">1e-5</text>
+<line x1="78" y1="310.0" x2="590" y2="310.0" stroke="#e0e0e0"/>
+<text x="70" y="314.0" text-anchor="end">1e-4</text>
+<line x1="78" y1="235.3" x2="590" y2="235.3" stroke="#e0e0e0"/>
+<text x="70" y="239.3" text-anchor="end">1e-3</text>
+<line x1="78" y1="160.6" x2="590" y2="160.6" stroke="#e0e0e0"/>
+<text x="70" y="164.6" text-anchor="end">1e-2</text>
+<line x1="78" y1="85.9" x2="590" y2="85.9" stroke="#e0e0e0"/>
+<text x="70" y="89.9" text-anchor="end">1e-1</text>
+<line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#eee"/>
+<text x="78.0" y="480.0" text-anchor="middle">5.4</text>
+<line x1="142.2" y1="48" x2="142.2" y2="460" stroke="#eee"/>
+<text x="142.2" y="480.0" text-anchor="middle">5.9</text>
+<line x1="206.3" y1="48" x2="206.3" y2="460" stroke="#eee"/>
+<text x="206.3" y="480.0" text-anchor="middle">6.4</text>
+<line x1="270.5" y1="48" x2="270.5" y2="460" stroke="#eee"/>
+<text x="270.5" y="480.0" text-anchor="middle">6.9</text>
+<line x1="334.6" y1="48" x2="334.6" y2="460" stroke="#eee"/>
+<text x="334.6" y="480.0" text-anchor="middle">7.4</text>
+<line x1="398.8" y1="48" x2="398.8" y2="460" stroke="#eee"/>
+<text x="398.8" y="480.0" text-anchor="middle">7.9</text>
+<line x1="463.0" y1="48" x2="463.0" y2="460" stroke="#eee"/>
+<text x="463.0" y="480.0" text-anchor="middle">8.4</text>
+<line x1="527.1" y1="48" x2="527.1" y2="460" stroke="#eee"/>
+<text x="527.1" y="480.0" text-anchor="middle">8.9</text>
+<rect x="78" y="48" width="512" height="412" fill="none" stroke="#333"/>
+<text x="334.0" y="504" text-anchor="middle">info Eb/N0 [dB]</text>
+<text x="20" y="254.0" text-anchor="middle" transform="rotate(-90 20 254.0)">info BER</text>
+<path d="M115.2,64.5 L211.5,74.8 L307.7,174.8 L487.3,443.4" fill="none" stroke="#1f77b4" stroke-width="2.2"/>
+<circle cx="115.2" cy="64.5" r="3.3" fill="#1f77b4"/>
+<circle cx="211.5" cy="74.8" r="3.3" fill="#1f77b4"/>
+<circle cx="307.7" cy="174.8" r="3.3" fill="#1f77b4"/>
+<circle cx="487.3" cy="443.4" r="3.3" fill="#1f77b4"/>
+<line x1="604" y1="66" x2="624" y2="66" stroke="#1f77b4" stroke-width="2.2"/>
+<text x="628" y="70">Z=16 (N~46*Z)</text>
+<path d="M78.0,61.2 L174.2,66.4 L270.5,154.3" fill="none" stroke="#2ca02c" stroke-width="2.2"/>
+<circle cx="78.0" cy="61.2" r="3.3" fill="#2ca02c"/>
+<circle cx="174.2" cy="66.4" r="3.3" fill="#2ca02c"/>
+<circle cx="270.5" cy="154.3" r="3.3" fill="#2ca02c"/>
+<line x1="604" y1="88" x2="624" y2="88" stroke="#2ca02c" stroke-width="2.2"/>
+<text x="628" y="92">Z=32 (N~46*Z)</text>
+<path d="M78.0,61.5 L174.2,67.3 L270.5,126.2 L360.3,380.6" fill="none" stroke="#d62728" stroke-width="2.2"/>
+<circle cx="78.0" cy="61.5" r="3.3" fill="#d62728"/>
+<circle cx="174.2" cy="67.3" r="3.3" fill="#d62728"/>
+<circle cx="270.5" cy="126.2" r="3.3" fill="#d62728"/>
+<circle cx="360.3" cy="380.6" r="3.3" fill="#d62728"/>
+<line x1="604" y1="110" x2="624" y2="110" stroke="#d62728" stroke-width="2.2"/>
+<text x="628" y="114">Z=64 (N~46*Z)</text>
+</svg>

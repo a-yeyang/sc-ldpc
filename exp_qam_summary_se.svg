@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
+<rect width="760" height="520" fill="white"/>
+<text x="319.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">SC-LDPC over QAM/AWGN: SNR cost of order x rate (Z=32)</text>
+<line x1="78" y1="460.0" x2="560" y2="460.0" stroke="#e8e8e8"/>
+<text x="70" y="464.0" text-anchor="end">0.51</text>
+<line x1="78" y1="377.6" x2="560" y2="377.6" stroke="#e8e8e8"/>
+<text x="70" y="381.6" text-anchor="end">3.98</text>
+<line x1="78" y1="295.2" x2="560" y2="295.2" stroke="#e8e8e8"/>
+<text x="70" y="299.2" text-anchor="end">7.44</text>
+<line x1="78" y1="212.8" x2="560" y2="212.8" stroke="#e8e8e8"/>
+<text x="70" y="216.8" text-anchor="end">10.91</text>
+<line x1="78" y1="130.4" x2="560" y2="130.4" stroke="#e8e8e8"/>
+<text x="70" y="134.4" text-anchor="end">14.38</text>
+<line x1="78" y1="48.0" x2="560" y2="48.0" stroke="#e8e8e8"/>
+<text x="70" y="52.0" text-anchor="end">17.84</text>
+<line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#f0f0f0"/>
+<text x="78.0" y="480.0" text-anchor="middle">0.97</text>
+<line x1="158.5" y1="48" x2="158.5" y2="460" stroke="#f0f0f0"/>
+<text x="158.5" y="480.0" text-anchor="middle">1.97</text>
+<line x1="239.1" y1="48" x2="239.1" y2="460" stroke="#f0f0f0"/>
+<text x="239.1" y="480.0" text-anchor="middle">2.97</text>
+<line x1="319.6" y1="48" x2="319.6" y2="460" stroke="#f0f0f0"/>
+<text x="319.6" y="480.0" text-anchor="middle">3.97</text>
+<line x1="400.1" y1="48" x2="400.1" y2="460" stroke="#f0f0f0"/>
+<text x="400.1" y="480.0" text-anchor="middle">4.97</text>
+<line x1="480.7" y1="48" x2="480.7" y2="460" stroke="#f0f0f0"/>
+<text x="480.7" y="480.0" text-anchor="middle">5.97</text>
+<rect x="78" y="48" width="482" height="412" fill="none" stroke="#333"/>
+<text x="319.0" y="504" text-anchor="middle">spectral efficiency  m*R [bits/symbol]</text>
+<text x="20" y="254.0" text-anchor="middle" transform="rotate(-90 20 254.0)">info Eb/N0 @ BER=1e-4 [dB]</text>
+<path d="M78.0,425.7 L104.9,406.7 L120.0,394.0 L134.5,381.3 L140.1,372.1" fill="none" stroke="#1f77b4" stroke-width="2.2"/>
+<circle cx="78.0" cy="425.7" r="3.3" fill="#1f77b4"/>
+<circle cx="104.9" cy="406.7" r="3.3" fill="#1f77b4"/>
+<circle cx="120.0" cy="394.0" r="3.3" fill="#1f77b4"/>
+<circle cx="134.5" cy="381.3" r="3.3" fill="#1f77b4"/>
+<circle cx="140.1" cy="372.1" r="3.3" fill="#1f77b4"/>
+<line x1="574" y1="66" x2="594" y2="66" stroke="#1f77b4" stroke-width="2.2"/>
+<text x="598" y="70">QPSK</text>
+<path d="M155.8,361.4 L209.7,334.0 L239.8,319.7 L268.8,300.1 L280.1,289.7" fill="none" stroke="#2ca02c" stroke-width="2.2"/>
+<circle cx="155.8" cy="361.4" r="3.3" fill="#2ca02c"/>
+<circle cx="209.7" cy="334.0" r="3.3" fill="#2ca02c"/>
+<circle cx="239.8" cy="319.7" r="3.3" fill="#2ca02c"/>
+<circle cx="268.8" cy="300.1" r="3.3" fill="#2ca02c"/>
+<circle cx="280.1" cy="289.7" r="3.3" fill="#2ca02c"/>
+<line x1="574" y1="88" x2="594" y2="88" stroke="#2ca02c" stroke-width="2.2"/>
+<text x="598" y="92">16-QAM</text>
+<path d="M233.7,300.3 L314.4,258.1 L359.6,223.9 L403.1,213.6 L420.0,197.4" fill="none" stroke="#ff7f0e" stroke-width="2.2"/>
+<circle cx="233.7" cy="300.3" r="3.3" fill="#ff7f0e"/>
+<circle cx="314.4" cy="258.1" r="3.3" fill="#ff7f0e"/>
+<circle cx="359.6" cy="223.9" r="3.3" fill="#ff7f0e"/>
+<circle cx="403.1" cy="213.6" r="3.3" fill="#ff7f0e"/>
+<circle cx="420.0" cy="197.4" r="3.3" fill="#ff7f0e"/>
+<line x1="574" y1="110" x2="594" y2="110" stroke="#ff7f0e" stroke-width="2.2"/>
+<text x="598" y="114">64-QAM</text>
+<path d="M311.5,223.3 L419.2,165.3 L479.4,140.5 L537.4,103.3 L560.0,82.3" fill="none" stroke="#d62728" stroke-width="2.2"/>
+<circle cx="311.5" cy="223.3" r="3.3" fill="#d62728"/>
+<circle cx="419.2" cy="165.3" r="3.3" fill="#d62728"/>
+<circle cx="479.4" cy="140.5" r="3.3" fill="#d62728"/>
+<circle cx="537.4" cy="103.3" r="3.3" fill="#d62728"/>
+<circle cx="560.0" cy="82.3" r="3.3" fill="#d62728"/>
+<line x1="574" y1="132" x2="594" y2="132" stroke="#d62728" stroke-width="2.2"/>
+<text x="598" y="136">256-QAM</text>
+</svg>

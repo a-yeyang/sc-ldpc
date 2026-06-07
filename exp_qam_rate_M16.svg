@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
+<rect width="760" height="520" fill="white"/>
+<text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">SC-LDPC 16-QAM/AWGN  rate sweep  (Z=32,w=3,L=50)</text>
+<line x1="78" y1="456.1" x2="590" y2="456.1" stroke="#e0e0e0"/>
+<text x="70" y="460.1" text-anchor="end">1e-5</text>
+<line x1="78" y1="365.6" x2="590" y2="365.6" stroke="#e0e0e0"/>
+<text x="70" y="369.6" text-anchor="end">1e-4</text>
+<line x1="78" y1="275.0" x2="590" y2="275.0" stroke="#e0e0e0"/>
+<text x="70" y="279.0" text-anchor="end">1e-3</text>
+<line x1="78" y1="184.4" x2="590" y2="184.4" stroke="#e0e0e0"/>
+<text x="70" y="188.4" text-anchor="end">1e-2</text>
+<line x1="78" y1="93.9" x2="590" y2="93.9" stroke="#e0e0e0"/>
+<text x="70" y="97.9" text-anchor="end">1e-1</text>
+<line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#eee"/>
+<text x="78.0" y="480.0" text-anchor="middle">2.7</text>
+<line x1="152.9" y1="48" x2="152.9" y2="460" stroke="#eee"/>
+<text x="152.9" y="480.0" text-anchor="middle">3.7</text>
+<line x1="227.7" y1="48" x2="227.7" y2="460" stroke="#eee"/>
+<text x="227.7" y="480.0" text-anchor="middle">4.7</text>
+<line x1="302.6" y1="48" x2="302.6" y2="460" stroke="#eee"/>
+<text x="302.6" y="480.0" text-anchor="middle">5.7</text>
+<line x1="377.4" y1="48" x2="377.4" y2="460" stroke="#eee"/>
+<text x="377.4" y="480.0" text-anchor="middle">6.7</text>
+<line x1="452.3" y1="48" x2="452.3" y2="460" stroke="#eee"/>
+<text x="452.3" y="480.0" text-anchor="middle">7.7</text>
+<line x1="527.1" y1="48" x2="527.1" y2="460" stroke="#eee"/>
+<text x="527.1" y="480.0" text-anchor="middle">8.7</text>
+<rect x="78" y="48" width="512" height="412" fill="none" stroke="#333"/>
+<text x="334.0" y="504" text-anchor="middle">info Eb/N0 [dB]</text>
+<text x="20" y="254.0" text-anchor="middle" transform="rotate(-90 20 254.0)">info BER</text>
+<path d="M78.0,63.9 L134.1,73.5 L190.3,299.2 L242.7,408.0" fill="none" stroke="#1f77b4" stroke-width="2.2"/>
+<circle cx="78.0" cy="63.9" r="3.3" fill="#1f77b4"/>
+<circle cx="134.1" cy="73.5" r="3.3" fill="#1f77b4"/>
+<circle cx="190.3" cy="299.2" r="3.3" fill="#1f77b4"/>
+<circle cx="242.7" cy="408.0" r="3.3" fill="#1f77b4"/>
+<line x1="604" y1="66" x2="624" y2="66" stroke="#1f77b4" stroke-width="2.2"/>
+<text x="628" y="70">R=0.5</text>
+<path d="M158.1,75.4 L214.2,82.0 L270.4,165.1 L322.8,439.9" fill="none" stroke="#2ca02c" stroke-width="2.2"/>
+<circle cx="158.1" cy="75.4" r="3.3" fill="#2ca02c"/>
+<circle cx="214.2" cy="82.0" r="3.3" fill="#2ca02c"/>
+<circle cx="270.4" cy="165.1" r="3.3" fill="#2ca02c"/>
+<circle cx="322.8" cy="439.9" r="3.3" fill="#2ca02c"/>
+<line x1="604" y1="88" x2="624" y2="88" stroke="#2ca02c" stroke-width="2.2"/>
+<text x="628" y="92">R=0.667</text>
+<path d="M221.0,86.1 L277.1,95.4 L333.3,194.2" fill="none" stroke="#ff7f0e" stroke-width="2.2"/>
+<circle cx="221.0" cy="86.1" r="3.3" fill="#ff7f0e"/>
+<circle cx="277.1" cy="95.4" r="3.3" fill="#ff7f0e"/>
+<circle cx="333.3" cy="194.2" r="3.3" fill="#ff7f0e"/>
+<line x1="604" y1="110" x2="624" y2="110" stroke="#ff7f0e" stroke-width="2.2"/>
+<text x="628" y="114">R=0.75</text>
+<path d="M283.1,96.3 L339.2,105.9 L395.4,198.1" fill="none" stroke="#9467bd" stroke-width="2.2"/>
+<circle cx="283.1" cy="96.3" r="3.3" fill="#9467bd"/>
+<circle cx="339.2" cy="105.9" r="3.3" fill="#9467bd"/>
+<circle cx="395.4" cy="198.1" r="3.3" fill="#9467bd"/>
+<line x1="604" y1="132" x2="624" y2="132" stroke="#9467bd" stroke-width="2.2"/>
+<text x="628" y="136">R=0.833</text>
+<path d="M313.0,102.4 L369.2,112.9 L425.3,158.1" fill="none" stroke="#d62728" stroke-width="2.2"/>
+<circle cx="313.0" cy="102.4" r="3.3" fill="#d62728"/>
+<circle cx="369.2" cy="112.9" r="3.3" fill="#d62728"/>
+<circle cx="425.3" cy="158.1" r="3.3" fill="#d62728"/>
+<line x1="604" y1="154" x2="624" y2="154" stroke="#d62728" stroke-width="2.2"/>
+<text x="628" y="158">R=0.875</text>
+</svg>
