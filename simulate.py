@@ -16,6 +16,7 @@ import sys
 import time
 import numpy as np
 
+import outpaths as OP
 from nr_ldpc import NRLDPCCode
 from sc_ldpc import SCLDPCCode
 from decoder import Tanner
@@ -67,7 +68,7 @@ def run_component():
     cur = _run(ed, [0.6, 0.9, 1.2, 1.5, 1.8, 2.1], code.rate,
                n_frames=8000, target_ferr=150, min_frames=300,
                label=f"5G NR BG2 component (Z={Z}, R={code.rate:.3f})")
-    json.dump(cur, open("results_component.json", "w"))
+    json.dump(cur, open(OP.route("results_component.json"), "w"))
 
 
 def run_sc():
@@ -84,7 +85,7 @@ def run_sc():
     cur = _run(ed, [0.0, 0.2, 0.35, 0.5, 0.65, 0.8], sc.rate,
                n_frames=700, target_ferr=50, min_frames=80,
                label=f"SC-LDPC full-BP (L={sc.L}, w={sc.w}, R={sc.rate:.3f})")
-    json.dump(cur, open("results_sc.json", "w"))
+    json.dump(cur, open(OP.route("results_sc.json"), "w"))
 
 
 def run_windowed():
@@ -102,14 +103,14 @@ def run_windowed():
     cur = _run(ed, [0.35, 0.5, 0.65, 0.8], sc.rate,
                n_frames=120, target_ferr=30, min_frames=40,
                label=f"SC-LDPC windowed (W={W})")
-    json.dump(cur, open("results_windowed.json", "w"))
+    json.dump(cur, open(OP.route("results_windowed.json"), "w"))
 
 
 def run_plot():
     curves = []
     for fn in ["results_component.json", "results_sc.json", "results_windowed.json"]:
         try:
-            curves.append(json.load(open(fn)))
+            curves.append(json.load(open(OP.route(fn))))
         except FileNotFoundError:
             print(f"(missing {fn}, skipping)")
     plotting.write_csv(curves, "results.csv")

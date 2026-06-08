@@ -24,6 +24,7 @@ import multiprocessing as mp
 from dataclasses import asdict
 import numpy as np
 
+import outpaths as OP
 import plotting
 import rl_construct as R
 
@@ -45,7 +46,7 @@ def _arr(a):
 
 
 def _save(out):
-    json.dump(out, open(RESULT + ".tmp", "w")); os.replace(RESULT + ".tmp", RESULT)
+    json.dump(out, open(OP.route(RESULT) + ".tmp", "w")); os.replace(OP.route(RESULT) + ".tmp", OP.route(RESULT))
 
 
 # --------------------------------------------------------------------------- #
@@ -122,9 +123,9 @@ def search_random(c, pool, seed=11):
 
 def run():
     out = None
-    if os.path.exists(RESULT):
+    if os.path.exists(OP.route(RESULT)):
         try:
-            out = json.load(open(RESULT)); out.setdefault("cells", {})
+            out = json.load(open(OP.route(RESULT))); out.setdefault("cells", {})
             print(f"[resume] {RESULT}: {len(out['cells'])} w-cells done {sorted(out['cells'])}",
                   flush=True)
         except Exception:
@@ -177,7 +178,7 @@ def run():
 
 def make_plots(out=None):
     if out is None:
-        out = json.load(open(RESULT))
+        out = json.load(open(OP.route(RESULT)))
     cells = out["cells"]
     ws = sorted(int(k[1:]) for k in cells)
     # n4 @ OPT_L vs w, one line per method

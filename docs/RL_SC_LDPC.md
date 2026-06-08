@@ -1,8 +1,8 @@
 # 用强化学习优化空间耦合 LDPC 滑窗译码
 
-> 研究记录 / 方法说明。配套实现:[rl_decoder.py](rl_decoder.py)（MDP 环境 + 表格 Q-learning，纯 NumPy）、
-> [experiments_rl.py](experiments_rl.py)（与基线对比、出图）。
-> 本工作建立在本仓库已有的 5G NR → SC-LDPC 收发链之上（见 [README.md](README.md)）。
+> 研究记录 / 方法说明。配套实现:[rl_decoder.py](../rl_decoder.py)（MDP 环境 + 表格 Q-learning，纯 NumPy）、
+> [experiments_rl.py](../experiments_rl.py)（与基线对比、出图）。
+> 本工作建立在本仓库已有的 5G NR → SC-LDPC 收发链之上（见 [README.md](../README.md)）。
 
 ---
 

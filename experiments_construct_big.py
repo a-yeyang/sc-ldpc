@@ -27,6 +27,7 @@ import time
 import multiprocessing as mp
 import numpy as np
 
+import outpaths as OP
 import plotting
 import rl_construct as R
 
@@ -172,6 +173,7 @@ def run_lsweep(rate, w, out, pool):
 
 def _save(out, fn):
     """Atomic save (temp file + rename) so an interrupt mid-write can't corrupt results."""
+    fn = OP.route(fn)
     tmp = fn + ".tmp"
     json.dump(out, open(tmp, "w"))
     os.replace(tmp, fn)
@@ -183,9 +185,9 @@ def run_slice(name):
     fn = f"results_big_{name}.json"
     # --- resume: reload any existing results and skip the cells already computed ---
     out = None
-    if os.path.exists(fn):
+    if os.path.exists(OP.route(fn)):
         try:
-            out = json.load(open(fn)); out.setdefault("cells", {})
+            out = json.load(open(OP.route(fn))); out.setdefault("cells", {})
             print(f"[resume] {fn}: {len(out['cells'])} cells already done {sorted(out['cells'])}",
                   flush=True)
         except Exception as e:
@@ -223,7 +225,7 @@ def _merge():
     out = {"cells": {}, "lsweep": []}
     for name in ["A", "B"]:
         try:
-            d = json.load(open(f"results_big_{name}.json"))
+            d = json.load(open(OP.route(f"results_big_{name}.json")))
         except FileNotFoundError:
             continue
         out["cells"].update(d.get("cells", {}))
@@ -297,7 +299,7 @@ def make_plots():
                                   title=f"Chain length L sweep ({tag} construction, R={rate} w={w})",
                                   path=f"exp_big_lsweep_{champ}.svg")
     _export_tables(out)
-    json.dump(out, open("results_big_merged.json", "w"))
+    json.dump(out, open(OP.route("results_big_merged.json"), "w"))
     print("wrote exp_big_*.svg, results_big_merged.json, results_big_{finals,hist}.csv")
 
 
@@ -306,13 +308,13 @@ def _export_tables(out):
     (loss = mean_reward, plus best_val_fer) per construction evaluation."""
     import csv
     cells = out["cells"]
-    with open("results_big_finals.csv", "w", newline="") as f:
+    with open(OP.route("results_big_finals.csv"), "w", newline="") as f:
         wr = csv.writer(f); wr.writerow(["cell", "rate", "w", "E", "method", "fer", "ber", "n4"])
         for k, c in sorted(cells.items()):
             for m, fv in c["finals"].items():
                 wr.writerow([k, c["rate"], c["w"], c["E"], m, f"{fv['fer']:.5f}",
                              f"{fv['ber']:.3e}", c["stats"].get(m, {}).get("n4", "")])
-    with open("results_big_hist.csv", "w", newline="") as f:
+    with open(OP.route("results_big_hist.csv"), "w", newline="") as f:
         wr = csv.writer(f)
         wr.writerow(["cell", "rate", "w", "method", "eval", "mean_reward_loss", "best_val_fer"])
         for k, c in sorted(cells.items()):

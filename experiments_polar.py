@@ -24,6 +24,7 @@ import sys
 import time
 import numpy as np
 
+import outpaths as OP
 from nr_polar import NRPolarCode
 from sc_polar import SCPolarCode
 import polar_bp as bp
@@ -168,7 +169,7 @@ def exp_wave():
         curves.append({"x": list(range(sc.L)), "y": (fail / nf).tolist(),
                        "label": f"Eb/N0={ebn0}dB", "rate": sc.rate})
         print(f"  wave Eb/N0={ebn0}dB done ({time.time()-t0:.1f}s)", flush=True)
-    json.dump(curves, open("results_polar_wave.json", "w"))
+    json.dump(curves, open(OP.route("results_polar_wave.json"), "w"))
     plotting.semilogy(curves, xlabel="block position t", ylabel="block error rate",
                       title="PIC decoding wave (chain terminated at both ends)",
                       path="exp_polar_wave.svg")
@@ -176,7 +177,7 @@ def exp_wave():
 
 
 def _save(name, curves, title):
-    json.dump(curves, open(f"results_polar_{name}.json", "w"))
+    json.dump(curves, open(OP.route(f"results_polar_{name}.json"), "w"))
     plotting.semilogy(curves, ylabel="BER", title=title, path=f"exp_polar_{name}.svg")
     print(f"\nwrote results_polar_{name}.json and exp_polar_{name}.svg", flush=True)
 
@@ -185,13 +186,13 @@ def run_plot():
     import os
     for name in ["main", "algos", "J"]:
         fn = f"results_polar_{name}.json"
-        if os.path.exists(fn):
-            curves = json.load(open(fn))
+        if os.path.exists(OP.route(fn)):
+            curves = json.load(open(OP.route(fn)))
             plotting.semilogy(curves, ylabel="BER", title=f"SC-polar experiment: {name}",
                               path=f"exp_polar_{name}.svg")
             print(f"re-plotted exp_polar_{name}.svg ({len(curves)} curves)")
-    if os.path.exists("results_polar_wave.json"):
-        curves = json.load(open("results_polar_wave.json"))
+    if os.path.exists(OP.route("results_polar_wave.json")):
+        curves = json.load(open(OP.route("results_polar_wave.json")))
         plotting.semilogy(curves, xlabel="block position t", ylabel="block error rate",
                           title="PIC decoding wave (chain terminated at both ends)",
                           path="exp_polar_wave.svg")

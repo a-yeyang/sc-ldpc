@@ -22,6 +22,7 @@ import sys
 import time
 import numpy as np
 
+import outpaths as OP
 from nr_ldpc import NRLDPCCode
 from sc_ldpc import SCLDPCCode
 from rl_decoder import (SCWindowEnv, TabularQAgent, fixed_controller,
@@ -131,7 +132,7 @@ def run_all():
            "base": base, "thr": thr, "oracle": {"iters": o_it, "ber": o_ber}, "rl": rl,
            "ber_snrs": BER_SNRS, "ref_mi": ref_mi, "ref_T": ref_T, "best_ec": best_ec,
            "base_curve": base_curve, "thr_curve": thr_curve, "rl_curve": rl_curve}
-    json.dump(res, open("results_rl.json", "w"), indent=1)
+    json.dump(res, open(OP.route("results_rl.json"), "w"), indent=1)
     make_plots(res)
     print(f"\nDone in {time.time()-t0:.0f}s.  Wrote results_rl.json, exp_rl_pareto.svg, exp_rl_ber.svg")
 
@@ -163,7 +164,7 @@ def make_plots(res):
 
 
 def run_plot():
-    make_plots(json.load(open("results_rl.json")))
+    make_plots(json.load(open(OP.route("results_rl.json"))))
     print("re-rendered exp_rl_pareto.svg and exp_rl_ber.svg")
 
 

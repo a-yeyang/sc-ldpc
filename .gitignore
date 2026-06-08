@@ -5,3 +5,4 @@ __pycache__/
 dashboard/*status.json
 .cluster_tunnel.local
 cluster_tunnel.sh
+*.out

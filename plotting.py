@@ -6,6 +6,8 @@ SVG (viewable in any browser) plus a CSV of the raw data.
 from __future__ import annotations
 import math
 
+from outpaths import route as _route
+
 
 def _nice_log_ticks(ymin, ymax):
     lo = math.floor(math.log10(ymin))
@@ -80,7 +82,7 @@ def semilogy(curves, xlabel="Eb/N0 [dB]", ylabel="BER", title="",
                  f'stroke="{col}" stroke-width="2.2"/>')
         s.append(f'<text x="{ml+pw+38}" y="{ly+4}">{c["label"]}</text>')
     s.append('</svg>')
-    with open(path, "w") as f:
+    with open(_route(path), "w") as f:
         f.write("\n".join(s))
 
 
@@ -138,7 +140,7 @@ def linear(curves, xlabel="x", ylabel="y", title="", path="plot.svg",
                  f'stroke="{col}" stroke-width="2.2"/>')
         s.append(f'<text x="{ml+pw+38}" y="{ly+4}">{c["label"]}</text>')
     s.append('</svg>')
-    with open(path, "w") as f:
+    with open(_route(path), "w") as f:
         f.write("\n".join(s))
 
 
@@ -184,12 +186,12 @@ def heatmap(M, row_labels, col_labels, title="", path="heatmap.svg",
     if note:
         s.append(f'<text x="{ml}" y="{H-18}" font-size="11" fill="#555">{note}</text>')
     s.append('</svg>')
-    with open(path, "w") as f:
+    with open(_route(path), "w") as f:
         f.write("\n".join(s))
 
 
 def write_csv(curves, path="results.csv"):
-    with open(path, "w") as f:
+    with open(_route(path), "w") as f:
         for c in curves:
             f.write(f"# {c['label']}\n")
             f.write("ebn0_db,ber,fer\n")

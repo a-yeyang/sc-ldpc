@@ -14,6 +14,7 @@ import sys
 import time
 import numpy as np
 
+import outpaths as OP
 from nr_ldpc import NRLDPCCode
 from sc_ldpc import SCLDPCCode
 from decoder import Tanner
@@ -102,7 +103,7 @@ def pam4_component_curve(ils, Z, rate, ebn0_list, label, n_frames=200,
 def run_control(rate):
     grid = list(PAM4_GRID[rate]) + [PAM4_GRID[rate][-1] + d for d in (0.7, 1.4, 2.1, 2.8)]
     cur = pam4_component_curve(1, 24, rate, grid, "plain 5G LDPC (uncoupled, full-BP)")
-    json.dump(cur, open(f"results_pam4_ctrl_{int(rate*100)}.json", "w"))
+    json.dump(cur, open(OP.route(f"results_pam4_ctrl_{int(rate*100)}.json"), "w"))
     print(f"\nsaved results_pam4_ctrl_{int(rate*100)}.json", flush=True)
 
 
@@ -112,7 +113,7 @@ def run(rate, L):
     # each (rate,L) job under the 10-min shell limit so it can run foreground.
     nf, tb = {30: (40, 400), 100: (30, 350), 200: (20, 250), 300: (14, 180)}.get(L, (30, 350))
     cur = pam4_curve(rate, L, grid, f"L={L}", n_frames=nf, target_berr=tb, min_frames=8)
-    json.dump(cur, open(f"results_pam4_{int(rate*100)}_{L}.json", "w"))
+    json.dump(cur, open(OP.route(f"results_pam4_{int(rate*100)}_{L}.json"), "w"))
     print(f"\nsaved results_pam4_{int(rate*100)}_{L}.json", flush=True)
 
 
@@ -122,12 +123,12 @@ def plot():
         R2 = int(rate * 100)
         curves = []
         cf = f"results_pam4_ctrl_{R2}.json"          # control first (plain 5G LDPC)
-        if os.path.exists(cf):
-            curves.append(json.load(open(cf)))
+        if os.path.exists(OP.route(cf)):
+            curves.append(json.load(open(OP.route(cf))))
         for L in [30, 100, 200, 300]:
             fn = f"results_pam4_{R2}_{L}.json"
-            if os.path.exists(fn):
-                curves.append(json.load(open(fn)))
+            if os.path.exists(OP.route(fn)):
+                curves.append(json.load(open(OP.route(fn))))
         if curves:
             Rc = curves[0]["rate"]
             plotting.semilogy(curves, ylabel="BER",

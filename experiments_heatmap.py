@@ -19,6 +19,7 @@ import sys
 import time
 import numpy as np
 
+import outpaths as OP
 from nr_ldpc import NRLDPCCode
 from sc_ldpc import SCLDPCCode
 from decoder import Tanner
@@ -64,7 +65,7 @@ def cell(rate, Z, L, w):
     ber, nf = _ber_at(one, HM_EBN0[rate], sc.rate,
                       n_frames=24, target_berr=300, min_frames=10)
     out = {"rate": sc.rate, "ebn0": HM_EBN0[rate], "ber": ber, "Z": Z, "L": L, "w": w}
-    json.dump(out, open(f"results_hm_{int(rate*100)}_{Z}_{L}_{w}.json", "w"))
+    json.dump(out, open(OP.route(f"results_hm_{int(rate*100)}_{Z}_{L}_{w}.json"), "w"))
     print(f"cell R{rate} Z{Z} L{L} w{w}: SC_rate={sc.rate:.3f} "
           f"BER@{HM_EBN0[rate]}dB={ber:.3e} ({nf} fr, {time.time()-t0:.0f}s)", flush=True)
 
@@ -85,7 +86,7 @@ def ctrl(rate, Z):
 
     ber, nf = _ber_at(one, HM_EBN0[rate], code.rate, n_frames=40, target_berr=300, min_frames=12)
     out = {"rate": code.rate, "ebn0": HM_EBN0[rate], "ber": ber, "Z": Z, "L": 0, "w": 0}
-    json.dump(out, open(f"results_hm_ctrl_{int(rate*100)}_{Z}.json", "w"))
+    json.dump(out, open(OP.route(f"results_hm_ctrl_{int(rate*100)}_{Z}.json"), "w"))
     print(f"ctrl R{rate} Z{Z}: rate={code.rate:.3f} BER@{HM_EBN0[rate]}dB={ber:.3e} ({nf} fr)", flush=True)
 
 
@@ -98,9 +99,9 @@ def render():
                 row = []
                 for L in HM_L:
                     fn = f"results_hm_{R2}_{Z}_{L}_{w}.json"
-                    row.append(json.load(open(fn))["ber"] if os.path.exists(fn) else None)
+                    row.append(json.load(open(OP.route(fn)))["ber"] if os.path.exists(OP.route(fn)) else None)
                 cf = f"results_hm_ctrl_{R2}_{Z}.json"
-                row.append(json.load(open(cf))["ber"] if os.path.exists(cf) else None)
+                row.append(json.load(open(OP.route(cf)))["ber"] if os.path.exists(OP.route(cf)) else None)
                 M.append(row); rows.append(f"Z={Z}")
             cols = [f"L={L}" for L in HM_L] + ["plain"]
             plotting.heatmap(M, rows, cols,

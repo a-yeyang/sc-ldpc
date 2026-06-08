@@ -5,7 +5,7 @@
 > 并在 BPSK + AWGN 信道下完成 **编码** 与 **译码**（SC / CRC 辅助 SCL / 置信传播 BP，
 > 以及在耦合链上的 **窗口化软译码**）。
 >
-> 这是仓库内 [SC-LDPC 工作](README.md) 的 Polar 对应版本：分量码 NR-LDPC → **NR-Polar**，
+> 这是仓库内 [SC-LDPC 工作](../README.md) 的 Polar 对应版本：分量码 NR-LDPC → **NR-Polar**，
 > 耦合记忆 `w` → **耦合深度 `J`**，边扩展 → **共享信息位**，末端归零 → **两端 dummy 终止**，
 > 滑窗 BP → **窗口化 SC/SCL/BP**。
 

@@ -24,6 +24,7 @@ import time
 import multiprocessing as mp
 import numpy as np
 
+import outpaths as OP
 from nr_ldpc import NRLDPCCode
 from decoder import Tanner
 import channel as ch
@@ -114,7 +115,7 @@ def run_search():
     for k in out["best"]:
         out["best"][k] = {"fer": out["best"][k]["fer"], "ber": out["best"][k]["ber"],
                           "assign": _arr(out["best"][k]["assign"])}
-    json.dump(out, open("results_construct_search.json", "w"), indent=1)
+    json.dump(out, open(OP.route("results_construct_search.json"), "w"), indent=1)
     print(f"\nsaved results_construct_search.json  ({time.time()-t0:.0f}s)")
     return out
 
@@ -156,7 +157,7 @@ def _ber_curve_component(cfg):
 
 def run_curves():
     t0 = time.time()
-    res = json.load(open("results_construct_search.json"))
+    res = json.load(open(OP.route("results_construct_search.json")))
     champs = res["champions"]
     curves = {}
     with mp.Pool(R.n_workers()) as pool:
@@ -168,7 +169,7 @@ def run_curves():
     print("  component (uncoupled 5G-NR)...", flush=True)
     curves["component"] = _ber_curve_component(CFG)
     res["curves"] = curves
-    json.dump(res, open("results_construct_search.json", "w"), indent=1)
+    json.dump(res, open(OP.route("results_construct_search.json"), "w"), indent=1)
     print(f"saved curves into results_construct_search.json ({time.time()-t0:.0f}s)")
     return res
 
@@ -177,7 +178,7 @@ def run_curves():
 #  phase 3: mechanism analysis (cycles / girth / balance / degree)
 # --------------------------------------------------------------------------- #
 def run_analysis():
-    res = json.load(open("results_construct_search.json"))
+    res = json.load(open(OP.route("results_construct_search.json")))
     champs = res["champions"]
     stats = {}
     print("=== construction mechanism (4-cycles, balance, degree, girth) ===")
@@ -200,7 +201,7 @@ def run_analysis():
                            "max": int(np.max(n4s)), "n": len(n4s)}
     print(f"  [random ref] n4 mean={np.mean(n4s):.0f} min={np.min(n4s)} max={np.max(n4s)}")
     res["stats"] = stats
-    json.dump(res, open("results_construct_search.json", "w"), indent=1)
+    json.dump(res, open(OP.route("results_construct_search.json"), "w"), indent=1)
     print("saved analysis into results_construct_search.json")
     return res
 
@@ -218,7 +219,7 @@ TRANSFER_CFGS = {
 
 def run_transfer():
     t0 = time.time()
-    res = json.load(open("results_construct_search.json"))
+    res = json.load(open(OP.route("results_construct_search.json")))
     theta = np.asarray(res["theta_feature"], dtype=np.float64)
     transfer = {}
     with mp.Pool(R.n_workers()) as pool:
@@ -250,7 +251,7 @@ def run_transfer():
                   f"random[median={np.median(rfers):.3f},best={min(rfers):.3f}]  "
                   f"round_robin={mrr['fer']:.3f}", flush=True)
     res["transfer"] = transfer
-    json.dump(res, open("results_construct_search.json", "w"), indent=1)
+    json.dump(res, open(OP.route("results_construct_search.json"), "w"), indent=1)
     print(f"saved transfer into results_construct_search.json ({time.time()-t0:.0f}s)")
     return res
 
@@ -269,7 +270,7 @@ COLORS = {"rl_feature": "#d62728", "rl_peredge": "#ff7f0e", "cem": "#9467bd",
 
 def make_plots(res=None):
     if res is None:
-        res = json.load(open("results_construct_search.json"))
+        res = json.load(open(OP.route("results_construct_search.json")))
     vf = res["config"]["val_frames"]
     floor = 0.5 / vf
     # ---- learning curve: best validation FER vs #evaluations -----------------
@@ -315,7 +316,7 @@ def run_robust(n=2000, seed=54321):
     """Remove champion-selection noise: (a) score the *deterministic greedy*
     construction implied by the learned policy (no sampling luck), and (b) re-rank
     every champion on a fresh, independent CRN bank."""
-    res = json.load(open("results_construct_search.json"))
+    res = json.load(open(OP.route("results_construct_search.json")))
     theta = np.asarray(res["theta_feature"], dtype=np.float64)
     pol = R.FeaturePolicy(CFG); pol.theta = theta.copy()
     greedy = pol.greedy_assign()
@@ -332,7 +333,7 @@ def run_robust(n=2000, seed=54321):
             print(f"  {name:20s} FER={m['fer']:.4f}  BER={m['ber']:.3e}  n4={st['n4']}", flush=True)
     res["robust"] = robust
     res["champions"]["rl_feature_greedy"] = _arr(greedy)
-    json.dump(res, open("results_construct_search.json", "w"), indent=1)
+    json.dump(res, open(OP.route("results_construct_search.json"), "w"), indent=1)
     print("saved robust re-rank into results_construct_search.json")
     return res
 

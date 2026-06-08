@@ -36,6 +36,7 @@ from dataclasses import asdict
 
 import numpy as np
 
+import outpaths as OP
 import plotting
 import qam
 import rl_construct as R
@@ -191,9 +192,9 @@ def run_cell(cell, pool):
 def run_all():
     cells = make_cells()
     done = {}
-    if os.path.exists(RESULT_FN):                              # resume
+    if os.path.exists(OP.route(RESULT_FN)):                              # resume
         try:
-            prev = json.load(open(RESULT_FN))
+            prev = json.load(open(OP.route(RESULT_FN)))
             done = {c["key"]: c for c in prev.get("cells", [])}
         except Exception:
             done = {}
@@ -217,7 +218,7 @@ def run_all():
                 print(f"  !! cell {k} failed: {e}", flush=True)
                 continue
             out["cells"].append(res); done[k] = res
-            json.dump(out, open(RESULT_FN, "w"))
+            json.dump(out, open(OP.route(RESULT_FN), "w"))
             yend = res["curves"]["round_robin"]["y"][-1]
             print(f"[{i+1}/{len(cells)}] {cell['group']} M{cell['M']} R{cell['rate']} "
                   f"w{cell['w']} L{cell['L']} Z{cell['Z']}  scR={res['sc_rate']:.3f} "
@@ -244,9 +245,9 @@ def _ebn0_at_ber(curve, target):
 
 
 def make_plots():
-    if not os.path.exists(RESULT_FN):
+    if not os.path.exists(OP.route(RESULT_FN)):
         print(f"no {RESULT_FN}"); return
-    cells = json.load(open(RESULT_FN))["cells"]
+    cells = json.load(open(OP.route(RESULT_FN)))["cells"]
     by = {c["key"]: c for c in cells}
     g = lambda pred: [c for c in cells if pred(c)]
 
@@ -346,7 +347,7 @@ def make_plots():
 
 def _export_csv(cells):
     import csv
-    with open("results_qam_finals.csv", "w", newline="") as f:
+    with open(OP.route("results_qam_finals.csv"), "w", newline="") as f:
         wr = csv.writer(f)
         wr.writerow(["key", "group", "M", "mod", "rate", "sc_rate", "se", "w", "L", "Z", "W",
                      "snr0", "ebn0@1e-4", "construction", "ebn0_grid", "ber_grid", "fer_grid"])

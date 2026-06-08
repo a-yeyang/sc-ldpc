@@ -1,10 +1,10 @@
 # 用强化学习做空间耦合 LDPC 的端到端构造优化
 
-> 研究记录 / 方法说明。配套实现：[rl_construct.py](rl_construct.py)（构造 MDP 环境 +
+> 研究记录 / 方法说明。配套实现：[rl_construct.py](../rl_construct.py)（构造 MDP 环境 +
 > 策略梯度 REINFORCE + CEM/随机搜索基线 + 短环分析，纯 NumPy + multiprocessing）、
-> [experiments_construct.py](experiments_construct.py)（搜索 / BER 曲线 / 机理分析 /
-> 迁移实验与出图）、[tests_construct.py](tests_construct.py)（含两种策略梯度的有限差分校验）。
-> 本工作建立在本仓库已有的 5G NR → SC-LDPC 收发链之上（见 [README.md](README.md)），
+> [experiments_construct.py](../experiments_construct.py)（搜索 / BER 曲线 / 机理分析 /
+> 迁移实验与出图）、[tests_construct.py](../tests_construct.py)（含两种策略梯度的有限差分校验）。
+> 本工作建立在本仓库已有的 5G NR → SC-LDPC 收发链之上（见 [README.md](../README.md)），
 > 与已有的"**RL 译码**"工作（[RL_SC_LDPC.md](RL_SC_LDPC.md)）相互独立、互为补充：
 > 那里学的是**怎么译**一张固定的码，这里学的是**怎么造**这张码。
 
@@ -145,7 +145,7 @@
   误码/误帧统计。掩码（打孔/终止/发送位）只与 `L,w,Kb,nb,Z` 有关、**与 assign 无关**，因此可对所有
   候选码施加**完全相同的信息比特与噪声**（CRN），评估器经测试对此**逐比特确定**。
 - **策略梯度**：Adam 优化器（纯 NumPy），优势做批内标准化，叠加熵正则鼓励探索。两种策略的
-  `∇ log π` 都用**有限差分校验**过（[tests_construct.py](tests_construct.py)）。
+  `∇ log π` 都用**有限差分校验**过（[tests_construct.py](../tests_construct.py)）。
 - **并行**：用 `multiprocessing.Pool` 把"每张码 × 帧块"切成任务铺满全部 CPU 核；BLAS 线程绑定为 1
   避免过度并发。冠军的高精度复测也按帧切块并行。
 
@@ -277,7 +277,7 @@ RL 学到的是**真正的结构性原理**、而非对单一码的过拟合。�
 构造落在 FER≈0.3 处）。**本次升级在公司 64 核集群节点上跑**（pod 64c/128G），每码率训练**四种
 优化器**——RL 特征策略、RL 逐边策略、CEM、同预算随机搜索——外加 round-robin / 默认 seed0 基线，
 每种 `batch=64 × 18 步 = 1152` 次评估（约为之前 Mac 精简跑的 3 倍）。用 **FER=0.1 的瀑布门限
-Eb/N0（越低越好）**做跨码率度量。脚本 [experiments_construct_rate.py](experiments_construct_rate.py)，
+Eb/N0（越低越好）**做跨码率度量。脚本 [experiments_construct_rate.py](../experiments_construct_rate.py)，
 数据 `results_construct_rate.json`（含每码率四方法的训练历史 `hist`：`mean_reward`=策略梯度
 回报/"loss"、`best_val_fer`、`evals`），图 `exp_construct_rate_threshold.svg`（门限-码率总览）/
 `exp_construct_rate_ber_*.svg`（每码率 BER，含 CEM）/ `exp_construct_rate_learn_*.svg`（每码率
@@ -316,7 +316,7 @@ Eb/N0（越低越好）**做跨码率度量。脚本 [experiments_construct_rate
 §5.1–5.6 都在中短码（Z=16）。这里验证本工作的核心论断——**RL 的优势在"单次评估贵 + 搜索空间大"时
 才真正显现**：换到**长码 5G NR BG1（Z=32，分量码字 ~860–1470 bit）、无线高码率
 {1/2, 2/3, 3/4, 5/6, 7/8}、耦合记忆 w∈{1,2,3}**，在集群 **2×80 核 pod** 上跑（脚本
-[experiments_construct_big.py](experiments_construct_big.py)）。
+[experiments_construct_big.py](../experiments_construct_big.py)）。
 
 **为什么这是"贵评估"**：长码 + 滑窗 BP，单帧 ~0.9 s（Z=64 更达 ~8 s/帧，端到端 RL 不可行——故在 Z=32
 上优化、把学到的"基图级"构造再部署到 Z=64/128 长码验证，见 §5.8）。评估贵 → 每种方法只能给 ~640 次
@@ -365,7 +365,7 @@ Eb/N0（越低越好）**做跨码率度量。脚本 [experiments_construct_rate
 
 §5.7 是 w∈{1,2,3}。这里把**蒙特卡洛贵评估**推到更大耦合记忆 **w∈{3,5,8,12}**（滑窗 `W=w+1`）、
 全码率 {1/2,2/3,3/4,5/6,7/8}，共 **20 格**，在一个 **100 核 / 512Gi / Guaranteed QoS / hostPath
-持久化**的抗驱逐 pod 上跑完（脚本 [experiments_construct_wmc.py](experiments_construct_wmc.py)；512Gi
+持久化**的抗驱逐 pod 上跑完（脚本 [experiments_construct_wmc.py](../experiments_construct_wmc.py)；512Gi
 是因为重格峰值内存 >128GB——这正是早先 128Gi pod 被 OOMKill 的真因）。
 
 **完整结果（FER@工作点；16 个有信号格，4 格无信号见下）：**
@@ -396,7 +396,7 @@ Eb/N0（越低越好）**做跨码率度量。脚本 [experiments_construct_rate
 把构造优化推到**大耦合记忆 w∈{3,5,8,12,16,20,30}**（边扩展空间 `(w+1)^E`，E=121，**w=30 时 31¹²¹**）、
 链长 L∈{30..240}。**端到端 Monte-Carlo 在大 w 不可行**（滑窗须 W≥w+1，w=30 时 ~2.5 s/帧@L=40、
 ~18 s/帧@L=300），故改用**快速结构代理**当奖励：最小化耦合提升图的 **4 环数**（~0.3 s、与 w 无关），
-champion 再按 girth / 跨 L 验证。脚本 [experiments_construct_wl.py](experiments_construct_wl.py)，全网格 ~7 分钟。
+champion 再按 girth / 跨 L 验证。脚本 [experiments_construct_wl.py](../experiments_construct_wl.py)，全网格 ~7 分钟。
 
 **结果（n4@L=60，越低越好）：**
 

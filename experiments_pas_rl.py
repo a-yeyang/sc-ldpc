@@ -47,6 +47,7 @@ import time
 import multiprocessing as mp
 import numpy as np
 
+import outpaths as OP
 import plotting
 import rl_construct as R
 import qam
@@ -292,7 +293,7 @@ def run_part1(pool):
                 print(f"  M={M} R_BMD={tgt}b: uniform {su:.2f}dB -> shaped {ss:.2f}dB "
                       f"= {gain:+.2f} dB", flush=True)
     out["secs"] = round(time.time() - t0, 1)
-    json.dump(out, open("results_pas_part1.json", "w"))
+    json.dump(out, open(OP.route("results_pas_part1.json"), "w"))
     print(f"  [PART 1 done in {out['secs']:.0f}s -> results_pas_part1.json]", flush=True)
     return out
 
@@ -550,7 +551,7 @@ def run_part2(pool, p1):
         except Exception as e:
             import traceback; traceback.print_exc()
             print(f"  !! cell {key} failed: {e}", flush=True)
-        json.dump(out, open(fn, "w"))
+        json.dump(out, open(OP.route(fn), "w"))
     print(f"\n[PART 2 done -> {fn}]", flush=True)
     return out
 
@@ -581,7 +582,7 @@ def make_plots():
     made = []
     # PART 1 figures
     try:
-        p1 = json.load(open("results_pas_part1.json"))
+        p1 = json.load(open(OP.route("results_pas_part1.json")))
     except FileNotFoundError:
         p1 = None
     if p1:
@@ -621,7 +622,7 @@ def make_plots():
 
     # PART 2 figures
     try:
-        p2 = json.load(open("results_pas_part2.json"))
+        p2 = json.load(open(OP.route("results_pas_part2.json")))
     except FileNotFoundError:
         p2 = None
     if p2:
@@ -663,7 +664,7 @@ def make_plots():
 def _export_tables(p1, p2):
     import csv
     if p1:
-        with open("results_pas_part1.csv", "w", newline="") as f:
+        with open(OP.route("results_pas_part1.csv"), "w", newline="") as f:
             wr = csv.writer(f)
             wr.writerow(["M", "esn0_db", "nu_star", "rbmd_uniform", "rbmd_shaped",
                          "mi_uniform", "mi_shaped"])
@@ -672,14 +673,14 @@ def _export_tables(p1, p2):
                 for i in range(len(cu["esn0"])):
                     wr.writerow([M, cu["esn0"][i], cu["nu_star"][i], cu["rbmd_uniform"][i],
                                  cu["rbmd_shaped"][i], cu["mi_uniform"][i], cu["mi_shaped"][i]])
-        with open("results_pas_gain_db.csv", "w", newline="") as f:
+        with open(OP.route("results_pas_gain_db.csv"), "w", newline="") as f:
             wr = csv.writer(f)
             wr.writerow(["M", "rbmd_target", "snr_uniform_db", "snr_shaped_db", "gain_db"])
             for M, rows in p1.get("dbgain", {}).items():
                 for d in rows:
                     wr.writerow([M, d["target"], d["snr_uniform"], d["snr_shaped"], d["gain_db"]])
     if p2:
-        with open("results_pas_part2_finals.csv", "w", newline="") as f:
+        with open(OP.route("results_pas_part2_finals.csv"), "w", newline="") as f:
             wr = csv.writer(f)
             wr.writerow(["cell", "rate", "w", "M", "Z", "E", "train_snr", "method",
                          "ber", "fer", "nu", "net_rate", "n4", "girth"])
@@ -700,7 +701,7 @@ if __name__ == "__main__":
             run_part1(pool)
     elif cmd == "part2":
         with mp.Pool(R.n_workers()) as pool:
-            p1 = json.load(open("results_pas_part1.json")) if __import__("os").path.exists("results_pas_part1.json") else None
+            p1 = json.load(open(OP.route("results_pas_part1.json"))) if __import__("os").path.exists(OP.route("results_pas_part1.json")) else None
             run_part2(pool, p1)
     elif cmd == "plot":
         make_plots()

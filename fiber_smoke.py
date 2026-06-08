@@ -50,6 +50,8 @@ from __future__ import annotations
 import sys, os, time, csv
 import numpy as np
 
+import outpaths as OP
+
 sys.path.insert(0, "/work")
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import qam
@@ -218,7 +220,7 @@ def main():
             print(f"  M={M:3d} OSNR={OSNR:5.1f}dB  codedBER={r['coded_ber']:.2e}  "
                   f"uncodedBER={r['uncoded_ber']:.2e}  {r['s_per_frame']*1000:.0f}ms/fr")
     results["osnr"] = e1
-    write_csv(os.path.join(here, "fiber_smoke_osnr.csv"), e1,
+    write_csv(OP.route("fiber_smoke_osnr.csv"), e1,
               ["M", "OSNR_dB", "coded_ber", "uncoded_ber", "sigma_eff", "s_per_frame"])
 
     # ----- Exp 2: BER vs launch power, multi-span real EDFA ASE -> nonlinear hump
@@ -232,7 +234,7 @@ def main():
         print(f"  Pin={Pin:5.1f}dBm  sigma_eff={r['sigma_eff']:.4f}  "
               f"codedBER={r['coded_ber']:.2e}  {r['s_per_frame']:.2f}s/fr")
     results["power"] = e2
-    write_csv(os.path.join(here, "fiber_smoke_power.csv"), e2,
+    write_csv(OP.route("fiber_smoke_power.csv"), e2,
               ["M", "Pin_dBm", "sigma_eff", "coded_ber", "uncoded_ber", "s_per_frame"])
     # report optimum
     Pin_opt = min(e2, key=lambda r: r["sigma_eff"])["Pin_dBm"]
@@ -260,7 +262,7 @@ def main():
               f"uncodedBER={r['uncoded_ber']:.2e}  sigma_eff={r['sigma_eff']:.4f}  "
               f"{r['s_per_frame']*1000:.0f}ms/fr")
     results["length"] = e4
-    write_csv(os.path.join(here, "fiber_smoke_length.csv"), e4,
+    write_csv(OP.route("fiber_smoke_length.csv"), e4,
               ["M", "L_km", "coded_ber", "uncoded_ber", "sigma_eff", "s_per_frame"])
 
     # ----- plot -----
@@ -309,7 +311,7 @@ def main():
 
         fig.suptitle("SC-LDPC over OptiCommPy fiber link -- smoke test", fontsize=12)
         fig.tight_layout()
-        out = os.path.join(here, "fiber_smoke.png")
+        out = OP.route("fiber_smoke.png")
         fig.savefig(out, dpi=120)
         print(f"\n  wrote {out}")
     except Exception as e:

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
 <rect width="760" height="520" fill="white"/>
-<text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">Effect of code length / lifting size Z (BG2, w=2, L=24)</text>
+<text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">experiment: len</text>
 <line x1="78" y1="398.1" x2="590" y2="398.1" stroke="#e0e0e0"/>
 <text x="70" y="402.1" text-anchor="end">1e-5</text>
 <line x1="78" y1="319.3" x2="590" y2="319.3" stroke="#e0e0e0"/>

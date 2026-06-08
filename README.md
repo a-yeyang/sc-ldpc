@@ -4,17 +4,54 @@
 > 构造空间耦合 LDPC（SC-LDPC / LDPC 卷积码），并在 BPSK + AWGN 信道下完成
 > **发射机编码** 与 **接收机译码**（全图置信传播 + 滑窗译码）。
 
-> 📎 **Polar 对应版本见 [README_POLAR.md](README_POLAR.md)**：以 3GPP TS 38.212 的 5G NR
+> 📎 **Polar 对应版本见 [README_POLAR.md](docs/README_POLAR.md)**：以 3GPP TS 38.212 的 5G NR
 > **Polar 码**为分量码，用**部分信息耦合（PIC）**构造空间耦合 Polar 码，并在 AWGN 下做
 > SC / CA-SCL / 窗口化 BP 译码实验（`nr_polar.py` / `sc_polar.py` / `polar_decoder.py` /
 > `polar_bp.py` / `experiments_polar.py`）。
 
-> 📎 **RL 端到端构造优化见 [RL_CONSTRUCTION.md](RL_CONSTRUCTION.md)**：把 SC-LDPC 的"边扩展"
+> 📎 **RL 端到端构造优化见 [RL_CONSTRUCTION.md](docs/RL_CONSTRUCTION.md)**：把 SC-LDPC 的"边扩展"
 > 构造建成 MDP，用策略梯度（REINFORCE）以真实收发链的误帧率为奖励端到端优化（`rl_construct.py` /
 > `experiments_construct.py` / `experiments_construct_rate.py`）。实测仅优化这一个旋钮就把 FER 降约
 > 5–11×、并消除错误地板；RL 自动学出"同列边散开（避免 4 环）"这一**可解释、可零样本迁移**的规则。
 > **全码率扫描（0.5–0.9）**显示构造增益在中码率 R≈0.6 最大（~0.9 dB）、向高码率单调缩小，与 BP–MAP
-> 门限差的理论一致。（与"RL 译码" [RL_SC_LDPC.md](RL_SC_LDPC.md) 互补：一边学怎么造、一边学怎么译。）
+> 门限差的理论一致。（与"RL 译码" [RL_SC_LDPC.md](docs/RL_SC_LDPC.md) 互补：一边学怎么造、一边学怎么译。）
+
+---
+
+## 仓库结构（Repository layout）
+
+所有 **Python 代码与 `data/` 基图保留在根目录**（扁平、可直接互相 import，且 `nr_ldpc.py` 按文件相对路径
+读取 `data/`）；所有**生成的图与结果按实验族分门别类**收纳，由 [`outpaths.py`](outpaths.py) 统一路由——
+任何脚本写出/重绘的 `exp_*.svg` 自动落入 `figures/<族>/`，`results_*.json|csv` 自动落入 `results/<族>/`
+（与重绘时的读取路径一致，故"只出图不重跑"也能正确找到已提交的数据）。
+
+```
+sc-ldpc/
+├── *.py                      核心库 + 实验驱动 + 测试（全部在根目录，保持可直接运行）
+│   ├── sc_ldpc / nr_ldpc / decoder / channel / plotting / simulate   SC-LDPC 收发链核心
+│   ├── rl_construct + experiments_construct*                         RL 边扩展构造优化（本项目重点）
+│   ├── qam / pas + experiments_qam_sweep / experiments_pas*          QAM 编码调制 + PAS 概率幅度成形
+│   ├── pam4_rrc + experiments_pam4*                                  PAM4 + RRC 波形信道
+│   ├── nr_polar / sc_polar / polar_* + experiments_polar            SC-Polar 对照线
+│   ├── fiber_smoke.py                                                光纤 SSFM 链路烟雾测试（需 OptiCommPy）
+│   ├── tests*.py / test_*.py / smoke_*.py                           自检与有限差分校验
+│   └── outpaths.py                                                  输出路由（图/结果 → 分类目录）
+├── data/                     5G NR 基矩阵（BG1/BG2，输入数据）
+├── figures/<族>/             所有 SVG/PNG 图，按族归档
+├── results/<族>/             所有 JSON/CSV 结果，按族归档
+├── docs/                     研究报告与分析（见下）
+├── dashboard/                集群在线监控（pod 状态轮询 + 实时面板）
+└── matlab/                   MATLAB 参考实现
+```
+
+**实验族（`figures/` 与 `results/` 各自的子目录）**：`construct`（SC-LDPC 边扩展 RL 构造 + BPSK/AWGN 基线）、
+`qam_pas`（QAM + PAS 成形）、`pam4`（PAM4+RRC 波形）、`polar`（SC-Polar）、`fiber`（光纤链路）、
+`baseline`（最初的 SC-LDPC 参数扫描与超参热力图）。
+
+**研究文档（`docs/`）**：[RL_CONSTRUCTION.md](docs/RL_CONSTRUCTION.md)（RL 构造技术报告 §5.1–5.8，含完整实验记录）、
+[RESEARCH_ANALYSIS.md](docs/RESEARCH_ANALYSIS.md)（科研叙事 / 贡献界定 / 局限）、
+[PUBLISHING_STRATEGY.md](docs/PUBLISHING_STRATEGY.md)（投稿去向分析）、
+[RL_SC_LDPC.md](docs/RL_SC_LDPC.md)（RL 译码）、[README_POLAR.md](docs/README_POLAR.md)（Polar 版本）。
 
 ---
 
@@ -187,10 +224,10 @@ L → ∞ 时，R_L → R           （码率损失 ∝ w/L，随 L 增大而消
 | `demo.py`      | 端到端演示（带状结构、编码校验、收发译码、译码波）|
 | `analyze_bg.py`| 在真实 BG1/BG2 上**验证** 5G 校验结构假设 |
 | `data/`        | 5G NR 基矩阵（BG2 iLS=1/0/6、BG1 iLS=1）|
-| `rl_decoder.py`| **强化学习译码**：把滑窗译码建成 MDP（`WindowBP` 单步 BP 引擎 + `SCWindowEnv` 环境 + 表格 Q-learning 智能体），见 [RL_SC_LDPC.md](RL_SC_LDPC.md) |
+| `rl_decoder.py`| **强化学习译码**：把滑窗译码建成 MDP（`WindowBP` 单步 BP 引擎 + `SCWindowEnv` 环境 + 表格 Q-learning 智能体），见 [RL_SC_LDPC.md](docs/RL_SC_LDPC.md) |
 | `experiments_rl.py`| RL 控制译码器 vs 固定窗口译码器的复杂度/BER 对比实验与出图 |
 | `tests_rl.py`  | RL 模块自检（`WindowBP` 与 `Tanner.decode` 逐比特一致等）|
-| `rl_construct.py`| **强化学习构造优化**：把边扩展建成 MDP（特征/逐边两种策略 + REINFORCE + CEM/随机搜索基线 + 短环/围长分析），见 [RL_CONSTRUCTION.md](RL_CONSTRUCTION.md) |
+| `rl_construct.py`| **强化学习构造优化**：把边扩展建成 MDP（特征/逐边两种策略 + REINFORCE + CEM/随机搜索基线 + 短环/围长分析），见 [RL_CONSTRUCTION.md](docs/RL_CONSTRUCTION.md) |
 | `experiments_construct.py`| RL 构造优化 vs 同预算随机搜索/CEM：搜索、BER 曲线、4 环机理、零样本迁移实验与出图 |
 | `experiments_construct_rate.py`| 把 RL 构造优化扫到 **0.5–0.9 全码率**（BG2 低/BG1 高）：每码率自动选 SNR、训练 + 基线 + BER 曲线 + 门限-码率总览 |
 | `tests_construct.py`| RL 构造模块自检（编码合法性、CRN 确定性、多进程一致、**两种策略梯度的有限差分校验**）|
@@ -447,12 +484,28 @@ python experiments_heatmap.py render              # 9 张 exp_hm_<R>_w<w>.svg
 ## 六、快速开始
 
 ```bash
-python demo.py        # 端到端演示（含带状结构与译码波可视化）
-python analyze_bg.py  # 验证 5G NR 校验结构
+python demo.py                       # 端到端演示（含带状结构与译码波可视化）
+python analyze_bg.py                 # 验证 5G NR 校验结构
 # 如需重新下载基图： python download_base_graphs.py
+
+# 自检（含两种策略梯度的有限差分校验）
+python tests_construct.py
+
+# RL 端到端构造优化（本项目重点）—— 训练 + 同预算基线对比 + 出图
+python experiments_construct.py all          # R≈0.6 深度研究：搜索 / BER / 4 环机理 / 迁移
+python experiments_construct_rate.py sweep   # 全码率 0.5–0.9 扫描
+python experiments_construct_wmc.py plot     # 从已提交数据重绘长码 w-sweep 主图
+
+# 仅从已提交的结果重绘任意一族的图（不重跑实验）
+python experiments_qam_sweep.py plot         # QAM 编码调制
+python experiments_pas2.py plot              # PAS 概率幅度成形
 ```
 
-依赖：仅 `numpy`、`scipy`（绘图用纯 Python SVG，无需 matplotlib）。
+**输出位置**：所有图与结果经 [`outpaths.py`](outpaths.py) 自动归档到 `figures/<族>/` 与 `results/<族>/`
+（如 `figures/construct/exp_wmc_rl_vs_random.svg`、`results/construct/results_wmc_ALL.json`），根目录保持整洁。
+
+依赖：核心 SC-LDPC / RL 构造链路仅需 `numpy`；PAM4 波形与部分基线脚本另需 `scipy`；光纤烟雾测试需 `OptiCommPy`。
+绘图为纯 Python SVG，无需 matplotlib。
 
 ---
 

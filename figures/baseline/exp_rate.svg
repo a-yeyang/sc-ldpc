@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
 <rect width="760" height="520" fill="white"/>
-<text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">Effect of code rate (5G NR rate matching, Z=24, w=2, L=30)</text>
+<text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">experiment: rate</text>
 <line x1="78" y1="367.0" x2="590" y2="367.0" stroke="#e0e0e0"/>
 <text x="70" y="371.0" text-anchor="end">1e-3</text>
 <line x1="78" y1="245.0" x2="590" y2="245.0" stroke="#e0e0e0"/>
@@ -56,9 +56,9 @@
 <circle cx="533.1" cy="432.9" r="3.3" fill="#ff7f0e"/>
 <line x1="604" y1="154" x2="624" y2="154" stroke="#ff7f0e" stroke-width="2.2"/>
 <text x="628" y="158">component R=0.50</text>
-<path d="M305.6,157.6 L362.4,355.2" fill="none" stroke="#17bec7" stroke-width="2.2"/>
-<circle cx="305.6" cy="157.6" r="3.3" fill="#17bec7"/>
-<circle cx="362.4" cy="355.2" r="3.3" fill="#17bec7"/>
-<line x1="604" y1="176" x2="624" y2="176" stroke="#17bec7" stroke-width="2.2"/>
+<path d="M305.6,157.6 L362.4,355.2" fill="none" stroke="#17becf" stroke-width="2.2"/>
+<circle cx="305.6" cy="157.6" r="3.3" fill="#17becf"/>
+<circle cx="362.4" cy="355.2" r="3.3" fill="#17becf"/>
+<line x1="604" y1="176" x2="624" y2="176" stroke="#17becf" stroke-width="2.2"/>
 <text x="628" y="180">SC R=0.50</text>
 </svg>

@@ -19,6 +19,7 @@ import time
 import multiprocessing as mp
 import numpy as np
 
+import outpaths as OP
 import plotting
 import rl_construct as R
 
@@ -52,6 +53,7 @@ def _arr(a):
 
 
 def _save(out, fn):
+    fn = OP.route(fn)
     json.dump(out, open(fn + ".tmp", "w")); os.replace(fn + ".tmp", fn)
 
 
@@ -140,9 +142,9 @@ def run_slice(name):
     sl = SLICES[name]
     fn = f"results_big_{name}.json"          # dashboard reads this name
     out = None
-    if os.path.exists(fn):
+    if os.path.exists(OP.route(fn)):
         try:
-            out = json.load(open(fn)); out.setdefault("cells", {})
+            out = json.load(open(OP.route(fn))); out.setdefault("cells", {})
             print(f"[resume] {fn}: {len(out['cells'])} cells {sorted(out['cells'])}", flush=True)
         except Exception:
             out = None
@@ -173,7 +175,7 @@ def make_plots():
     cells = {}
     for nm in ["A", "B", "ALL"]:
         try:
-            cells.update(json.load(open(f"results_wmc_{nm}.json")).get("cells", {}))
+            cells.update(json.load(open(OP.route(f"results_wmc_{nm}.json"))).get("cells", {}))
         except FileNotFoundError:
             pass
     if not cells:

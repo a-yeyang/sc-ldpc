@@ -23,6 +23,7 @@ import time
 import multiprocessing as mp
 import numpy as np
 
+import outpaths as OP
 from nr_ldpc import NRLDPCCode
 import plotting
 import rl_construct as R
@@ -145,7 +146,7 @@ def run_sweep():
     # reuse the deep-study R~0.6 policy for a zero-shot transfer column, if present
     transfer_theta = None
     try:
-        transfer_theta = json.load(open("results_construct_search.json"))["theta_feature"]
+        transfer_theta = json.load(open(OP.route("results_construct_search.json")))["theta_feature"]
         print("(loaded R~0.6 feature policy for a zero-shot transfer column)")
     except Exception:
         pass
@@ -156,7 +157,7 @@ def run_sweep():
                 out["rates"][label] = run_one_rate(label, cfg, cand, pool, transfer_theta)
             except Exception as e:                       # don't lose other rates
                 print(f"  !! {label} failed: {e}", flush=True)
-            json.dump(out, open("results_construct_rate.json", "w"), indent=1)
+            json.dump(out, open(OP.route("results_construct_rate.json"), "w"), indent=1)
     make_plots(out)
     print(f"\nsaved results_construct_rate.json + figures ({time.time()-t0:.0f}s)")
 
@@ -185,7 +186,7 @@ def _thr(curve, lvl=0.1, key="fer"):
 
 def make_plots(out=None):
     if out is None:
-        out = json.load(open("results_construct_rate.json"))
+        out = json.load(open(OP.route("results_construct_rate.json")))
     rates_d = out["rates"]
     labels = [l for l, _, _ in RATE_PLAN if l in rates_d]
     xrate = [rates_d[l]["rate"] for l in labels]

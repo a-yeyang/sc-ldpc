@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
 <rect width="760" height="520" fill="white"/>
-<text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">Effect of coupling depth w (BG2, Z=16, L=30)</text>
+<text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">experiment: w</text>
 <line x1="78" y1="388.6" x2="590" y2="388.6" stroke="#e0e0e0"/>
 <text x="70" y="392.6" text-anchor="end">1e-5</text>
 <line x1="78" y1="313.9" x2="590" y2="313.9" stroke="#e0e0e0"/>

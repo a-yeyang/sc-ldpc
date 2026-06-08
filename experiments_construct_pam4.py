@@ -50,6 +50,7 @@ import time
 import multiprocessing as mp
 import numpy as np
 
+import outpaths as OP
 import plotting
 import rl_construct as R
 import pam4_rrc as p4
@@ -377,14 +378,14 @@ def run_slice(k):
             except Exception as e:
                 import traceback; traceback.print_exc()
                 print(f"  !! cell R{rate} w{w} failed: {e}", flush=True)
-            json.dump(out, open(fn, "w"))
+            json.dump(out, open(OP.route(fn), "w"))
         for (lr, lw) in LSWEEP_CELLS:
             if (lr, lw) in cells:
                 try:
                     run_lsweep(lr, lw, out, pool)
                 except Exception as e:
                     print(f"  !! lsweep R{lr} w{lw} failed: {e}", flush=True)
-                json.dump(out, open(fn, "w"))
+                json.dump(out, open(OP.route(fn), "w"))
     print(f"\nslice {k} done in {time.time()-t0:.0f}s -> {fn}", flush=True)
 
 
@@ -395,7 +396,7 @@ def _merge():
     out = {"cells": {}, "lsweeps": []}
     for k in range(N_SLICES):
         try:
-            d = json.load(open(f"results_pam4big_{k}.json"))
+            d = json.load(open(OP.route(f"results_pam4big_{k}.json")))
         except FileNotFoundError:
             continue
         out["cells"].update(d.get("cells", {}))
@@ -467,20 +468,20 @@ def make_plots():
                                   title=f"PAM4 chain-length L sweep ({tag}, R={rate} w={w})",
                                   path=f"exp_pam4big_lsweep_R{int(rate*1000)}_w{w}_{champ}.svg")
     _export_tables(out)
-    json.dump(out, open("results_pam4big_merged.json", "w"))
+    json.dump(out, open(OP.route("results_pam4big_merged.json"), "w"))
     print("wrote exp_pam4big_*.svg, results_pam4big_merged.json, results_pam4big_{finals,hist}.csv")
 
 
 def _export_tables(out):
     import csv
     cells = out["cells"]
-    with open("results_pam4big_finals.csv", "w", newline="") as f:
+    with open(OP.route("results_pam4big_finals.csv"), "w", newline="") as f:
         wr = csv.writer(f); wr.writerow(["cell", "rate", "w", "Z", "E", "train_snr", "method", "ber", "fer", "n4"])
         for k, c in sorted(cells.items()):
             for m, fv in c["finals"].items():
                 wr.writerow([k, c["rate"], c["w"], c.get("Z", Z), c["E"], c["train_snr"], m,
                              f"{fv['ber']:.4e}", f"{fv['fer']:.4f}", c["stats"].get(m, {}).get("n4", "")])
-    with open("results_pam4big_hist.csv", "w", newline="") as f:
+    with open(OP.route("results_pam4big_hist.csv"), "w", newline="") as f:
         wr = csv.writer(f)
         wr.writerow(["cell", "rate", "w", "method", "eval", "mean_reward", "best_val_ber"])
         for k, c in sorted(cells.items()):

@@ -54,6 +54,7 @@ from dataclasses import asdict
 
 import numpy as np
 
+import outpaths as OP
 import plotting
 import rl_construct as R
 import qam
@@ -525,9 +526,9 @@ def run():
     print(f"PAS2 matched-SE run: {nw} workers, {len(CELLS)} cells, BG{BG} "
           f"train L={OPT_L} report L={REPORT_LS}, numpy-only", flush=True)
     done = {}
-    if os.path.exists(RESULT_FN):
+    if os.path.exists(OP.route(RESULT_FN)):
         try:
-            done = json.load(open(RESULT_FN)).get("cells", {})
+            done = json.load(open(OP.route(RESULT_FN))).get("cells", {})
             print(f"  (resuming: {len(done)} cells already done)", flush=True)
         except Exception:
             done = {}
@@ -547,8 +548,8 @@ def run():
                 import traceback
                 traceback.print_exc()
                 print(f"  !! cell {key} failed: {e}", flush=True)
-            json.dump(out, open(RESULT_FN, "w"))
-    json.dump(out, open(RESULT_FN, "w"))
+            json.dump(out, open(OP.route(RESULT_FN), "w"))
+    json.dump(out, open(OP.route(RESULT_FN), "w"))
     print(f"\nALL DONE in {time.time()-t0:.0f}s -> {RESULT_FN}", flush=True)
 
 
@@ -568,10 +569,10 @@ MCOL = {16: "#1f77b4", 64: "#2ca02c", 256: "#d62728"}
 
 
 def make_plots():
-    if not os.path.exists(RESULT_FN):
+    if not os.path.exists(OP.route(RESULT_FN)):
         print(f"no {RESULT_FN}")
         return
-    data = json.load(open(RESULT_FN))
+    data = json.load(open(OP.route(RESULT_FN)))
     cells = data["cells"]
     made = []
     for key, c in cells.items():
@@ -648,7 +649,7 @@ def _export_tables(data):
     import csv
     cells = data["cells"]
     # (a) headline: required Eb/N0 @ 1e-5 at matched SE per method per cell+L
-    with open("results_pas2_required_ebn0.csv", "w", newline="") as f:
+    with open(OP.route("results_pas2_required_ebn0.csv"), "w", newline="") as f:
         wr = csv.writer(f)
         wr.writerow(["cell", "M", "Z", "w", "L", "matched_SE", "method", "sc_rate", "nu",
                      "ebn0@1e-5", "ber@end", "n4", "girth",
@@ -670,7 +671,7 @@ def _export_tables(data):
                                  e if e is not None else "", f"{rep[n]['y'][-1]:.3e}",
                                  rep[n].get("n4", ""), rep[n].get("girth", ""), g_cem, g_rr])
     # (b) ablations: joint vs separate, RL vs CEM vs random (train-L val BER)
-    with open("results_pas2_ablations.csv", "w", newline="") as f:
+    with open(OP.route("results_pas2_ablations.csv"), "w", newline="") as f:
         wr = csv.writer(f)
         wr.writerow(["cell", "M", "Z", "w", "matched_SE", "nu_matched",
                      "val_RL", "val_CEM", "val_random", "val_uniformCEM",

@@ -16,6 +16,7 @@ import sys
 import time
 import numpy as np
 
+import outpaths as OP
 from nr_ldpc import NRLDPCCode, mp_for_rate, KB
 from sc_ldpc import SCLDPCCode
 from decoder import Tanner
@@ -188,7 +189,7 @@ def exp_chain(L):
                           f"SC L={L} (window W={W})", max_iter=12,
                           n_frames=40, target_ferr=10**9, target_berr=400,
                           min_frames=12)
-    json.dump(cur, open(f"results_exp_chain_{L}.json", "w"))
+    json.dump(cur, open(OP.route(f"results_exp_chain_{L}.json"), "w"))
     print(f"\nsaved results_exp_chain_{L}.json", flush=True)
 
 
@@ -196,7 +197,7 @@ def plot_chain():
     import os
     curves = []
     for L in [30, 100, 200, 300]:
-        fn = f"results_exp_chain_{L}.json"
+        fn = OP.route(f"results_exp_chain_{L}.json")
         if os.path.exists(fn):
             curves.append(json.load(open(fn)))
     if curves:
@@ -227,7 +228,7 @@ def exp_chain_high(target, Ls=(30, 100, 200, 300)):
                               f"L={L} (R={Rc:.2f})", max_iter=12,
                               n_frames=40, target_ferr=10**9, target_berr=400,
                               min_frames=12)
-        json.dump(cur, open(f"results_exp_chain_high_{int(target*100)}_{L}.json", "w"))
+        json.dump(cur, open(OP.route(f"results_exp_chain_high_{int(target*100)}_{L}.json"), "w"))
         print(f"\nsaved chain_high R~{target} L={L}", flush=True)
 
 
@@ -237,7 +238,7 @@ def plot_chain_high():
         R2 = int(target * 100)
         curves = []
         for L in [30, 100, 200, 300]:
-            fn = f"results_exp_chain_high_{R2}_{L}.json"
+            fn = OP.route(f"results_exp_chain_high_{R2}_{L}.json")
             if os.path.exists(fn):
                 curves.append(json.load(open(fn)))
         if curves:
@@ -249,7 +250,7 @@ def plot_chain_high():
 
 
 def _save(name, curves, title):
-    json.dump(curves, open(f"results_exp_{name}.json", "w"))
+    json.dump(curves, open(OP.route(f"results_exp_{name}.json"), "w"))
     plotting.semilogy(curves, ylabel="BER", title=title, path=f"exp_{name}.svg")
     print(f"\nwrote results_exp_{name}.json and exp_{name}.svg", flush=True)
 
@@ -257,7 +258,7 @@ def _save(name, curves, title):
 def run_plot():
     import os
     for name in ["L", "w", "rate", "len"]:
-        fn = f"results_exp_{name}.json"
+        fn = OP.route(f"results_exp_{name}.json")
         if os.path.exists(fn):
             curves = json.load(open(fn))
             plotting.semilogy(curves, ylabel="BER", title=f"experiment: {name}",

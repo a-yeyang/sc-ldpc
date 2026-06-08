@@ -30,8 +30,9 @@ def pod_status(pod, sl, node):
 
 def finalize():
     # pull the (now complete) results so progress is never lost
-    subprocess.run(["kubectl", "cp", "yye-wmc:/work/results_big_ALL.json",
-                    f"{ROOT}/results_wmc_ALL.json"], timeout=180)
+    dest = os.path.join(ROOT, "results", "construct", "results_wmc_ALL.json")
+    os.makedirs(os.path.dirname(dest), exist_ok=True)
+    subprocess.run(["kubectl", "cp", "yye-wmc:/work/results_big_ALL.json", dest], timeout=180)
 
 
 def main():
