@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
+<rect width="760" height="520" fill="white"/>
+<text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">PAS2 matched-SE=3.9761 BER: 64-QAM w=3 Z=32 L=200</text>
+<line x1="78" y1="440.2" x2="590" y2="440.2" stroke="#e0e0e0"/>
+<text x="70" y="444.2" text-anchor="end">1e-6</text>
+<line x1="78" y1="366.3" x2="590" y2="366.3" stroke="#e0e0e0"/>
+<text x="70" y="370.3" text-anchor="end">1e-5</text>
+<line x1="78" y1="292.3" x2="590" y2="292.3" stroke="#e0e0e0"/>
+<text x="70" y="296.3" text-anchor="end">1e-4</text>
+<line x1="78" y1="218.3" x2="590" y2="218.3" stroke="#e0e0e0"/>
+<text x="70" y="222.3" text-anchor="end">1e-3</text>
+<line x1="78" y1="144.3" x2="590" y2="144.3" stroke="#e0e0e0"/>
+<text x="70" y="148.3" text-anchor="end">1e-2</text>
+<line x1="78" y1="70.3" x2="590" y2="70.3" stroke="#e0e0e0"/>
+<text x="70" y="74.3" text-anchor="end">1e-1</text>
+<line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#eee"/>
+<text x="78.0" y="480.0" text-anchor="middle">7.4</text>
+<line x1="127.8" y1="48" x2="127.8" y2="460" stroke="#eee"/>
+<text x="127.8" y="480.0" text-anchor="middle">7.9</text>
+<line x1="177.6" y1="48" x2="177.6" y2="460" stroke="#eee"/>
+<text x="177.6" y="480.0" text-anchor="middle">8.4</text>
+<line x1="227.4" y1="48" x2="227.4" y2="460" stroke="#eee"/>
+<text x="227.4" y="480.0" text-anchor="middle">8.9</text>
+<line x1="277.2" y1="48" x2="277.2" y2="460" stroke="#eee"/>
+<text x="277.2" y="480.0" text-anchor="middle">9.4</text>
+<line x1="327.0" y1="48" x2="327.0" y2="460" stroke="#eee"/>
+<text x="327.0" y="480.0" text-anchor="middle">9.9</text>
+<line x1="376.8" y1="48" x2="376.8" y2="460" stroke="#eee"/>
+<text x="376.8" y="480.0" text-anchor="middle">10.4</text>
+<line x1="426.6" y1="48" x2="426.6" y2="460" stroke="#eee"/>
+<text x="426.6" y="480.0" text-anchor="middle">10.9</text>
+<line x1="476.4" y1="48" x2="476.4" y2="460" stroke="#eee"/>
+<text x="476.4" y="480.0" text-anchor="middle">11.4</text>
+<line x1="526.2" y1="48" x2="526.2" y2="460" stroke="#eee"/>
+<text x="526.2" y="480.0" text-anchor="middle">11.9</text>
+<line x1="576.1" y1="48" x2="576.1" y2="460" stroke="#eee"/>
+<text x="576.1" y="480.0" text-anchor="middle">12.4</text>
+<rect x="78" y="48" width="512" height="412" fill="none" stroke="#333"/>
+<text x="334.0" y="504" text-anchor="middle">info Eb/N0 [dB]</text>
+<text x="20" y="254.0" text-anchor="middle" transform="rotate(-90 20 254.0)">info BER</text>
+<path d="M78.0,69.7 L150.7,81.5 L224.4,399.0 L297.1,373.0 L370.9,443.6" fill="none" stroke="#7f7f7f" stroke-width="2.2"/>
+<circle cx="78.0" cy="69.7" r="3.3" fill="#7f7f7f"/>
+<circle cx="150.7" cy="81.5" r="3.3" fill="#7f7f7f"/>
+<circle cx="224.4" cy="399.0" r="3.3" fill="#7f7f7f"/>
+<circle cx="297.1" cy="373.0" r="3.3" fill="#7f7f7f"/>
+<circle cx="370.9" cy="443.6" r="3.3" fill="#7f7f7f"/>
+<line x1="604" y1="66" x2="624" y2="66" stroke="#7f7f7f" stroke-width="2.2"/>
+<text x="628" y="70">uniform + round-robin</text>
+<path d="M78.0,87.5 L150.7,61.0 L224.4,391.9" fill="none" stroke="#000000" stroke-width="2.2"/>
+<circle cx="78.0" cy="87.5" r="3.3" fill="#000000"/>
+<circle cx="150.7" cy="61.0" r="3.3" fill="#000000"/>
+<circle cx="224.4" cy="391.9" r="3.3" fill="#000000"/>
+<line x1="604" y1="88" x2="624" y2="88" stroke="#000000" stroke-width="2.2"/>
+<text x="628" y="92">uniform + CEM (strong)</text>
+<path d="M78.0,87.4 L150.7,124.8 L224.4,92.6 L297.1,86.2 L370.9,111.5 L443.6,443.6" fill="none" stroke="#2ca02c" stroke-width="2.2"/>
+<circle cx="78.0" cy="87.4" r="3.3" fill="#2ca02c"/>
+<circle cx="150.7" cy="124.8" r="3.3" fill="#2ca02c"/>
+<circle cx="224.4" cy="92.6" r="3.3" fill="#2ca02c"/>
+<circle cx="297.1" cy="86.2" r="3.3" fill="#2ca02c"/>
+<circle cx="370.9" cy="111.5" r="3.3" fill="#2ca02c"/>
+<circle cx="443.6" cy="443.6" r="3.3" fill="#2ca02c"/>
+<line x1="604" y1="110" x2="624" y2="110" stroke="#2ca02c" stroke-width="2.2"/>
+<text x="628" y="114">shaped(nu*) + round-robin</text>
+<path d="M150.7,102.9 L224.4,76.5 L297.1,109.9 L370.9,137.4" fill="none" stroke="#17becf" stroke-width="2.2"/>
+<circle cx="150.7" cy="102.9" r="3.3" fill="#17becf"/>
+<circle cx="224.4" cy="76.5" r="3.3" fill="#17becf"/>
+<circle cx="297.1" cy="109.9" r="3.3" fill="#17becf"/>
+<circle cx="370.9" cy="137.4" r="3.3" fill="#17becf"/>
+<line x1="604" y1="132" x2="624" y2="132" stroke="#17becf" stroke-width="2.2"/>
+<text x="628" y="136">shaped + CEM constr</text>
+<path d="M78.0,124.4 L150.7,91.6 L224.4,86.2 L297.1,114.2" fill="none" stroke="#ff7f0e" stroke-width="2.2"/>
+<circle cx="78.0" cy="124.4" r="3.3" fill="#ff7f0e"/>
+<circle cx="150.7" cy="91.6" r="3.3" fill="#ff7f0e"/>
+<circle cx="224.4" cy="86.2" r="3.3" fill="#ff7f0e"/>
+<circle cx="297.1" cy="114.2" r="3.3" fill="#ff7f0e"/>
+<line x1="604" y1="154" x2="624" y2="154" stroke="#ff7f0e" stroke-width="2.2"/>
+<text x="628" y="158">shaped + RL constr</text>
+<path d="M78.0,82.1 L150.7,83.6 L224.4,109.1 L297.1,99.8 L370.9,105.5 L443.6,173.4" fill="none" stroke="#9467bd" stroke-width="2.2"/>
+<circle cx="78.0" cy="82.1" r="3.3" fill="#9467bd"/>
+<circle cx="150.7" cy="83.6" r="3.3" fill="#9467bd"/>
+<circle cx="224.4" cy="109.1" r="3.3" fill="#9467bd"/>
+<circle cx="297.1" cy="99.8" r="3.3" fill="#9467bd"/>
+<circle cx="370.9" cy="105.5" r="3.3" fill="#9467bd"/>
+<circle cx="443.6" cy="173.4" r="3.3" fill="#9467bd"/>
+<line x1="604" y1="176" x2="624" y2="176" stroke="#9467bd" stroke-width="2.2"/>
+<text x="628" y="180">separate-opt (split->RL)</text>
+<path d="M78.0,88.2 L150.7,81.4 L224.4,108.0 L297.1,85.0" fill="none" stroke="#d62728" stroke-width="2.2"/>
+<circle cx="78.0" cy="88.2" r="3.3" fill="#d62728"/>
+<circle cx="150.7" cy="81.4" r="3.3" fill="#d62728"/>
+<circle cx="224.4" cy="108.0" r="3.3" fill="#d62728"/>
+<circle cx="297.1" cy="85.0" r="3.3" fill="#d62728"/>
+<line x1="604" y1="198" x2="624" y2="198" stroke="#d62728" stroke-width="2.2"/>
+<text x="628" y="202">RL-joint [ours]</text>
+</svg>
