@@ -38,7 +38,8 @@ LSWEEP_LS = [50, 100, 200]
 LSWEEP_FRAMES = [120, 180]
 LSWEEP_OFFSETS = [0.0]
 SLICES = {"A": {"rates": [0.5, 0.833], "lsweep": (0.667, 8)},
-          "B": {"rates": [0.667, 0.75, 0.875], "lsweep": (0.75, 8)}}
+          "B": {"rates": [0.667, 0.75, 0.875], "lsweep": (0.75, 8)},
+          "ALL": {"rates": [0.5, 0.667, 0.75, 0.833, 0.875], "lsweep": (0.667, 8)}}
 
 
 def cfg(rate, w, L):
@@ -170,7 +171,7 @@ def run_slice(name):
 
 def make_plots():
     cells = {}
-    for nm in ["A", "B"]:
+    for nm in ["A", "B", "ALL"]:
         try:
             cells.update(json.load(open(f"results_wmc_{nm}.json")).get("cells", {}))
         except FileNotFoundError:
@@ -189,7 +190,9 @@ def make_plots():
                 continue
             rl = min(c["finals"]["rl"]["fer"], c["finals"]["rl_peredge"]["fer"])
             rnd = c["finals"]["random_search"]["fer"]
-            xs.append(w); ys.append(rnd / max(rl, 1e-4))
+            if rl >= 0.999 and rnd >= 0.999:        # skip no-signal cells (FER=1)
+                continue
+            xs.append(w); ys.append(min(rnd / max(rl, 0.005), 40))
         if xs:
             series.append({"x": xs, "y": ys, "label": f"R={rate}", "color": cols[i % len(cols)]})
     plotting.linear(series, xlabel="coupling memory w", ylabel="random_FER / RL_FER (>1 = RL better)",

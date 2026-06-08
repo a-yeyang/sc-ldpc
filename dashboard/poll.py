@@ -12,7 +12,7 @@ import time
 
 DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(DIR)
-PODS = [("yye-scldpc-a", "A", "cpu-10-208-55-86"), ("yye-scldpc-b", "B", "cpu-10-208-55-85")]
+PODS = [("yye-wmc", "ALL", "cpu-10-208-55-86")]
 
 
 def pod_status(pod, sl, node):
@@ -29,10 +29,9 @@ def pod_status(pod, sl, node):
 
 
 def finalize():
-    for pod, sl, _ in PODS:
-        subprocess.run(["kubectl", "cp", f"{pod}:/work/results_big_{sl}.json",
-                        f"{ROOT}/results_big_{sl}.json"], timeout=180)
-    subprocess.run(["python3", "experiments_construct_big.py", "plot"], cwd=ROOT, timeout=900)
+    # pull the (now complete) results so progress is never lost
+    subprocess.run(["kubectl", "cp", "yye-wmc:/work/results_big_ALL.json",
+                    f"{ROOT}/results_wmc_ALL.json"], timeout=180)
 
 
 def main():

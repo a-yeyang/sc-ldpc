@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
+<rect width="760" height="520" fill="white"/>
+<text x="319.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">RL vs random search vs w (Monte-Carlo, long Z=32 codes)</text>
+<line x1="78" y1="460.0" x2="560" y2="460.0" stroke="#e8e8e8"/>
+<text x="70" y="464.0" text-anchor="end">-2.90</text>
+<line x1="78" y1="377.6" x2="560" y2="377.6" stroke="#e8e8e8"/>
+<text x="70" y="381.6" text-anchor="end">6.46</text>
+<line x1="78" y1="295.2" x2="560" y2="295.2" stroke="#e8e8e8"/>
+<text x="70" y="299.2" text-anchor="end">15.82</text>
+<line x1="78" y1="212.8" x2="560" y2="212.8" stroke="#e8e8e8"/>
+<text x="70" y="216.8" text-anchor="end">25.18</text>
+<line x1="78" y1="130.4" x2="560" y2="130.4" stroke="#e8e8e8"/>
+<text x="70" y="134.4" text-anchor="end">34.54</text>
+<line x1="78" y1="48.0" x2="560" y2="48.0" stroke="#e8e8e8"/>
+<text x="70" y="52.0" text-anchor="end">43.90</text>
+<line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#f0f0f0"/>
+<text x="78.0" y="480.0" text-anchor="middle">3.00</text>
+<line x1="158.3" y1="48" x2="158.3" y2="460" stroke="#f0f0f0"/>
+<text x="158.3" y="480.0" text-anchor="middle">4.50</text>
+<line x1="238.7" y1="48" x2="238.7" y2="460" stroke="#f0f0f0"/>
+<text x="238.7" y="480.0" text-anchor="middle">6.00</text>
+<line x1="319.0" y1="48" x2="319.0" y2="460" stroke="#f0f0f0"/>
+<text x="319.0" y="480.0" text-anchor="middle">7.50</text>
+<line x1="399.3" y1="48" x2="399.3" y2="460" stroke="#f0f0f0"/>
+<text x="399.3" y="480.0" text-anchor="middle">9.00</text>
+<line x1="479.7" y1="48" x2="479.7" y2="460" stroke="#f0f0f0"/>
+<text x="479.7" y="480.0" text-anchor="middle">10.50</text>
+<line x1="560.0" y1="48" x2="560.0" y2="460" stroke="#f0f0f0"/>
+<text x="560.0" y="480.0" text-anchor="middle">12.00</text>
+<rect x="78" y="48" width="482" height="412" fill="none" stroke="#333"/>
+<text x="319.0" y="504" text-anchor="middle">coupling memory w</text>
+<text x="20" y="254.0" text-anchor="middle" transform="rotate(-90 20 254.0)">random_FER / RL_FER (>1 = RL better)</text>
+<path d="M78.0,369.9" fill="none" stroke="#1f77b4" stroke-width="2.2"/>
+<circle cx="78.0" cy="369.9" r="3.3" fill="#1f77b4"/>
+<line x1="574" y1="66" x2="594" y2="66" stroke="#1f77b4" stroke-width="2.2"/>
+<text x="598" y="70">R=0.5</text>
+<path d="M78.0,413.3 L185.1,361.1 L345.8,199.7" fill="none" stroke="#d62728" stroke-width="2.2"/>
+<circle cx="78.0" cy="413.3" r="3.3" fill="#d62728"/>
+<circle cx="185.1" cy="361.1" r="3.3" fill="#d62728"/>
+<circle cx="345.8" cy="199.7" r="3.3" fill="#d62728"/>
+<line x1="574" y1="88" x2="594" y2="88" stroke="#d62728" stroke-width="2.2"/>
+<text x="598" y="92">R=0.667</text>
+<path d="M78.0,390.5 L185.1,425.7 L345.8,416.9 L560.0,281.9" fill="none" stroke="#2ca02c" stroke-width="2.2"/>
+<circle cx="78.0" cy="390.5" r="3.3" fill="#2ca02c"/>
+<circle cx="185.1" cy="425.7" r="3.3" fill="#2ca02c"/>
+<circle cx="345.8" cy="416.9" r="3.3" fill="#2ca02c"/>
+<circle cx="560.0" cy="281.9" r="3.3" fill="#2ca02c"/>
+<line x1="574" y1="110" x2="594" y2="110" stroke="#2ca02c" stroke-width="2.2"/>
+<text x="598" y="114">R=0.75</text>
+<path d="M78.0,350.8 L185.1,245.2 L345.8,82.3" fill="none" stroke="#9467bd" stroke-width="2.2"/>
+<circle cx="78.0" cy="350.8" r="3.3" fill="#9467bd"/>
+<circle cx="185.1" cy="245.2" r="3.3" fill="#9467bd"/>
+<circle cx="345.8" cy="82.3" r="3.3" fill="#9467bd"/>
+<line x1="574" y1="132" x2="594" y2="132" stroke="#9467bd" stroke-width="2.2"/>
+<text x="598" y="136">R=0.833</text>
+<path d="M78.0,258.4 L185.1,393.4 L345.8,358.2 L560.0,402.2" fill="none" stroke="#ff7f0e" stroke-width="2.2"/>
+<circle cx="78.0" cy="258.4" r="3.3" fill="#ff7f0e"/>
+<circle cx="185.1" cy="393.4" r="3.3" fill="#ff7f0e"/>
+<circle cx="345.8" cy="358.2" r="3.3" fill="#ff7f0e"/>
+<circle cx="560.0" cy="402.2" r="3.3" fill="#ff7f0e"/>
+<line x1="574" y1="154" x2="594" y2="154" stroke="#ff7f0e" stroke-width="2.2"/>
+<text x="598" y="158">R=0.875</text>
+</svg>
