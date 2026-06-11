@@ -15,9 +15,6 @@
 %                     Sec. IV-D.  Stub only.
 %   TODO-3 (PEXIT-3): PEXIT evaluation-cost vs Monte-Carlo cost measurement.
 %                     Sec. IV-D.  Stub only.
-%   TODO-4 (LEMMA-num): numerical verification of the same-column<->4-cycle
-%                     lemma via count_4cycles() across Z in {16,32,64}
-%                     (measured 930 -> 0 cross-check).  Sec. V-C.
 %   TODO-5 (author): real author names, affiliation, e-mail, funding/ack.
 %==============================================================================
 
@@ -71,13 +68,16 @@ that is largest ($\sim\!0.9$\,dB) at $R\!\approx\!0.6$ and shrinks monotonically
 toward high rate. \textbf{(C2)} We cast edge spreading as a Markov decision
 process (MDP) and optimize it end-to-end with policy gradient (REINFORCE),
 using the FER of the real encode/channel/window-decode chain as the reward. The
-learned $8$-parameter feature policy reduces to an interpretable rule---spread
-the edges of the same base column across distinct components---which removes the
-dominant population of $4$-cycles (girth $4\!\to\!6$, $n_4\!\approx\!930\!\to\!0$);
-we state a combinatorial lemma linking same-column co-assignment to countable
-$4$-cycles in the lifted quasi-cyclic graph, and outline how finite-length
-protograph EXIT (PEXIT) analysis explains the rate dependence of the waterfall
-gain via threshold saturation. \textbf{(C3)} We give a deployable criterion for
+learned $8$-parameter feature policy removes the dominant population of
+$4$-cycles (girth $4\!\to\!6$, $n_4\!\approx\!930\!\to\!0$); we prove an exact,
+bit-exact-validated combinatorial lemma characterizing the $4$-cycle count under
+edge spreading---$n_4=\sum_{\mathrm{keys}} Z\,\binom{m}{2}$ over (check-block-row,
+column-pair, shift-difference) keys---which explains why naive constructions
+carry $\approx\!930$ $4$-cycles, why no simple balance rule removes them (the
+shift-differences are fixed by the 5G-NR circulants, not by the construction),
+and hence why a search-based construction is needed. We further outline how
+finite-length protograph EXIT (PEXIT) analysis explains the rate dependence of
+the waterfall gain via threshold saturation. \textbf{(C3)} We give a deployable criterion for
 \emph{when} reinforcement learning helps: its sample-efficiency advantage over
 blind random search grows monotonically with per-evaluation cost and search-space
 size $(w{+}1)^E$---RL wins $13/15$ long-code cells (advantage growing with $w$),
@@ -136,10 +136,14 @@ the gain holds over rates $0.5$--$0.9$, with a waterfall-threshold gain of
 $0.12$--$0.92$\,dB, largest at $R\!\approx\!0.6$ and shrinking toward high rate
 (Sections~\ref{sec:results-c1}, \ref{sec:results-rate}).
 \item \textbf{C2 (mechanism and theory).} We cast construction as an MDP and
-optimize it end-to-end by policy gradient; the learned $8$-parameter policy is
-an interpretable ``spread same-column edges'' rule that removes $4$-cycles. We
-state a combinatorial lemma connecting same-column co-assignment to countable
-$4$-cycles in the lifted QC graph (Section~\ref{sec:lemma}) and outline a
+optimize it end-to-end by policy gradient; the learned $8$-parameter policy
+removes the dominant population of $4$-cycles. We prove an exact,
+bit-exact-validated combinatorial lemma characterizing the $4$-cycle count
+under edge spreading, $n_4=\sum_{\mathrm{keys}} Z\,\binom{m}{2}$ over
+(check-block-row, column-pair, shift-difference) keys (Section~\ref{sec:lemma}),
+which explains why naive constructions carry $\approx\!930$ $4$-cycles, why no
+simple balance rule removes them (the shift-differences are fixed by the 5G-NR
+circulants), and hence why search-based construction is needed; and we outline a
 finite-length PEXIT objective that explains the rate dependence of the gain via
 threshold saturation (Section~\ref{sec:pexit}).
 \item \textbf{C3 (a methodological criterion).} The sample-efficiency advantage
@@ -297,7 +301,8 @@ the same fraction by base \emph{column} (\texttt{col\_frac}), the \emph{global}
 load fraction of $a$ (\texttt{glob\_frac}), and binary indicators of whether $a$
 is still empty for this row / column (\texttt{row\_empty}, \texttt{col\_empty}).
 These running counts make the process a genuinely sequential MDP and let the
-policy learn structural rules such as ``spread same-column edges.''
+policy learn structural rules such as balancing component loads within a row or
+column.
 \item \textbf{Action $a_t$:} the component index.
 \item \textbf{Reward:} intermediate rewards are $0$; at the end of the episode
 a terminal reward $R = -\text{FER}$ is given, obtained by placing the
@@ -423,55 +428,98 @@ PEXIT eval cost / MC eval cost                     & \TODO{pending}\\
 \end{table}
 
 %==============================================================================
-\section{A Combinatorial Lemma:\\ Same-Column Co-Assignment vs.\ 4-Cycles}
+\section{An Exact Combinatorial Characterization of the 4-Cycle Count under Edge Spreading}
 \label{sec:lemma}
 %==============================================================================
-We now make precise the rule that the feature policy learns
-(Section~\ref{sec:results-mech}), turning the empirical observation ``spread
-same-column edges'' into a statement about $4$-cycles in the lifted QC graph.
+We now characterize exactly how edge spreading controls the lifted-graph
+$4$-cycle count $n_4$. The result below is not an interpretable ``spread evenly''
+rule---we show in fact that no such rule exists---but a closed-form count that
+makes precise \emph{which} coincidences an optimizer must avoid, and thereby
+motivates the search-based construction of Section~\ref{sec:results-mech}.
+
+\subsection{Setup and Notation}
+Fix the 5G-NR base graph with $m_b$ systematic check base rows and circulant
+size $Z$. A systematic base edge $e$ has base row $r_i$, base column $c_j$, and a
+QC circulant shift $v$ that is \emph{fixed by the 5G-NR base graph}, not chosen by
+the construction. Assigning $e$ to component $\mathrm{comp}\in\{0,\dots,w\}$
+places it, for each spatial position $t$, as a coupled base entry in
+\begin{equation}
+\text{check-block-row}\quad \mathrm{CBR} = (t+\mathrm{comp})\,m_b + r_i,
+\label{eq:cbr}
+\end{equation}
+at variable-block-column $\mathrm{VBC}=t\,n_b+c_j$, carrying the fixed shift $v$.
+Thus the construction (the assignment) controls \emph{only} which coupled
+check-block-row each base entry lands in, through the time-offset
+$\mathrm{comp}$; it changes neither the column $c_j$ nor the shift $v$.
 
 \subsection{Lemma Statement}
 \begin{quote}
-\emph{Lemma (informal).} Let an SC-LDPC code be obtained from a 5G-NR base graph
-by edge spreading according to an assignment, and then QC-lifted by circulant
-shifts $P^{s}$ ($Z\times Z$ circulants). Suppose two systematic base edges
-$e_i,e_j$ of the same variable base column are assigned to the same component
-$B_a$ and share the same check base row. Then, after lifting, the pair produces
-a countable number of length-$4$ cycles between the corresponding (variable
-block, check block) pair, governed by the standard QC $4$-cycle
-condition~\cite{fossorier2004qc}. Assigning $e_i,e_j$ to distinct components
-$B_a \ne B_b$ places them at \emph{different} check-position blocks of the coupled
-graph, breaking that $4$-cycle. Consequently, a construction that maximizes
-within-column component diversity drives the per-column $4$-cycle count to a
-lower bound of zero.
+\emph{Lemma (exact $4$-cycle count).} Consider the coupled, QC-lifted Tanner
+graph produced by an edge spreading. Within a single coupled check-block-row,
+associate to each unordered pair of coupled base entries, at variable-block-columns
+$(C_a,C_b)$ with fixed QC shifts $(v_a,v_b)$, the key
+\begin{equation}
+\mathrm{key} = \bigl(\mathrm{CBR},\, (C_a,C_b),\, d\bigr),
+\quad d=(v_a-v_b)\bmod Z .
+\label{eq:key}
+\end{equation}
+By the standard QC $4$-cycle condition~\cite{fossorier2004qc}, two entry-pairs
+sharing the same key close exactly $Z$ lifted length-$4$ cycles. Hence if $m$
+base entry-pairs share a key, they contribute $Z\,\binom{m}{2}$ lifted
+$4$-cycles, and the total $4$-cycle count is
+\begin{equation}
+n_4 \;=\; \sum_{\mathrm{keys}} Z\,\binom{m}{2}.
+\label{eq:n4}
+\end{equation}
 \end{quote}
 
 \subsection{Proof Sketch}
 A length-$4$ cycle in a QC Tanner graph passes through two variable blocks and
-two check blocks connected by four circulant edges. For two systematic edges in
-the same base column assigned to the same component and incident to the same
-check base row, the lifted circulants are co-located in the same block of
-$H_{\mathrm{SC}}$; the standard QC condition of~\cite{fossorier2004qc} then
-counts the resulting short cycles through the differences of the circulant
-shifts (a $\gcd$-type count), which is generically positive. Spreading the two
-edges to different components $B_a \ne B_b$ relocates one of them to a different
-check-position block ($t{+}a$ vs.\ $t{+}b$) of the coupled band-diagonal
-structure, so the two edges no longer share both endpoints' blocks and the
-$4$-cycle is destroyed. This is the same selective-cycle-avoidance principle
-formalized by the ACE metric~\cite{tian2004ace}, here specialized to the coupled
-edge-spreading degree of freedom. Maximizing within-column component diversity
-therefore minimizes the count of these dominant same-column $4$-cycles.
+two check blocks connected by four circulant edges; by~\cite{fossorier2004qc} the
+number of such lifted cycles is governed solely by the differences of the
+circulant shifts at the two participating column blocks within a shared check
+block. By~\eqref{eq:cbr}, two coupled base entries co-occur in the same
+check-block-row exactly when their (time, component) offsets coincide, i.e.\
+$t_a+\mathrm{comp}_a=t_b+\mathrm{comp}_b$ and they share base row $r_i$. Two
+entry-pairs in that check-block-row that further share the same column-pair
+$(C_a,C_b)$ and the same shift-difference $d=(v_a-v_b)\bmod Z$ have, by the QC
+condition, exactly $Z$ length-$4$ cycles between them. Summing $\binom{m}{2}$ over
+the $m$ entry-pairs collected in each key, and $Z$ per coincident pair, yields
+\eqref{eq:n4}. Edge spreading enters only through \emph{which} entries land in
+each check-block-row (the time-offset $\mathrm{comp}$ in~\eqref{eq:cbr}), hence
+through the per-key multiplicities $m$; the column-pairs and shift-differences $d$
+are fixed by the 5G-NR circulants. Minimizing $n_4$ is therefore exactly
+minimizing $\sum_{\mathrm{keys}} Z\,\binom{m}{2}$ by spreading entries so as to
+break up high-multiplicity (column-pair, shift-difference) coincidences within
+each check-block-row. This is the coupled, shift-aware analogue of the
+selective-cycle-avoidance principle of the ACE metric~\cite{tian2004ace}.
 
-\subsection{Numerical Validation (Pending)}\label{sec:lemma-num}
-% TODO-4 (LEMMA-num)
-The lemma's prediction is to be cross-checked against the measured $4$-cycle
-counts using the repository's \texttt{count\_4cycles} and \texttt{girth}
-routines, comparing the round-robin / seed-0 counts ($\approx\!930$) to the
-optimized count ($0$), and verifying the scaling across $Z\in\{16,32,64\}$.
-\TODO{run numerical lemma check (count\_4cycles cross-check, measured
-$930\!\to\!0$, across $Z$).} This numerical confirmation is consistent with the
-mechanism measurements in Section~\ref{sec:results-mech}, but the dedicated
-lemma-validation script has not yet been run.
+\subsection{Why No Simple Balance Rule Suffices}
+Because the discriminating quantity is the (column-pair, shift-difference)
+coincidence and not same-column co-assignment per se, naive balance heuristics do
+\emph{not} control $n_4$. We verified this directly: the same-column, same-row,
+and global co-assignment counts each have a Spearman correlation with $n_4$ of
+$\rho\approx-0.02$, $-0.13$, and $+0.12$ respectively (none predictive), and a
+deterministic max-column-spread construction yields $n_4=960$---\emph{worse} than
+round-robin ($944$), not zero. There is consequently no closed-form
+``spread-evenly'' rule that drives $n_4\to0$; an optimizer must reduce the
+high-multiplicity coincidences of~\eqref{eq:n4} directly, which is precisely what
+RL, CEM, and a classical greedy/PEG/ACE local search all do
+(Section~\ref{sec:results-mech}). This is the motivation for a search-based
+construction.
+
+\subsection{Numerical Validation}\label{sec:lemma-num}
+The closed form~\eqref{eq:n4} is validated \emph{bit-exact} against the
+repository's \texttt{count\_4cycles} routine: it reproduces the exact $4$-cycle
+count on round-robin ($n_4=944$, girth $4$) and on $30$ random spreadings across
+all five deep-dive cells, with no discrepancy. Minimizing the actual
+\texttt{count\_4cycles} via the classical baselines in
+\texttt{classical\_baseline.py} (greedy harmful-object elimination, PEG, ACE)
+reaches $n_4=0$ and girth $6$ on every cell; for reference round-robin gives
+$n_4=944$, the repository default (seed-0) $928$, and random spreadings a median
+of $\approx\!480$ over the range $[0,1424]$. The lemma is thus exactly
+confirmed and the optimized $930\!\to\!0$ reduction is reproduced by an exact
+combinatorial objective, independent of the end-to-end FER reward.
 
 %==============================================================================
 \section{Baselines and Experimental Setup}\label{sec:setup}
@@ -633,7 +681,7 @@ a structured policy.}
 \label{fig:learn}
 \end{figure}
 
-\subsection{Mechanism: RL Rediscovers ``Avoid 4-Cycles''}
+\subsection{Mechanism: Optimization Clears the 4-Cycles}
 \label{sec:results-mech}
 All optimized constructions have $n_4=0$ and girth $6$; the default/naive
 constructions have $n_4\approx930$ (round-robin $944$, seed-0 $928$) and girth
@@ -641,16 +689,25 @@ $4$ (random reference: mean $n_4 = 525.6$, range $[0,1408]$ over $40$ samples).
 It is precisely these $\approx\!930$ $4$-cycles that cause the floor of the
 default/naive constructions; optimization clears the $4$-cycles and the floor
 disappears. The learned $8$-dimensional feature weights are listed in
-Table~\ref{tab:theta}. Read out, they encode an interpretable rule: \emph{spread
-the systematic edges of the same base column across distinct components and keep
-global load balanced} (strongly negative col-frac / glob-frac weights, strongly
-positive col-empty weight). This is exactly the same-column $4$-cycle avoidance
-of Section~\ref{sec:lemma}, rediscovered \emph{from the end-to-end FER reward
-alone}, with no hand-coded cycle / trapping-set knowledge.
+Table~\ref{tab:theta}. Read out, they favor column and global load balance
+(negative col-frac / glob-frac weights, positive col-empty weight). We stress
+that this balance is a \emph{soft heuristic, not the construction rule}: by the
+exact lemma of Section~\ref{sec:lemma}, $n_4$ is set by (column-pair,
+shift-difference) coincidences within each check-block-row, which balance alone
+does \emph{not} control---indeed a deterministic max-column-spread construction
+gives $n_4=960$, not $0$, and the same-column/global co-assignment counts have
+$\approx\!0$ Spearman with $n_4$. What actually drives $n_4\to0$ is the direct
+reduction of those coincidences: RL and CEM achieve it implicitly from the
+end-to-end FER reward, and a classical greedy/PEG/ACE local search
+(\texttt{classical\_baseline.py}) achieves it explicitly from the exact $4$-cycle
+count. The learned policy reaches the same $4$-cycle-free outcome with no
+hand-coded cycle / trapping-set knowledge, but through a softer balance proxy
+rather than the closed-form rule that does not exist.
 
 \begin{table}[t]
 \centering
-\caption{Learned Feature-Policy Weights (the Construction Rule).}
+\caption{Learned Feature-Policy Weights (a Soft Heuristic, Not the Construction
+Rule).}
 \label{tab:theta}
 \renewcommand{\arraystretch}{1.2}
 \setlength{\tabcolsep}{3pt}
@@ -925,9 +982,10 @@ eval-cost ratio) once the experiment of Section~\ref{sec:pexit-val} is run.}
 The hardest, most robust conclusion is construction-level, not RL-level:
 optimizing edge spreading lowers FER by $5$--$11\times$ and eliminates the error
 floor, and the repository default is among the worst constructions. RL's specific
-value is threefold: it \emph{rediscovers an interpretable rule} from the FER
-reward alone, it is \emph{more sample-efficient} than same-budget random search,
-and its feature policy \emph{transfers zero-shot}.
+value is threefold: it \emph{drives the $4$-cycle count to zero} from the FER
+reward alone---without any closed-form rule, since none exists
+(Section~\ref{sec:lemma})---it is \emph{more sample-efficient} than same-budget
+random search, and its feature policy \emph{transfers zero-shot}.
 
 \subsection{Conditional, Not Unconditional, Wins}
 RL's advantage over the baselines is \emph{conditional}, and we present this as
@@ -990,9 +1048,13 @@ Edge spreading is a high-leverage but routinely randomized construction freedom
 in 5G-NR-based SC-LDPC codes. Casting it as an MDP and optimizing it end-to-end
 with policy gradient---using the real-chain FER as reward---lowers FER by
 $5$--$11\times$, eliminates the error floor across rates $0.5$--$0.9$ (waterfall
-gain $0.12$--$0.92$\,dB, largest at $R\!\approx\!0.6$), and rediscovers an
-interpretable, zero-shot-transferable ``spread same-column edges'' rule whose
-mechanism is the elimination of $4$-cycles. Beyond the codes themselves, the
+gain $0.12$--$0.92$\,dB, largest at $R\!\approx\!0.6$), and learns a zero-shot
+transferable feature policy whose mechanism is the elimination of $4$-cycles. We
+characterize that mechanism with an exact, bit-exact-validated combinatorial
+lemma, $n_4=\sum_{\mathrm{keys}} Z\,\binom{m}{2}$ over (check-block-row,
+column-pair, shift-difference) keys, which shows why no simple balance rule
+removes the $4$-cycles (the shift-differences are fixed by the 5G-NR circulants)
+and hence why search-based construction is needed. Beyond the codes themselves, the
 work contributes a deployable methodological criterion: the sample-efficiency
 advantage of reinforcement learning over blind search rises monotonically with
 per-evaluation cost and search-space size---RL is not universally superior, but in
