@@ -27,7 +27,14 @@
 \usepackage{array}
 \usepackage{multirow}
 \usepackage{url}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,fit,backgrounds,calc}
 \usepackage[colorlinks=true,allcolors=blue]{hyperref}
+
+% component colours, shared by the edge-spreading and MDP schematics
+\definecolor{compZero}{RGB}{31,119,180}
+\definecolor{compOne}{RGB}{255,127,14}
+\definecolor{compTwo}{RGB}{44,160,44}
 
 % A visible TODO macro so the human can grep / eyeball every pending item.
 \newcommand{\TODO}[1]{\textcolor{red}{[TODO: #1]}}
@@ -252,6 +259,66 @@ $i = 0,\dots,L{+}w{-}1$ indexes check (row) positions over a coupling length
 $L$. Variable position $t$ thus connects through $B_0,\dots,B_w$ to check
 positions $t,\dots,t{+}w$.
 
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[every node/.style={font=\scriptsize}]
+  % ----- (a) edge spreading: colour each base edge by its component ----------
+  \def\bs{0.34} % block size
+  \begin{scope}[shift={(0,0)}]
+    \node[font=\footnotesize] at (1.7*\bs,1.05) {Base matrix $B$};
+    \node[font=\scriptsize] at (1.7*\bs,0.78) {(one component code)};
+    % 3x4 grid; coloured cells = systematic edges assigned to B_0/B_1/B_2
+    \foreach \r in {0,1,2}\foreach \c in {0,1,2,3}
+      \draw[gray!50] (\c*\bs,-\r*\bs) rectangle +(\bs,-\bs);
+    \fill[compZero] (0*\bs,-0*\bs) rectangle +(\bs,-\bs);
+    \fill[compOne]  (1*\bs,-0*\bs) rectangle +(\bs,-\bs);
+    \fill[compTwo]  (2*\bs,-1*\bs) rectangle +(\bs,-\bs);
+    \fill[compZero] (3*\bs,-1*\bs) rectangle +(\bs,-\bs);
+    \fill[compOne]  (0*\bs,-2*\bs) rectangle +(\bs,-\bs);
+    \fill[compTwo]  (2*\bs,-2*\bs) rectangle +(\bs,-\bs);
+    \node[align=center,font=\scriptsize] at (1.7*\bs,-3.05*\bs)
+      {$B=B_0\!+\!B_1\!+\!B_2$\\\emph{edge spreading} = colour each edge};
+  \end{scope}
+  % arrow
+  \draw[-{Stealth[length=2.2mm]},thick] (1.55,-0.55) -- (2.25,-0.55)
+    node[midway,above,font=\scriptsize]{stagger};
+  % ----- (b) band-diagonal coupled matrix H_SC (staircase) -------------------
+  \begin{scope}[shift={(2.55,0.35)}]
+    \node[font=\footnotesize] at (3*\bs,1.05-0.35) {Coupled $H_{\mathrm{SC}}$ (band-diagonal)};
+    \foreach \t in {0,1,2,3}{
+      \foreach \off/\col in {0/compZero,1/compOne,2/compTwo}{
+        \pgfmathtruncatemacro{\row}{\t+\off}
+        \fill[\col] (\t*\bs,-\row*\bs) rectangle +(\bs,-\bs);
+        \draw[gray!40] (\t*\bs,-\row*\bs) rectangle +(\bs,-\bs);
+      }
+    }
+    % grid outline rows 0..5, cols 0..3
+    \foreach \r in {0,...,5}\foreach \c in {0,...,3}
+      \draw[gray!25] (\c*\bs,-\r*\bs) rectangle +(\bs,-\bs);
+    \node[below,font=\scriptsize] at (2*\bs,-6*\bs+0.03) {variable positions $t=0..L{-}1$};
+    \node[rotate=90,anchor=south,font=\scriptsize] at (-0.08,-3*\bs) {check positions $i$};
+    % termination bracket (last w=2 rows)
+    \draw[thick,gray] (4*\bs+0.05,-4*\bs) -- (4*\bs+0.05,-6*\bs);
+    \node[right,align=left,font=\scriptsize] at (4*\bs+0.12,-5*\bs) {termin-\\ation};
+  \end{scope}
+  % legend (own line at the very bottom, centred -- avoids collisions)
+  \begin{scope}[shift={(1.55,-2.15)}]
+    \fill[compZero](0,0)rectangle+(0.22,0.22);\node[right]at(0.24,0.11){$B_0$};
+    \fill[compOne](0.85,0)rectangle+(0.22,0.22);\node[right]at(1.09,0.11){$B_1$};
+    \fill[compTwo](1.7,0)rectangle+(0.22,0.22);\node[right]at(1.94,0.11){$B_2$};
+  \end{scope}
+\end{tikzpicture}
+\caption{Edge spreading and the resulting spatially-coupled code. \textbf{(a)} A
+single base protograph $B$ is split into $w{+}1$ components by assigning each
+base edge to one of $B_0,B_1,B_2$ (a colouring). \textbf{(b)} Staggering the
+components along the diagonal yields the band-diagonal coupled matrix
+$H_{\mathrm{SC}}[i,t]=B_{i-t}$ over coupling length $L$; the last $w$ check
+positions are the termination. The \emph{colouring in (a)}---i.e.\ which edge
+goes to which component---is the construction variable this paper optimizes; in
+standard pipelines it is drawn from a random number generator.}
+\label{fig:scstruct}
+\end{figure}
+
 \subsection{Termination and Rate Loss}
 The $w$ extra check positions at the tail are the \emph{termination}: they
 impose stronger constraints at the chain boundaries (lower-degree, more reliable
@@ -290,6 +357,44 @@ while blind search cannot efficiently cover $(w{+}1)^E$.
 %==============================================================================
 We construct a code edge-by-edge in a fixed row-major order
 $e_0,\dots,e_{E-1}$ and cast it as an MDP.
+
+\begin{figure}[t]
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tikzpicture}[
+   box/.style={draw,rounded corners,align=center,font=\scriptsize,
+               minimum height=0.95cm,minimum width=2.1cm,inner sep=2pt},
+   ar/.style={-{Stealth[length=2mm]},thick}]
+  % --- top row: the per-edge MDP rollout ---
+  \node[box,fill=compZero!10] (s)  at (0,0)   {State $s_t$\\\scriptsize per-component load\\\scriptsize features of edge $e_t$};
+  \node[box,fill=compOne!14]  (pi) at (3.1,0) {Policy $\pi_\theta(a\,|\,s_t)$\\\scriptsize linear softmax\\\scriptsize ($w{+}5$ params)};
+  \node[box,fill=compZero!10] (a)  at (6.2,0) {Action $a_t\!\in\!\{0,..,w\}$\\\scriptsize component for $e_t$};
+  \draw[ar] (s) -- (pi);
+  \draw[ar] (pi) -- (a);
+  \draw[ar] (a.north) to[out=120,in=60]
+        node[above,font=\scriptsize]{next edge\ \ ($\times E$ steps $\Rightarrow$ full code)} (s.north);
+  % --- down to evaluation ---
+  \node[box,fill=gray!10] (ev) at (6.2,-2.1) {Build $H_{\mathrm{SC}}$, evaluate\\\scriptsize encode$\to$BPSK$+$AWGN\\\scriptsize $\to$window BP$\to$FER (CRN)};
+  \draw[ar] (a) -- (ev);
+  % --- bottom row right-to-left: reward, update ---
+  \node[box,fill=orange!12] (r)  at (3.1,-2.1) {Reward\\$R=-\mathrm{FER}$};
+  \node[box,fill=compTwo!14] (up) at (0,-2.1)  {REINFORCE\\\scriptsize $\nabla J\!=\!\mathbb{E}[(R\!-\!b)\sum_t\!\nabla\log\pi]$};
+  \draw[ar] (ev) -- (r);
+  \draw[ar] (r) -- (up);
+  \draw[ar] (up.north) to[out=90,in=180]
+        node[left,font=\scriptsize,pos=0.7]{update $\theta$} (pi.west);
+\end{tikzpicture}}
+\caption{Construction as an MDP solved by policy gradient. \emph{Top (rollout):}
+the code is built one edge at a time; at step $t$ the policy reads the running
+per-component load features $s_t$ of edge $e_t$ and samples its component $a_t$;
+after $E$ steps a full assignment (a complete code) is produced. \emph{Bottom
+(learning):} the finished code is scored by the \emph{real} encode/channel/
+window-decode chain on common-random-number frames, giving terminal reward
+$R=-\mathrm{FER}$; REINFORCE then updates the $w{+}5$ shared policy weights. No
+ground-truth code is needed---the reward is the measured FER of the candidate
+itself.}
+\label{fig:mdp}
+\end{figure}
 
 \subsection{State, Action, Reward}
 \begin{itemize}
@@ -690,7 +795,13 @@ $4$W/$1$L ($p{=}0.375$, n.s.); long cells $5$W/$0$L ($p{=}0.06$), $3$W/$2$L
 ($p{=}0.06$), $4$W/$1$L ($p{=}0.375$). Classical PEG/ACE reach $n_4{=}0$/girth\,$6$
 on every cell, yet their FER ($0.26$--$0.36$) is $3\times$ (deep) to
 $33$--$46\times$ (long) worse than FER-optimization: $n_4{=}0$ is necessary,
-not sufficient.}
+not sufficient. The named literature \emph{cutting vector}~\cite{mitchell2015scldpc},
+best of its three strengths per cell, gives FER $0.169/0.003/0.167/0.013/0.019$
+across the five cells: it is stuck in the structural tier on the deep cell
+($0.169$ vs.\ RL $0.093$) but \emph{competitive} with RL on several long codes
+(e.g.\ $0.003$ vs.\ $0.010$), where $n_4$ decouples from performance---though its
+textbook and $n_4$-optimized variants are unreliable ($0.21$--$1.0$) and, unlike
+the feature policy, it is non-transferable.}
 \end{table*}
 
 \begin{table}[t]
