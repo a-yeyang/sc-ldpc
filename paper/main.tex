@@ -888,10 +888,15 @@ structural tier as PEG/ACE; and even the cutting vector \emph{optimized directly
 for FER} over its own family reaches only $0.169$---still roughly $2\times$ above
 the FER-optimizers ($0.09$--$0.11$), because the cutting-vector family is
 structurally restricted (one threshold per column) and cannot express the
-beyond-$4$-cycle structure that the full assignment freedom can. The literature
-method thus spans the naive and structural tiers but never enters the
-FER-optimized tier---exactly the gap that motivates searching the full
-edge-spreading space.
+beyond-$4$-cycle structure that the full assignment freedom can. On the deep cell
+the literature method thus spans the naive and structural tiers but does
+\emph{not} enter the FER-optimized tier---exactly the gap that motivates searching
+the full edge-spreading space. We note that this gap is cell-dependent: on the
+long codes, where $n_4$ decouples from performance
+(Section~\ref{sec:results-bigw}), an FER-tuned cutting vector can itself approach
+the FER-optimized tier, so the cutting-vector restriction binds most tightly
+exactly in the mid-length regime where $4$-cycle structure still governs the
+floor.
 
 \begin{table}[t]
 \centering
