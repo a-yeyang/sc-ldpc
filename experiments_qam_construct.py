@@ -158,6 +158,66 @@ def train_rl_qam(cfg, M, ebn0, pool, seed=0):
     return np.asarray(cand[int(np.argmin([m["fer"] for m in vm]))], dtype=np.int64), pol.theta.tolist()
 
 
+# bigger native-QAM training budget (the first pass under-trained: 16x24x28 at a
+# poorly-chosen SNR where the QAM FER had no gradient signal).
+NATIVE_STEPS, NATIVE_BATCH, NATIVE_FRAMES, NATIVE_VAL = 48, 32, 48, 400
+
+
+def pick_train_snr(out):
+    """Train at the SNR where the round-robin FER is in the discriminating waterfall
+    region (closest to 0.30); training where FER~1 or ~0 gives no gradient signal."""
+    rr = out["constructions"]["round_robin"]["waterfall"]
+    return min(rr, key=lambda p: abs(p["fer"] - 0.30))["snr"]
+
+
+def train_rl_qam_big(cfg, M, ebn0, pool, seed=0):
+    pol = R.FeaturePolicy(cfg, seed=seed)
+    best = {"fer": 2.0, "assign": None}
+    for step in range(NATIVE_STEPS):
+        rolls = [pol.rollout() for _ in range(NATIVE_BATCH)]
+        assigns = [a for a, _ in rolls]
+        mets = eval_qam(cfg, assigns, M, ebn0, frame_seed=20000 + step, n_frames=NATIVE_FRAMES, pool=pool)
+        rew = np.array([-m["fer"] for m in mets])
+        adv = rew - rew.mean(); sd = adv.std()
+        if sd > 1e-9:
+            adv = adv / sd
+        pol.update([(tr, float(adv[i])) for i, (a, tr) in enumerate(rolls)])
+        gi = int(np.argmin([m["fer"] for m in mets]))
+        if mets[gi]["fer"] < best["fer"]:
+            best = {"fer": mets[gi]["fer"], "assign": assigns[gi]}
+    greedy = pol.greedy_assign()
+    cand = [greedy, best["assign"] if best["assign"] is not None else greedy]
+    vm = eval_qam(cfg, cand, M, ebn0, frame_seed=88888, n_frames=NATIVE_VAL, pool=pool)
+    return np.asarray(cand[int(np.argmin([m["fer"] for m in vm]))], dtype=np.int64), pol.theta.tolist()
+
+
+def rerun_rlqam(M):
+    """Retrain ONLY rl_qam (bigger budget, discriminating training SNR), recompute its
+    waterfall, overwrite its entry -- the other five constructions are kept as-is."""
+    fname = f"results_qam_construct_M{M}.json"
+    out = json.load(open(fname))
+    grid, fg = out["snr_grid"], out["frames_grid"]
+    nw = R.n_workers()
+    print(f"M={M} rl_qam RERUN  workers={nw}", flush=True)
+    with Pool(nw) as pool:
+        tsnr = pick_train_snr(out)
+        print(f"  train @ {tsnr}dB (round-robin FER~0.3), budget "
+              f"{NATIVE_STEPS}x{NATIVE_BATCH}x{NATIVE_FRAMES}", flush=True)
+        a, theta = train_rl_qam_big(CFG, M, tsnr, pool)
+        st = _stats(CFG, a)
+        wf = waterfall(CFG, a, M, grid, fg, pool)
+        out["constructions"]["rl_qam"] = {"assign": a.tolist(), **st, "waterfall": wf,
+                                          "train_snr": tsnr,
+                                          "budget": [NATIVE_STEPS, NATIVE_BATCH, NATIVE_FRAMES]}
+        out["theta_rl_qam"] = theta
+        out.setdefault("_assigns", {})["rl_qam"] = a.tolist()
+        json.dump(out, open(fname, "w"))
+        best = min(wf, key=lambda p: p["fer"])
+        print(f"  rl_qam NEW: n4={st['n4']} girth={st['girth']} "
+              f"minFER={best['fer']:.3e}@{best['snr']}dB", flush=True)
+    print(f"--- M={M} rl_qam rerun done -> {fname}", flush=True)
+
+
 def best_random_qam(cfg, M, ebn0, pool):
     rng = np.random.default_rng(123)
     cand = [R.random_assign(cfg, rng) for _ in range(RANDOM_BUDGET)]
@@ -276,5 +336,7 @@ if __name__ == "__main__":
         agg()
     elif cmd == "run":
         run(int(sys.argv[2]))
+    elif cmd == "rlqam":
+        rerun_rlqam(int(sys.argv[2]))
     else:
-        raise SystemExit("usage: experiments_qam_construct.py [run <16|64|256>|agg]")
+        raise SystemExit("usage: experiments_qam_construct.py [run <M>|rlqam <M>|agg]")
