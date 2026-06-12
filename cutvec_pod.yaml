@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: yye-scldpc-cutvec
+  labels: {app: sc-ldpc-rl, owner: yye}
+spec:
+  restartPolicy: Never
+  nodeSelector: {kubernetes.io/hostname: cpu-10-208-55-85}
+  containers:
+  - name: main
+    image: python:3.12-slim
+    command: ["sleep", "infinity"]
+    workingDir: /work
+    env:
+    - {name: EXP_WORKERS, value: "48"}
+    - {name: OMP_NUM_THREADS, value: "1"}
+    - {name: OPENBLAS_NUM_THREADS, value: "1"}
+    - {name: MKL_NUM_THREADS, value: "1"}
+    - {name: VECLIB_MAXIMUM_THREADS, value: "1"}
+    - {name: NUMEXPR_NUM_THREADS, value: "1"}
+    resources:
+      requests: {cpu: "48", memory: "48Gi", ephemeral-storage: "20Gi"}
+      limits:   {cpu: "48", memory: "48Gi", ephemeral-storage: "40Gi"}

@@ -590,6 +590,15 @@ which optimize a \emph{structural} objective---progressive edge growth / the ACE
 metric / direct greedy elimination of the exact lifted-graph $4$-cycle
 count---rather than the end-to-end FER. These isolate ``how much does merely
 removing $4$-cycles buy?'' from ``how much does optimizing the real FER buy?''.
+\item \textbf{Cutting-vector edge spreading~\cite{mitchell2015scldpc}:} the
+\emph{named literature} SC-LDPC construction. A cutting vector is a per-column
+row-threshold $\zeta_k[c]$ that deterministically splits the base matrix into the
+coupling components, assigning systematic edge $(r,c)$ to component
+$\#\{k:\zeta_k[c]\le r\}$. We evaluate it at three strengths: \emph{uniform} (the
+textbook deterministic equal-band cut), \emph{optimized for $n_4$} (the faithful
+literature objective---cutting vectors selected for good cycle properties), and
+\emph{optimized for FER} (the strongest cutting vector, given our own end-to-end
+objective but restricted to the cutting-vector family).
 \item \textbf{Round-robin:} a naive perfectly-balanced heuristic.
 \item \textbf{Repository default (seed-0):} the single random assignment shipped
 by the original pipeline.
@@ -707,14 +716,16 @@ Optimization Is Needed for the Rest ($0.24\!\to\!0.09$).}
  & CEM                 & $0.091\pm0.016$ & $0^{\ast}$\,/\,6\\
  & Random search       & $0.106\pm0.024$ & $0^{\ast}$\,/\,6\\
 \midrule
-\multirow{3}{*}{\shortstack[l]{struct.\\opt.}}
- & PEG                 & $0.261$ & $0$\,/\,6\\
- & ACE                 & $0.261$ & $0$\,/\,6\\
- & Greedy $4$-cycle    & $0.238$ & $0$\,/\,6\\
+\multirow{4}{*}{\shortstack[l]{struct.\\opt.}}
+ & PEG                       & $0.261$ & $0$\,/\,6\\
+ & ACE                       & $0.261$ & $0$\,/\,6\\
+ & Greedy $4$-cycle          & $0.238$ & $0$\,/\,6\\
+ & Cutting vector (opt.)~\cite{mitchell2015scldpc} & $0.236$ & $0$\,/\,6\\
 \midrule
-\multirow{2}{*}{naive}
- & Round-robin         & $0.661$ & $944$\,/\,4\\
- & Default seed-0      & $0.698$ & $928$\,/\,4\\
+\multirow{3}{*}{naive}
+ & Round-robin                  & $0.661$ & $944$\,/\,4\\
+ & Default seed-0               & $0.698$ & $928$\,/\,4\\
+ & Cutting vector (uniform)~\cite{mitchell2015scldpc} & $0.936$ & $1920$\,/\,4\\
 \bottomrule
 \end{tabular}
 \\[3pt]
@@ -862,6 +873,25 @@ $\{$PEG, ACE, greedy$\}$---is the cleanest framing of the contribution: the leve
 is \emph{optimizing the real FER}, and RL's role within the FER-objective family
 is sample efficiency at scale (Section~\ref{sec:results-bigw}) and transfer
 (Section~\ref{sec:results-transfer}).
+
+\textbf{The named literature construction sits in the structural tier.} To rule
+out the objection that our gains are measured only against generic random/CEM/PEG
+baselines, we benchmark the canonical SC-LDPC cutting-vector construction of
+Mitchell--Lentmaier--Costello~\cite{mitchell2015scldpc}
+(\texttt{experiments\_cutvec.py}), the standard \emph{named} edge-spreading
+method. The result reinforces the dichotomy from all three sides
+(Table~\ref{tab:c1}): the \emph{textbook} uniform cutting vector is among the
+\emph{worst} constructions of all ($\text{FER}=0.936$, $n_4=1920$---equal-band
+cuts create dense $4$-cycle clusters); the cutting vector \emph{optimized for
+cycle properties} reaches $n_4{=}0$ and $\text{FER}=0.236$, statistically the same
+structural tier as PEG/ACE; and even the cutting vector \emph{optimized directly
+for FER} over its own family reaches only $0.169$---still roughly $2\times$ above
+the FER-optimizers ($0.09$--$0.11$), because the cutting-vector family is
+structurally restricted (one threshold per column) and cannot express the
+beyond-$4$-cycle structure that the full assignment freedom can. The literature
+method thus spans the naive and structural tiers but never enters the
+FER-optimized tier---exactly the gap that motivates searching the full
+edge-spreading space.
 
 \begin{table}[t]
 \centering
