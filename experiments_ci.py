@@ -55,6 +55,18 @@ CELLS = {
     "big_R0.667_w2": dict(cfg=_big_cfg(0.667, 2), snr=None, cand=_SNR_CAND[0.667], final=1200),
     "big_R0.667_w3": dict(cfg=_big_cfg(0.667, 3), snr=None, cand=_SNR_CAND[0.667], final=1200),
     "big_R0.75_w3": dict(cfg=_big_cfg(0.75, 3), snr=None, cand=_SNR_CAND[0.75], final=1200),
+    # P1 (T-COM gap): multi-seed CI for the full-rate sweep cells (Table tab:rate
+    # is currently single-seed -> no error bars).  Same Config + auto-SNR grid as
+    # the RATE_PLAN in experiments_construct_rate.py; R0.6 is already covered by
+    # R0.6_deep above, so we add R0.5/R0.7/R0.8/R0.9.
+    "R0.5":  dict(cfg=R.Config(bg=2, ils=0, Z=16, mp=12, w=2, L=30, W=6, max_iter=12),
+                  snr=None, cand=[1.0, 1.5, 2.0, 2.5, 3.0], final=1500),
+    "R0.7":  dict(cfg=R.Config(bg=1, ils=0, Z=16, mp=11, w=2, L=30, W=6, max_iter=12),
+                  snr=None, cand=[2.0, 2.5, 3.0, 3.5, 4.0], final=1500),
+    "R0.8":  dict(cfg=R.Config(bg=1, ils=0, Z=16, mp=8, w=2, L=30, W=6, max_iter=12),
+                  snr=None, cand=[2.5, 3.0, 3.5, 4.0, 4.5], final=1500),
+    "R0.9":  dict(cfg=R.Config(bg=1, ils=0, Z=16, mp=4, w=2, L=30, W=6, max_iter=12),
+                  snr=None, cand=[3.5, 4.0, 4.5, 5.0, 5.5, 6.0], final=1500),
 }
 
 # equal budget for every method (steps x batch evaluations); modest so 5 cells x

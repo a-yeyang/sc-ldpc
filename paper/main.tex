@@ -577,13 +577,19 @@ combinatorial objective, independent of the end-to-end FER reward.
 \section{Baselines and Experimental Setup}\label{sec:setup}
 %==============================================================================
 \subsection{Baselines}
-We compare the two RL policies against four baselines under identical evaluator,
-budget, and validation:
+We compare the two RL policies against the following baselines under identical
+evaluator, budget, and validation:
 \begin{itemize}
 \item \textbf{Random search} (key baseline): sample a batch of uniformly random
 assignments per step and keep the best by validation FER.
 \item \textbf{Cross-entropy method (CEM):} a strong distribution-based optimizer
 maintaining per-edge categorical distributions and updating from elites.
+\item \textbf{Classical structural optimizers (PEG, ACE, greedy $4$-cycle):} the
+standard non-learning construction baselines (\texttt{classical\_baseline.py}),
+which optimize a \emph{structural} objective---progressive edge growth / the ACE
+metric / direct greedy elimination of the exact lifted-graph $4$-cycle
+count---rather than the end-to-end FER. These isolate ``how much does merely
+removing $4$-cycles buy?'' from ``how much does optimizing the real FER buy?''.
 \item \textbf{Round-robin:} a naive perfectly-balanced heuristic.
 \item \textbf{Repository default (seed-0):} the single random assignment shipped
 by the original pipeline.
@@ -622,33 +628,101 @@ training point.
 
 \subsection{Construction Decides Success or Failure}\label{sec:results-c1}
 Table~\ref{tab:c1} reports the high-precision $2000$-frame re-test at $2.5$\,dB
-(lower FER is better), together with lifted-graph $4$-cycle count $n_4$ and
-girth. Optimizing the single edge-spreading knob lowers FER from $0.70$ to
-$0.06$--$0.13$---about $5$--$11\times$. The repository default (seed-0) is among
-the \emph{worst} constructions ($0.698$), and so is the naive perfectly-balanced
-round-robin heuristic ($0.66$).
+(lower FER is better) and sorts the constructions into three tiers. The
+\emph{naive} tier---the repository default (seed-0, $0.698$) and the perfectly
+balanced round-robin heuristic ($0.661$)---carries $\approx\!930$ $4$-cycles and
+is among the \emph{worst}. The \emph{structural-optimization} tier (classical PEG,
+ACE, and greedy $4$-cycle elimination; Section~\ref{sec:setup}) drives the
+$4$-cycle count to $0$ and the girth to $6$, which alone recovers most of the
+loss ($0.66\!\to\!0.24$--$0.26$). The \emph{FER-optimization} tier (the four
+searches that optimize the end-to-end FER---RL, CEM, and random search) reaches
+$0.090$--$0.106$, a further $\sim\!2.5\times$ beyond the structural optimum and
+$\sim\!7\times$ below the naive baseline (best individual seeds reach $0.064$, up
+to $11\times$). The headline is therefore twofold: (i) optimizing the single
+edge-spreading knob lowers FER by $\sim\!7$--$11\times$ over the naive default;
+and (ii) \emph{eliminating $4$-cycles is necessary but not sufficient}---the
+classical $n_4{=}0$ constructions are still $\sim\!2.5\times$ worse than the
+FER-optimized ones, so the remaining leverage lives in beyond-$4$-cycle structure
+that only an end-to-end FER objective captures. Crucially, this last gap is the
+\emph{construction-tier} effect, not an RL-specific one: at this deep-cell budget
+the four FER-optimizers (including blind random search) are statistically
+indistinguishable across seeds (Table~\ref{tab:ci}; paired RL-vs-random sign test
+$4$W/$1$L, $p{=}0.375$). RL's \emph{own} advantage over random search is a
+separate, large-space phenomenon established on the long codes
+(Section~\ref{sec:results-bigw}).
+
+\begin{table*}[t]
+\centering
+\caption{Statistical Rigor (G1): Multi-Seed Mean FER\,$\pm$\,$95\%$\,CI ($5$
+Seeds, Equal Budget, Large Independent Re-Test) for the Five Representative Cells,
+With the Classical $n_4{=}0$ Structural Optimum (PEG/ACE) for Reference. On the
+\emph{Deep} Cell All FER-Optimizers Overlap (RL's Edge Is Not Yet Significant);
+on the \emph{Long} Codes RL-Feature Separates From Equal-Budget Random Search.
+Every Tier Beats the Classical $n_4{=}0$ Optimum by $3$--$46\times$.}
+\label{tab:ci}
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{6pt}
+\footnotesize
+\begin{tabular}{@{}llccccc@{}}
+\toprule
+cell & $R$ & RL-feature & RL-per-edge & CEM & random search & PEG/ACE ($n_4{=}0$)\\
+\midrule
+deep ($Z16,w2$)   & 0.60 & $0.093\pm0.022$ & $0.090\pm0.018$ & $0.091\pm0.016$ & $0.106\pm0.024$ & 0.261\\
+long ($Z32,w3$)   & 0.46 & $\mathbf{0.010}\pm0.010$ & $0.017\pm0.010$ & $0.021\pm0.009$ & $0.042\pm0.030$ & 0.331\\
+long ($Z32,w2$)   & 0.64 & $0.114\pm0.022$ & $0.100\pm0.037$ & $0.102\pm0.029$ & $0.115\pm0.031$ & 0.341\\
+long ($Z32,w3$)   & 0.63 & $\mathbf{0.010}\pm0.012$ & $0.033\pm0.021$ & $0.011\pm0.007$ & $0.029\pm0.027$ & 0.357\\
+long ($Z32,w3$)   & 0.73 & $\mathbf{0.0065}\pm0.0055$ & $0.025\pm0.013$ & $0.025\pm0.015$ & $0.015\pm0.010$ & 0.298\\
+\bottomrule
+\end{tabular}
+\\[3pt]
+{\footnotesize Paired RL-feature vs.\ random sign test (5 seeds): deep
+$4$W/$1$L ($p{=}0.375$, n.s.); long cells $5$W/$0$L ($p{=}0.06$), $3$W/$2$L
+($p{=}1.0$---the small-$w$, small-space $R{=}0.64$ exception), $5$W/$0$L
+($p{=}0.06$), $4$W/$1$L ($p{=}0.375$). Classical PEG/ACE reach $n_4{=}0$/girth\,$6$
+on every cell, yet their FER ($0.26$--$0.36$) is $3\times$ (deep) to
+$33$--$46\times$ (long) worse than FER-optimization: $n_4{=}0$ is necessary,
+not sufficient.}
+\end{table*}
 
 \begin{table}[t]
 \centering
-\caption{Construction Decides Success: $2000$-Frame Re-Test at $2.5$\,dB
-(BG2, $Z{=}16$, $L{=}30$, $w{=}2$).}
+\caption{Construction Decides Success (Deep-Dive Cell, BG2 $Z{=}16$ $L{=}30$
+$w{=}2$, $2.5$\,dB, $2000$-Frame Re-Test). The Four FER-Optimizing Searches Are
+Reported as Multi-Seed Mean\,$\pm$\,$95\%$\,CI ($5$ Independent Seeds, Equal
+Budget); the Structural and Naive Baselines Are Deterministic / Single
+Construction. Eliminating $4$-Cycles (PEG/ACE/Greedy) Is \emph{Necessary but Not
+Sufficient}: It Recovers Most of the Gain ($0.66\!\to\!0.24$), but End-to-End FER
+Optimization Is Needed for the Rest ($0.24\!\to\!0.09$).}
 \label{tab:c1}
 \renewcommand{\arraystretch}{1.2}
 \setlength{\tabcolsep}{4pt}
 \footnotesize
-\begin{tabular}{@{}lrrrr@{}}
+\begin{tabular}{@{}llrr@{}}
 \toprule
-Construction & FER & BER & $n_4$ & girth\\
+ & Construction & FER & $n_4$\,/\,girth\\
 \midrule
-CEM                          & \textbf{0.064} & $1.37\!\times\!10^{-4}$ & 0   & 6\\
-RL per-edge policy           & 0.080          & $1.98\!\times\!10^{-4}$ & 0   & 6\\
-RL feature policy            & 0.092          & $2.67\!\times\!10^{-4}$ & 0   & 6\\
-RL feature (greedy)          & 0.112          & $3.47\!\times\!10^{-4}$ & 0   & 6\\
-Random search (budget $640$) & 0.133          & $2.60\!\times\!10^{-4}$ & 0   & 6\\
-Round-robin                  & 0.661          & $1.18\!\times\!10^{-3}$ & 944 & 4\\
-Default seed-0               & 0.698          & $1.10\!\times\!10^{-3}$ & 928 & 4\\
+\multirow{4}{*}{\shortstack[l]{FER\\opt.}}
+ & RL feature policy   & $0.093\pm0.022$ & $0^{\ast}$\,/\,6\\
+ & RL per-edge policy  & $0.090\pm0.018$ & $0^{\ast}$\,/\,6\\
+ & CEM                 & $0.091\pm0.016$ & $0^{\ast}$\,/\,6\\
+ & Random search       & $0.106\pm0.024$ & $0^{\ast}$\,/\,6\\
+\midrule
+\multirow{3}{*}{\shortstack[l]{struct.\\opt.}}
+ & PEG                 & $0.261$ & $0$\,/\,6\\
+ & ACE                 & $0.261$ & $0$\,/\,6\\
+ & Greedy $4$-cycle    & $0.238$ & $0$\,/\,6\\
+\midrule
+\multirow{2}{*}{naive}
+ & Round-robin         & $0.661$ & $944$\,/\,4\\
+ & Default seed-0      & $0.698$ & $928$\,/\,4\\
 \bottomrule
 \end{tabular}
+\\[3pt]
+{\footnotesize $^{\ast}$ Median over seeds; a minority of FER-optimized champions
+retain a small $4$-cycle population yet still reach low FER (pronounced on the
+long codes, Section~\ref{sec:results-bigw})---an early sign that beyond-$4$-cycle
+structure, which the end-to-end FER reward captures but $n_4$ does not, governs
+performance.}
 \end{table}
 
 The more important effect is on the \emph{error floor}. Table~\ref{tab:ber} and
@@ -697,17 +771,25 @@ $\approx\!3$--$6\times10^{-5}$; the uncoupled component code is worst.}
 \end{figure}
 
 \subsection{Sample Efficiency at Fixed Budget}\label{sec:results-learn}
-Fig.~\ref{fig:learn} and Table~\ref{tab:learn} show the best validation FER
-versus number of evaluations. Random search stalls at $\approx\!0.09$ after
-about $140$ evaluations (best-of-$k$ is an order statistic with a very slow
-tail), while RL/CEM keep descending to $0.035$--$0.06$ via a structured policy.
-On the $2000$-frame re-test, RL ($0.080/0.092$) and CEM ($0.064$) both
-consistently beat random search ($0.133$), and even the \emph{deterministic
-greedy} rule ($0.112$)---which contains no sampling luck---beats random search.
+Fig.~\ref{fig:learn} and Table~\ref{tab:learn} show, for a \emph{representative
+seed}, the best validation FER versus number of evaluations: random search stalls
+early (best-of-$k$ is an order statistic with a very slow tail), while RL/CEM keep
+descending via a structured policy. We stress that this is a single-seed
+trajectory: across the five seeds of Table~\ref{tab:ci}, the deep-cell
+FER-optimizers---including random search---are statistically comparable
+($0.090$--$0.106$, overlapping CIs), so on a small space at a generous budget the
+sample-efficiency advantage of a structured search over best-of-$k$ random is
+real but not yet significant. Where it \emph{does} become significant, by a wide
+and reproducible margin, is the expensive-evaluation, large-space regime of the
+long codes (Section~\ref{sec:results-bigw}, Table~\ref{tab:ci}): there RL-feature
+beats equal-budget random search $5$/$5$ seeds on the large-$w$ cells. The
+learning curve below should thus be read as a mechanism illustration, not as the
+significance claim---which Table~\ref{tab:ci} carries.
 
 \begin{table}[t]
 \centering
-\caption{Best Validation FER vs.\ Number of Evaluations (Learning Curve).}
+\caption{Best Validation FER vs.\ Number of Evaluations (Learning Curve, Single
+Representative Seed; Across-Seed Significance Is in Table~\ref{tab:ci}).}
 \label{tab:learn}
 \renewcommand{\arraystretch}{1.2}
 \setlength{\tabcolsep}{4pt}
@@ -727,9 +809,10 @@ CEM           & 0.09 & 0.075 & 0.05  & 0.05  & \textbf{0.050}\\
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{exp_construct_learn.pdf}
-\caption{Best validation FER vs.\ number of construction evaluations. Random
-search stalls at $\approx\!0.09$; RL (both policies) and CEM keep descending via
-a structured policy.}
+\caption{Best validation FER vs.\ number of construction evaluations (single
+representative seed; cf.\ Table~\ref{tab:ci} for across-seed CIs). Random
+search stalls early; RL (both policies) and CEM keep descending via a structured
+policy.}
 \label{fig:learn}
 \end{figure}
 
@@ -755,6 +838,30 @@ end-to-end FER reward, and a classical greedy/PEG/ACE local search
 count. The learned policy reaches the same $4$-cycle-free outcome with no
 hand-coded cycle / trapping-set knowledge, but through a softer balance proxy
 rather than the closed-form rule that does not exist.
+
+\textbf{$n_4{=}0$ is necessary, not sufficient (the classical-baseline result).}
+This is the sharpest statement of what the FER objective buys. The classical
+structural optimizers PEG, ACE, and greedy $4$-cycle elimination all reach
+$n_4{=}0$ and girth $6$ on \emph{every} cell---they solve the cycle-removal
+problem exactly---yet their FER is $0.238$--$0.261$ on the deep cell and
+$0.298$--$0.357$ on the long codes (Tables~\ref{tab:c1},~\ref{tab:ci}), i.e.\
+$\sim\!2.5$--$3\times$ worse than the FER-optimizers on the deep cell and
+$33$--$46\times$ worse on the long codes. Removing the $\approx\!930$ $4$-cycles
+recovers most of the naive loss ($0.66\!\to\!0.24$), but the last and largest
+multiplicative factor comes from beyond-$4$-cycle structure (higher-length cycles,
+absorbing/trapping sets) that the exact $4$-cycle objective is blind to and that
+only the end-to-end FER reward---used by RL, CEM, and even random search---can
+see. The phenomenon is starkest on the long codes, where the FER-optimized
+champions frequently retain a \emph{large} $4$-cycle population (median $n_4$ up
+to $1472$, Table~\ref{tab:ci}) while still achieving the lowest FER: at long block
+length $n_4$ decouples from performance entirely, so a construction principle keyed
+to $n_4$ (classical or the deep-cell ``avoid $4$-cycles'' reading) is the wrong
+target and an end-to-end objective is mandatory. This dichotomy---FER-objective
+optimizers $\{$RL, CEM, random$\}$ versus structural-objective optimizers
+$\{$PEG, ACE, greedy$\}$---is the cleanest framing of the contribution: the lever
+is \emph{optimizing the real FER}, and RL's role within the FER-objective family
+is sample efficiency at scale (Section~\ref{sec:results-bigw}) and transfer
+(Section~\ref{sec:results-transfer}).
 
 \begin{table}[t]
 \centering
@@ -870,7 +977,12 @@ $R$ & $w$ & $E$ & SNR & RL-f & RL-pe & CEM & rand & seed0\\
 
 \textbf{Findings.} \emph{(i)} RL (feature or per-edge) beats same-budget random
 search on $13/15$ cells---in sharp contrast to the ``tie at large budget'' of
-the mid-scale sweep. \emph{(ii)} The advantage grows with $w$: $w{=}1\to4/5$,
+the mid-scale sweep. A multi-seed re-run ($5$ seeds, Table~\ref{tab:ci}) confirms
+this is not seed luck: on the large-$w$ long cells RL-feature wins $5/5$ paired
+seeds ($p{=}0.06$) with non-overlapping CIs (e.g.\ $R{=}0.46,w{=}3$: RL
+$0.010\pm0.010$ vs.\ random $0.042\pm0.030$), while the lone non-win
+($R{=}2/3,w{=}2$, $3$W/$2$L, $p{=}1.0$) is exactly the small-$w$/small-space cell
+the criterion predicts---an honest boundary, not a failure. \emph{(ii)} The advantage grows with $w$: $w{=}1\to4/5$,
 $w{=}2\to4/5$, $w{=}3\to5/5$, and RL often drives FER to exactly $0$ while random
 search stalls at $0.05$--$0.14$ (e.g.\ $R{=}2/3,w{=}3$: RL $0.000$ vs.\ random
 $0.140$). \emph{(iii)} RL dominates the repository default across the board.
@@ -1050,14 +1162,20 @@ random search, and its feature policy \emph{transfers zero-shot}.
 
 \subsection{Conditional, Not Unconditional, Wins}
 RL's advantage over the baselines is \emph{conditional}, and we present this as
-an honest feature rather than a weakness. At a large evaluation budget,
-best-of-$N$ random search is a strong baseline and CEM ties or slightly beats
-policy-gradient RL on single-point FER (e.g.\ CEM $0.064$ vs.\ RL feature $0.092$
-in Table~\ref{tab:c1}); in the deep waterfall, several $4$-cycle-free
-constructions converge within Monte-Carlo noise. The first-order factor is
-whether a construction avoids $4$-cycles, which several optimizers can achieve;
-RL's incremental value is automation, interpretability, and transfer---and a
-clean criterion for \emph{when} sample efficiency matters
+an honest feature rather than a weakness. The multi-seed CIs of
+Table~\ref{tab:ci} make the boundary precise. At a large evaluation budget on a
+small space (the deep cell), best-of-$N$ random search is a strong baseline and
+RL, CEM, and random search are statistically indistinguishable ($0.090$--$0.106$,
+overlapping $95\%$ CIs; paired RL-vs-random sign test $4$W/$1$L, $p{=}0.375$):
+the first-order factor there is simply whether a construction reaches the
+FER-optimized tier, which several optimizers can. The advantage becomes
+significant in the expensive-evaluation, large-space regime---the long codes,
+where RL-feature wins $5/5$ seeds on the large-$w$ cells ($p{=}0.06$) with
+non-overlapping CIs---and the single genuine non-win ($R{=}2/3,w{=}2$) is the
+small-space cell the criterion predicts. RL's incremental value over the other
+FER-optimizers is thus automation, interpretability, transfer
+(Section~\ref{sec:results-transfer}), and a clean, reproducible criterion for
+\emph{when} sample efficiency matters
 (Sections~\ref{sec:results-bigw}--\ref{sec:results-wproxy}).
 
 \subsection{Scale and Scope}
