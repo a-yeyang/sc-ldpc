@@ -848,47 +848,68 @@ performance.}
 \end{table}
 
 The more important effect is on the \emph{error floor}. Table~\ref{tab:ber} and
-Fig.~\ref{fig:ber} give the BER-vs-$E_b/N_0$ waterfall: optimized constructions
-have \emph{no} error floor (decaying to $\sim\!10^{-6}/0$ at high SNR), whereas
-the default/naive constructions exhibit a floor at $\approx\!3$--$6\times10^{-5}$.
-Measured at the BER$=10^{-3}$ waterfall threshold, the optimized constructions
-sit at $2.30$--$2.38$\,dB, the default/naive at $2.53$--$2.54$\,dB ($\sim\!0.16$\,dB
-construction gain), and the uncoupled component code at $3.11$\,dB ($\sim\!0.75$\,dB
-coupling gain). The construction dividend is therefore largest in the
-low-BER / error-floor region, consistent with the theory that short cycles
-mainly hurt the floor.
+Fig.~\ref{fig:ber} give the high-precision BER-vs-$E_b/N_0$ waterfall, in which
+the frame bank is grown with SNR (from $4{,}000$ frames at $2.2$\,dB to
+$60{,}000$ frames---$2.688\times10^{8}$ information bits---at $3.7$/$4.0$\,dB) so
+that the deep-floor region carries genuine statistical power. The separation is
+stark and statistically powered: the optimized constructions (RL/CEM/random
+search) descend steeply and \emph{show no floor}---at $4.0$\,dB the RL-feature
+and CEM champions record \emph{zero} bit errors in the entire $60{,}000$-frame
+($2.688\times10^{8}$-bit) bank, a measured BER upper bound of
+$<1.7\times10^{-8}$ (rule-of-three $95\%$ one-sided), while random search holds a
+steep slope down to $4.5\times10^{-8}$ ($12$ bit errors in the same bank).
+The naive constructions instead \emph{floor}: round-robin saturates at
+$\approx\!4\times10^{-6}$ ($1{,}105$ bit errors at $4.0$\,dB) and the repository
+default (seed-0) at $\approx\!8\times10^{-6}$ ($2{,}229$ bit errors), each tens
+of standard deviations above the optimized curves. At the deep operating point
+this is a $2$--$3$ order-of-magnitude separation that the previous
+$2000$-frame measurement could not resolve. (At the highest SNRs we report the
+zero-error optimized points as upper bounds rather than a literal zero; the raw
+bit-error counts and bank sizes are tabulated below.) The construction dividend
+is therefore largest in the low-BER / error-floor region, consistent with the
+theory that short cycles mainly hurt the floor.
 
-\begin{table}[t]
+\begin{table*}[t]
 \centering
-\caption{BER-vs-$E_b/N_0$ Waterfall (Deep-Dive Operating Point).
-``Floor'' Marks the High-SNR Saturation of the Default/Naive Constructions.}
+\caption{High-Precision BER-vs-$E_b/N_0$ Waterfall (Deep-Dive Operating Point).
+Frame Bank Grows With SNR to $60{,}000$ Frames ($2.688\times10^{8}$ Info Bits)
+at $3.7$/$4.0$\,dB. Optimized Constructions Show \emph{No} Floor (BER Vanishes
+Into a $<1.7\times10^{-8}$ Upper Bound With a Steep Slope); the Naive
+Constructions \emph{Floor} at $\sim\!10^{-6}$ With Thousands of Bit Errors.}
 \label{tab:ber}
 \renewcommand{\arraystretch}{1.2}
-\setlength{\tabcolsep}{3.5pt}
+\setlength{\tabcolsep}{6pt}
 \footnotesize
-\begin{tabular}{@{}lccccc@{}}
+\begin{tabular}{@{}lccccccc@{}}
 \toprule
-$E_b/N_0$ (dB) & 2.2 & 2.5 & 2.8 & 3.1 & 3.4\\
+$E_b/N_0$ (dB) & 2.2 & 2.5 & 2.8 & 3.1 & 3.4 & 3.7 & 4.0\\
 \midrule
-RL feature   & $5.5\mathrm{e}{-3}$ & $3.4\mathrm{e}{-4}$ & $1.9\mathrm{e}{-5}$ & $5.1\mathrm{e}{-6}$ & $0$\\
-CEM          & $2.7\mathrm{e}{-3}$ & $1.4\mathrm{e}{-4}$ & $4.7\mathrm{e}{-6}$ & $0$ & $0$\\
-Random search& $3.9\mathrm{e}{-3}$ & $3.7\mathrm{e}{-4}$ & $3.7\mathrm{e}{-5}$ & $2.7\mathrm{e}{-6}$ & $0$\\
-Seed-0       & $6.2\mathrm{e}{-3}$ & $1.2\mathrm{e}{-3}$ & $3.5\mathrm{e}{-4}$ & $1.4\mathrm{e}{-4}$ & $6.4\mathrm{e}{-5}^{\dagger}$\\
-Round-robin  & $6.8\mathrm{e}{-3}$ & $1.1\mathrm{e}{-3}$ & $2.6\mathrm{e}{-4}$ & $1.0\mathrm{e}{-4}$ & $3.3\mathrm{e}{-5}^{\dagger}$\\
-Uncoupled    & $2.3\mathrm{e}{-2}$ & $9.2\mathrm{e}{-3}$ & $3.1\mathrm{e}{-3}$ & $1.0\mathrm{e}{-3}$ & $1.9\mathrm{e}{-4}$\\
+RL feature    & $4.5\mathrm{e}{-3}$ & $2.9\mathrm{e}{-4}$ & $1.6\mathrm{e}{-5}$ & $1.0\mathrm{e}{-6}$ & $4.5\mathrm{e}{-9}$ & ${<}1.7\mathrm{e}{-8}^{\ast}$ & ${<}1.7\mathrm{e}{-8}^{\ast}$\\
+CEM           & $2.5\mathrm{e}{-3}$ & $1.3\mathrm{e}{-4}$ & $8.4\mathrm{e}{-6}$ & $9.8\mathrm{e}{-7}$ & $1.3\mathrm{e}{-7}$ & ${<}1.7\mathrm{e}{-8}^{\ast}$ & ${<}1.7\mathrm{e}{-8}^{\ast}$\\
+Random search & $4.3\mathrm{e}{-3}$ & $2.7\mathrm{e}{-4}$ & $2.5\mathrm{e}{-5}$ & $2.9\mathrm{e}{-6}$ & $5.5\mathrm{e}{-7}$ & $1.3\mathrm{e}{-7}$ & $4.5\mathrm{e}{-8}$\\
+Round-robin   & $6.7\mathrm{e}{-3}$ & $1.1\mathrm{e}{-3}$ & $2.9\mathrm{e}{-4}$ & $9.1\mathrm{e}{-5}$ & $3.2\mathrm{e}{-5}^{\dagger}$ & $1.1\mathrm{e}{-5}^{\dagger}$ & $4.1\mathrm{e}{-6}^{\dagger}$\\
+Seed-0        & $6.2\mathrm{e}{-3}$ & $1.2\mathrm{e}{-3}$ & $3.6\mathrm{e}{-4}$ & $1.4\mathrm{e}{-4}$ & $5.6\mathrm{e}{-5}^{\dagger}$ & $2.2\mathrm{e}{-5}^{\dagger}$ & $8.3\mathrm{e}{-6}^{\dagger}$\\
 \bottomrule
 \end{tabular}
 \\[2pt]
-{\footnotesize $^{\dagger}$ error floor.}
-\end{table}
+{\footnotesize Bank size by SNR: $4$k ($2.2$/$2.5$), $12$k ($2.8$), $25$k
+($3.1$), $50$k ($3.4$), $60$k ($3.7$/$4.0$) frames ($4480$ info bits/frame).
+$^{\ast}$\,Zero bit errors observed in the $60{,}000$-frame
+($2.688\times10^{8}$-bit) bank; value is the rule-of-three $95\%$ one-sided upper
+bound, \emph{not} a measured zero. $^{\dagger}$\,error floor (round-robin
+$1{,}105$ and seed-0 $2{,}229$ bit errors at $4.0$\,dB).}
+\end{table*}
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{exp_construct_ber.pdf}
-\caption{BER-vs-$E_b/N_0$ waterfall for six constructions. Optimized
-constructions (RL/CEM/random search) decay without a floor; the repository
-default (seed-0) and the naive round-robin heuristic exhibit an error floor at
-$\approx\!3$--$6\times10^{-5}$; the uncoupled component code is worst.}
+\caption{High-precision BER-vs-$E_b/N_0$ waterfall for the deep-dive cell.
+Optimized constructions (RL/CEM/random search) decay steeply with no floor---at
+$4.0$\,dB the RL/CEM champions record zero bit errors in a $60{,}000$-frame
+($2.688\times10^{8}$-bit) bank (plotted as a $<1.7\times10^{-8}$ upper bound, not
+a literal zero), whereas the repository default (seed-0) and the naive
+round-robin heuristic floor at $\approx\!4$--$8\times10^{-6}$ with thousands of
+bit errors---a $2$--$3$ order-of-magnitude, statistically powered separation.}
 \label{fig:ber}
 \end{figure}
 
@@ -1047,6 +1068,27 @@ high rate $4$-cycles decouple from performance (e.g.\ a round-robin code with
 $n_4=3264$ is not bad at $R=0.7$) and the dominant harmful structure is no longer
 the $4$-cycle.
 
+\textbf{Multi-seed confirmation: optimizers tie, all beat the naive baseline.}
+To put error bars on the rate-sweep ordering we re-ran four cells with $5$
+independent seeds each (mean FER\,$\pm$\,$95\%$ CI, Student-$t$, large
+independent re-test): at $R{=}0.479$ ($2.0$\,dB) RL-feature
+$0.163\pm0.093$, CEM $0.125\pm0.019$, random $0.137\pm0.028$; at $R{=}0.692$
+($2.5$\,dB) $0.488\pm0.046$, $0.415\pm0.035$, $0.458\pm0.049$; at $R{=}0.770$
+($3.0$\,dB) $0.357\pm0.016$, $0.343\pm0.021$, $0.372\pm0.032$; and at
+$R{=}0.906$ ($4.5$\,dB) $0.171\pm0.030$, $0.173\pm0.010$, $0.194\pm0.024$. At
+these mid-scale rate cells, under a generous budget, RL, CEM and random search
+are \emph{statistically indistinguishable} (overlapping CIs), CEM is often the
+best single point, and RL does \emph{not} significantly beat random search
+(paired RL-vs-random sign test $3/5$, $2/5$, $4/5$, $4/5$ wins;
+$p{=}1.0$, $1.0$, $0.375$, $0.375$). The honest reading is the one the rest of
+the paper makes: \emph{all} the FER-optimizers are comparable and \emph{all}
+decisively beat the naive/default baselines, while RL's specific edge over
+random search is reserved for the long-code/large-$w$/expensive-evaluation regime
+(C3; Table~\ref{tab:ci}, Sections~\ref{sec:results-bigw}--\ref{sec:results-wproxy}),
+not these cells. Two of the cells ($R{=}0.692$, $R{=}0.770$) sit higher on the
+waterfall (operating FER $0.36$--$0.49$), an intrinsically harder, noisier
+operating point at which the optimizer ordering is least separable.
+
 \begin{table}[t]
 \centering
 \caption{Full-Rate Sweep: FER at the Operating Point ($1152$ Evals/Optimizer)
@@ -1077,6 +1119,77 @@ FER$=0.1$) vs.\ code rate. The gain is largest at moderate rate
 saturation closing the BP--MAP gap (Section~\ref{sec:pexit}).}
 \label{fig:rate}
 \end{figure}
+
+\subsection{Construction Gain Holds Across Modulation Order (QAM)}
+\label{sec:results-qam}
+All results so far use BPSK. To test whether the construction gain is an artifact
+of binary modulation, we re-run the deep cell (BG2, $Z{=}16$, $R{=}0.603$) over
+complex-AWGN square $M$-QAM at $M\in\{16,64,256\}$ ($2.41$, $3.62$,
+$4.83$\,bit/s/Hz), with Gray-mapped soft-LLR demapping into the same window
+decoder. Table~\ref{tab:qam} reports FER at the discriminating SNR of each
+waterfall (the four-cycle count $n_4$ of each construction is modulation-independent
+and is listed once). Three findings.
+
+\emph{(a) The gain is not BPSK-specific.} At every modulation order the optimized
+constructions beat the naive round-robin/seed-0 by $40$--$86\times$: $16$-QAM
+$0.003$ vs.\ $0.237$ ($\sim\!86\times$), $64$-QAM $0.007$ vs.\ $0.260$
+($\sim\!40\times$), $256$-QAM $0.007$ vs.\ $0.453$ ($\sim\!68\times$). The same
+three-tier structure as BPSK persists across the constellation.
+
+\emph{(b) Train once on BPSK, deploy on any QAM order.} The construction
+optimized on the cheapest, sharpest-reward channel---BPSK (\texttt{rl\_bpsk})---
+transfers \emph{zero-shot} across modulation orders: it reaches $n_4{=}0$/girth\,$6$
+and posts the best FER at all three $M$ ($0.003$/$0.007$/$0.007$), without any
+QAM-specific search. This is the practical recipe: optimize the construction on
+BPSK, then deploy the resulting edge spreading unchanged on the QAM order the link
+actually uses.
+
+\emph{(c) Native QAM-reward training underperforms (honest footnote).} Training
+the policy directly on the QAM FER reward (\texttt{rl\_qam}) is \emph{worse} than
+the BPSK-transferred construction and fails to reach $n_4{=}0$ (it lands at
+$480$--$960$ four-cycles), because the QAM FER is a noisier, less
+construction-discriminating training signal than BPSK FER---which is exactly why
+BPSK-then-transfer is preferred. The $64$-QAM cutting vector reaffirms that
+$n_4{=}0$ is necessary but not sufficient: it reaches $n_4{=}0$ yet still posts
+$0.056$, well above the optimized tier. Complete waterfall and constellation data
+are saved for reproducibility; at the top of each waterfall all optimized
+constructions reach $0$ frame errors in the bank ($8000$ frames), which we report
+as upper bounds rather than a literal zero.
+
+\begin{table}[t]
+\centering
+\caption{QAM Construction Sweep (Deep Cell BG2 $Z{=}16$, $R{=}0.603$,
+Complex-AWGN $M$-QAM): FER at the Discriminating SNR. The Construction Gain
+($40$--$86\times$ Over Naive) Holds Across $M$; the BPSK-Optimized Construction
+(\texttt{rl\_bpsk}) Transfers Zero-Shot and Is Best at Every $M$.}
+\label{tab:qam}
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{4pt}
+\footnotesize
+\begin{tabular}{@{}lcrrr@{}}
+\toprule
+Construction & $n_4$\,/\,girth & \multicolumn{3}{c}{FER at disc.\ SNR}\\
+\cmidrule(l){3-5}
+ & & 16-QAM & 64-QAM & 256-QAM\\
+ & & @6\,dB & @9\,dB & @13\,dB\\
+\midrule
+RL (BPSK-transfer)  & $0$\,/\,6 & \textbf{0.003} & \textbf{0.007} & \textbf{0.007}\\
+Random search       & $0$\,/\,6 & 0.007 & 0.009 & 0.008\\
+Cutting vector~\cite{mitchell2015scldpc} & $0$\,/\,6 & 0.012 & 0.056 & 0.013\\
+RL (native QAM)     & $480$--$960$\,/\,4 & 0.010 & 0.017 & 0.013\\
+\midrule
+Round-robin (naive) & $944$\,/\,4 & 0.237 & 0.260 & 0.453\\
+Seed-0 (naive)      & $928$\,/\,4 & 0.305 & 0.391 & 0.480\\
+\bottomrule
+\end{tabular}
+\\[3pt]
+{\footnotesize Spectral efficiencies $2.41$/$3.62$/$4.83$\,bit/s/Hz. Each FER is
+measured on an SNR-grown bank; at the top of each waterfall the optimized
+constructions reach $0$ frame errors in an $8000$-frame bank (FER upper bound
+$<4\times10^{-4}$). \texttt{rl\_qam}'s residual $n_4$ is $944$ ($16$-QAM),
+$960$ ($64$-QAM), $480$ ($256$-QAM): native QAM-reward training does not clear the
+four-cycles, unlike the BPSK-transferred construction.}
+\end{table}
 
 \subsection{The RL Home Court: Long Codes and Large $w$}
 \label{sec:results-bigw}
@@ -1119,6 +1232,10 @@ $R$ & $w$ & $E$ & SNR & RL-f & RL-pe & CEM & rand & seed0\\
 7/8 & 3 &  69 & 4.5 & \textbf{0.000} & 0.007 & 0.057 & 0.050 & 0.280\\
 \bottomrule
 \end{tabular}
+\\[3pt]
+{\footnotesize FERs are champion re-tests on a $300$-frame bank
+(granularity $1/300$); a reported $0.000$ denotes $0/300$ frame errors---an FER
+upper bound of $\approx\!10^{-2}$ ($95\%$ rule-of-three), not a literal zero.}
 \end{table}
 
 \textbf{Findings.} \emph{(i)} RL (feature or per-edge) beats same-budget random
@@ -1129,9 +1246,11 @@ seeds ($p{=}0.06$) with non-overlapping CIs (e.g.\ $R{=}0.46,w{=}3$: RL
 $0.010\pm0.010$ vs.\ random $0.042\pm0.030$), while the lone non-win
 ($R{=}2/3,w{=}2$, $3$W/$2$L, $p{=}1.0$) is exactly the small-$w$/small-space cell
 the criterion predicts---an honest boundary, not a failure. \emph{(ii)} The advantage grows with $w$: $w{=}1\to4/5$,
-$w{=}2\to4/5$, $w{=}3\to5/5$, and RL often drives FER to exactly $0$ while random
-search stalls at $0.05$--$0.14$ (e.g.\ $R{=}2/3,w{=}3$: RL $0.000$ vs.\ random
-$0.140$). \emph{(iii)} RL dominates the repository default across the board.
+$w{=}2\to4/5$, $w{=}3\to5/5$, and RL often drives FER to \emph{zero observed
+frame errors in the $300$-frame re-test bank} (reported as $0.000$, an FER upper
+bound of $\approx\!10^{-2}$ rule-of-three, not a literal zero probability) while
+random search stalls at $0.05$--$0.14$ (e.g.\ $R{=}2/3,w{=}3$: RL $0.000$ vs.\
+random $0.140$). \emph{(iii)} RL dominates the repository default across the board.
 \emph{(iv)} Honestly, the two exceptions ($R{=}5/6,w{=}1$ and $R{=}7/8,w{=}2$)
 both occur at small $w$ where the space is small and random search suffices, and
 the $R{=}1/2,w{=}1$ auto-operating point is low (FER$\approx\!0.9$, poor
@@ -1153,8 +1272,10 @@ We extend the expensive Monte-Carlo evaluation to $w\in\{3,5,8,12\}$ (window
 $W=w{+}1$), full rate, $20$ cells, on an eviction-resistant $100$-core pod.
 Table~\ref{tab:wmc} shows the trend cleanly: as $w$ grows from $3$ to $8$, random
 search gets steadily worse (e.g.\ $R{=}2/3$: $0.040\to0.083\to0.133$) while RL
-gets steadily better, often reaching exactly $0$
-($0.017\to0.010\to\mathbf{0.000}$). RL's win rate by $w$ is
+gets steadily better, often reaching \emph{zero observed frame errors}
+($0.017\to0.010\to\mathbf{0.000}$; the $\mathbf{0.000}$ entries are $0/300$
+re-test frames, an FER upper bound of $\approx\!10^{-2}$, not a literal zero).
+RL's win rate by $w$ is
 $w{=}3\!:\!5/5$, $w{=}5\!:\!3/4$, $w{=}8\!:\!4/4$, $w{=}12\!:\!2/2$ (over cells
 with signal; the rest are ties, none losses). The default construction is almost
 uniformly $0.7$--$1.0$ (fully broken). Four ``no-signal'' cells (where all
@@ -1182,6 +1303,11 @@ $R$ & $w{=}3$ & $w{=}5$ & $w{=}8$ & $w{=}12$\\
 7/8 & 0.003 / 0.100 & 0.003 / 0.023 & \textbf{0.000 / 0.043} & 0.010 / 0.037\\
 \bottomrule
 \end{tabular}
+\\[3pt]
+{\footnotesize FERs are champion re-tests on a $300$-frame bank (granularity
+$1/300\approx3.3\times10^{-3}$); a reported $0.000$ is $0/300$ frame errors, i.e.\
+an FER upper bound of $\approx\!10^{-2}$ ($95\%$ rule-of-three), not a measured
+zero probability.}
 \end{table}
 
 \begin{figure}[t]
@@ -1209,6 +1335,34 @@ $n_4{=}0$, and RL has no extra advantage. RL pays off only when the objective is
 threshold such as PEXIT is, by contrast, cheap; Section~\ref{sec:pexit}). This
 unifies the three regimes into one rule: \emph{RL's value rises monotonically
 with per-evaluation cost}.
+
+\textbf{Why the advantage grows with the search space: an order-statistic
+argument.} The empirical C3 trend---RL's edge over best-of-$N$ random search
+widening as the space $(w{+}1)^E$ grows---has a simple theoretical underpinning,
+which we state as a heuristic-but-correct argument rather than a formal theorem.
+Best-of-$N$ random search returns the minimum of $N$ i.i.d.\ FER draws from the
+construction distribution, an \emph{order statistic} $X_{(1)}$. Its expected value
+improves only slowly in $N$: for a distribution with a left tail of measure
+$\Pr[X\le f]\approx (f/f_0)^{\alpha}$ near the optimum, the expected best-of-$N$
+satisfies $\mathbb{E}[X_{(1)}]\!-\!f_{\min}=\Theta(N^{-1/\alpha})$---a polynomially
+slow, and in the heavy-tail/discrete-floor regimes effectively logarithmic, decay.
+Crucially, this tail mass shrinks as the space grows: enlarging $w$ multiplies the
+number of constructions by $(w{+}1)^{\Delta E}$ while the count of near-optimal
+($4$-cycle-free, low-floor) constructions grows far more slowly, so the
+\emph{fraction} of good constructions---hence the effective $\alpha$ and the
+probability that any of $N$ uniform samples lands near the optimum---falls
+exponentially in $E$. For a \emph{fixed} budget $N$, best-of-$N$ random search
+therefore \emph{degrades} as $(w{+}1)^E$ expands: it covers an exponentially
+smaller share of the space. A parametric policy of \emph{fixed} dimension
+($w{+}5$ weights, independent of $E$) has, by contrast, a sample complexity that
+does not grow with $E$---it climbs a structural gradient defined by the same
+per-component features at every code size and never enumerates the
+$(w{+}1)^E$ space. Hence, holding the budget fixed, the policy's expected FER is
+essentially flat in $E$ while best-of-$N$ random search's worsens, so the gap
+$\mathbb{E}[X_{(1)}^{\mathrm{rand}}]-\mathbb{E}[\mathrm{FER}_{\pi}]$ widens
+monotonically as the search space grows. This is precisely the empirically
+observed C3 criterion (Tables~\ref{tab:big},~\ref{tab:wmc}): random search
+degrades and RL improves as $w$---and thus $(w{+}1)^E$---increases.
 
 \begin{table}[t]
 \centering
@@ -1241,40 +1395,72 @@ search.}
 \end{figure}
 
 \subsection{Zero-Shot Transfer}\label{sec:results-transfer}
-We move the $8$ learned feature weights \emph{unchanged} to two new codes and
-greedily construct (no search on the new code). Table~\ref{tab:transfer} shows
-the zero-shot rule beats both the typical random construction (median) and the
-round-robin heuristic on both new configurations, indicating that RL learned a
-genuine structural principle rather than overfitting one code. This is a
-deployment property random search / CEM cannot provide, since they output a
-code-specific assignment that must be re-searched for every new code.
-(A best-of-$12$ random search can occasionally edge out the single zero-shot
-greedy code---an unequal $12$-vs-$0$-evaluation comparison.)
+We move the $8$ learned feature weights \emph{unchanged} to seven unseen target
+codes (all $w{=}2$: longer lifting $Z\in\{24,32,64\}$, higher/lower rate via
+$m_p\in\{6,10\}$, a longer chain $L{=}50$, and a cross-base-graph BG1 target) and
+greedily construct, with \emph{no search} on the new code.
+Table~\ref{tab:transfer} reports, per target, the zero-shot FER against (i) a full
+per-instance RL run on that code, (ii) the round-robin heuristic, (iii) the
+random-construction median, and (iv) a fair best-of-$12$ random search; the last
+column is the fraction of the (round-robin\,$\to$\,per-instance-RL) optimization
+gain that the zero-shot rule recovers at zero search cost.
+
+The headline is the transfer economy: pooled over the seven targets, the single
+$8$-parameter learned rule recovers a \emph{mean $78\%$} of a full per-instance
+optimization---reached by re-running RL from scratch on each new code---while
+performing \emph{no} search on the target. It beats the random-construction
+median on $4/7$ targets and is competitive with (but does not dominate) the fair
+best-of-$12$ random search, edging it on $2/7$. We do \emph{not} claim it beats
+random search outright; rather, the deployable value is that a code-agnostic rule
+of fixed dimension transfers without any re-search, recovering most of a
+per-instance optimization for free---a property that random search and CEM, which
+emit a code-specific assignment vector, structurally cannot offer. The hard case
+is the cross-base-graph target (crossBG1, a high-FER $\approx\!0.6$ operating
+point), where the rule recovers only $32\%$: transfer across base graphs, at a
+poorly-discriminating operating point, is where the learned principle is weakest,
+which we report rather than hide. (The per-instance figures are single RL runs; a
+more-seeds version may refine them.)
 
 \begin{table}[t]
 \centering
-\caption{Zero-Shot Transfer of the $8$ Learned Weights (Greedy, No Re-Search):
-FER on New Codes.}
+\caption{Zero-Shot Transfer of the $8$ Learned Weights (Greedy, No Re-Search) to
+Seven Unseen Targets (All $w{=}2$): FER vs.\ a Full Per-Instance RL Run,
+Round-Robin, the Random Median, and a Fair Best-of-$12$ Random Search. Final
+Column: \% of the (Round-Robin\,$\to$\,Per-Instance-RL) Gain Recovered Zero-Shot.}
 \label{tab:transfer}
 \renewcommand{\arraystretch}{1.2}
-\setlength{\tabcolsep}{4pt}
+\setlength{\tabcolsep}{2.6pt}
 \footnotesize
-\begin{tabular}{@{}lrrrr@{}}
+\begin{tabular}{@{}llrrrrrr@{}}
 \toprule
-Transfer target & rate & zero-shot & random (med.) & round-robin\\
+Target & $R$ & 0-shot & per-inst & RR & rnd-med & rnd-b12 & rec.\\
 \midrule
-$Z{=}24$ (longer blocks) & 0.603 & \textbf{0.124} & 0.146 & 0.240\\
-$m_p{=}6$ (higher rate)  & 0.693 & \textbf{0.788} & 0.852 & 0.960\\
+Z24 (longer)   & 0.603 & 0.062 & 0.069 & 0.239 & 0.132 & 0.075 & 104\%\\
+mp6 (hi-rate)  & 0.693 & 0.094 & 0.067 & 0.471 & 0.167 & 0.095 & 93\%\\
+Z32 (long)     & 0.603 & 0.096 & 0.041 & 0.199 & 0.112 & 0.047 & 65\%\\
+Z64 (long)     & 0.603 & 0.082 & 0.026 & 0.201 & 0.082 & 0.039 & 68\%\\
+mp10 (lo-rate) & 0.534 & 0.033 & 0.012 & 0.169 & 0.032 & 0.013 & 87\%\\
+L50 (chain)    & 0.612 & 0.138 & 0.131 & 0.781 & 0.315 & 0.120 & 99\%\\
+crossBG1       & 0.692 & 0.610 & 0.456 & 0.681 & 0.607 & 0.468 & 32\%\\
+\midrule
+\multicolumn{7}{l}{\emph{pooled}: mean recovery} & \textbf{78\%}\\
 \bottomrule
 \end{tabular}
+\\[3pt]
+{\footnotesize Each FER is the champion re-tested on a $1500$-frame independent
+bank. ``rec.'' $=$ $(\mathrm{RR}-\text{0-shot})/(\mathrm{RR}-\text{per-inst})$,
+clipped report; $>\!100\%$ means the zero-shot code matched or beat the
+per-instance run. Beats the random median on $4/7$, edges best-of-$12$ on $2/7$.}
 \end{table}
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{exp_construct_transfer.pdf}
-\caption{Zero-shot transfer of the learned feature policy to new codes. The
-transferred rule (greedy, no re-search) is below the random-construction median
-and the round-robin heuristic on both new configurations.}
+\caption{Zero-shot transfer of the learned feature policy to unseen codes. The
+transferred rule (greedy, no re-search) recovers a mean $78\%$ of a full
+per-instance optimization at zero search cost, beats the random-construction
+median on $4/7$ targets, and is competitive with a fair best-of-$12$ random
+search; the cross-base-graph target is the honest hard case.}
 \label{fig:transfer}
 \end{figure}
 

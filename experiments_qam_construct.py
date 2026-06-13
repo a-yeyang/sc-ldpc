@@ -44,12 +44,23 @@ from sc_ldpc import SCLDPCCode
 CFG = R.Config(bg=2, ils=0, Z=16, mp=8, w=2, L=30, W=6, max_iter=12)
 BPSK_TRAIN_SNR = 2.5
 
-# candidate info-bit Eb/N0 grids per order (rate ~0.60); the full grid IS the
-# waterfall.  Higher order needs more SNR for the same info-bit error rate.
+# AUDIT FIX (EXP-QAMlong): a LONG-code config so the QAM result is not limited to the
+# single deep cell. BG1 Z32 R~0.46 w3 -- the long cell where RL won on BPSK.
+LONG_CFG = R.Config(bg=1, ils=0, Z=32, mp=24, w=3, L=24, W=5, max_iter=12)
+CONFIGS = {"deep": CFG, "long": LONG_CFG}
+
+# candidate info-bit Eb/N0 grids per order; the full grid IS the waterfall.
+# Higher order needs more SNR for the same info-bit error rate.
 SNR_GRID = {
     16:  [3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0],
     64:  [8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0],
     256: [13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20.0],
+}
+# wider grids for the long, lower-rate config (probe-friendly: spans the waterfall)
+SNR_GRID_LONG = {
+    16:  [3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0],
+    64:  [5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0],
+    256: [11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0],
 }
 # training budgets (equal for rl_qam / rl_bpsk / random)
 STEPS, BATCH, FRAMES, VAL = 16, 24, 28, 200
@@ -255,11 +266,14 @@ def waterfall(cfg, assign, M, grid, frames_grid, pool):
     return pts
 
 
-def run(M):
-    fname = f"results_qam_construct_M{M}.json"
-    grid = SNR_GRID[M]; fg = _frames_grid(grid)
+def run(M, cfgtag="deep"):
+    global CFG
+    CFG = CONFIGS[cfgtag]
+    tag = "" if cfgtag == "deep" else f"{cfgtag}_"
+    fname = f"results_qam_construct_{tag}M{M}.json"
+    grid = (SNR_GRID if cfgtag == "deep" else SNR_GRID_LONG)[M]; fg = _frames_grid(grid)
     nw = R.n_workers()
-    print(f"M={M}  workers={nw}  SNR grid={grid}", flush=True)
+    print(f"M={M} cfg={cfgtag} (rate={CFG.build().rate:.3f})  workers={nw}  SNR grid={grid}", flush=True)
     with Pool(nw) as pool:
         if os.path.exists(fname):
             out = json.load(open(fname))
@@ -335,8 +349,8 @@ if __name__ == "__main__":
     if cmd == "agg":
         agg()
     elif cmd == "run":
-        run(int(sys.argv[2]))
+        run(int(sys.argv[2]), sys.argv[3] if len(sys.argv) > 3 else "deep")
     elif cmd == "rlqam":
         rerun_rlqam(int(sys.argv[2]))
     else:
-        raise SystemExit("usage: experiments_qam_construct.py [run <M>|rlqam <M>|agg]")
+        raise SystemExit("usage: experiments_qam_construct.py [run <M> [deep|long]|rlqam <M>|agg]")

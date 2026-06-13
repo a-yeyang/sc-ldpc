@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: yye-scldpc-floor
+  labels:
+    app: sc-ldpc-rl
+    owner: yye
+spec:
+  restartPolicy: Never
+  nodeSelector:
+    kubernetes.io/hostname: hpe-node144
+  containers:
+  - name: main
+    image: python:3.12-slim
+    command: ["sleep", "infinity"]
+    workingDir: /work
+    env:
+    - name: EXP_WORKERS
+      value: "64"
+    - name: OMP_NUM_THREADS
+      value: "1"
+    - name: OPENBLAS_NUM_THREADS
+      value: "1"
+    - name: MKL_NUM_THREADS
+      value: "1"
+    - name: VECLIB_MAXIMUM_THREADS
+      value: "1"
+    - name: NUMEXPR_NUM_THREADS
+      value: "1"
+    resources:
+      requests:
+        cpu: "64"
+        memory: "96Gi"
+        ephemeral-storage: "20Gi"
+      limits:
+        cpu: "64"
+        memory: "96Gi"
+        ephemeral-storage: "40Gi"

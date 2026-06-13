@@ -67,19 +67,29 @@ CELLS = {
                   snr=None, cand=[2.5, 3.0, 3.5, 4.0, 4.5], final=1500),
     "R0.9":  dict(cfg=R.Config(bg=1, ils=0, Z=16, mp=4, w=2, L=30, W=6, max_iter=12),
                   snr=None, cand=[3.5, 4.0, 4.5, 5.0, 5.5, 6.0], final=1500),
+    # AUDIT FIX (EXP-P1fix): the original R0.7/R0.8 auto-picked operating points
+    # landed too high on the waterfall (champion FER 0.36-0.49, poor discrimination).
+    # Re-pick at a lower target FER (0.15) over a higher SNR grid + more probe frames
+    # so the comparison sits in the clean waterfall region.  Fresh run (no resume).
+    "R0.7hi": dict(cfg=R.Config(bg=1, ils=0, Z=16, mp=11, w=2, L=30, W=6, max_iter=12),
+                   snr=None, cand=[3.0, 3.5, 4.0, 4.5, 5.0, 5.5], ftarget=0.15, final=1500),
+    "R0.8hi": dict(cfg=R.Config(bg=1, ils=0, Z=16, mp=8, w=2, L=30, W=6, max_iter=12),
+                   snr=None, cand=[3.5, 4.0, 4.5, 5.0, 5.5, 6.0], ftarget=0.15, final=1500),
 }
 
 # equal budget for every method (steps x batch evaluations); modest so 5 cells x
 # 4 methods x SEEDS stays feasible.  Champion re-eval uses `final` frames above.
 STEPS, BATCH, FRAMES, VAL = 16, 32, 24, 80
-SEEDS = [0, 1, 2, 3, 4]
-PROBE_N, PROBE_FRAMES = 64, 20
+# AUDIT FIX (EXP-S): 10 seeds (was 5) -> the long-code "RL beats random" win was
+# 5/5 with sign-test p=0.0625 (just above 0.05); 10 seeds can reach p<0.05.
+SEEDS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+PROBE_N, PROBE_FRAMES = 80, 40
 FINAL_SEED = 987654                       # SAME re-eval frames across all methods/seeds (fair)
 METHODS = ["rl_feature", "rl_peredge", "cem", "random"]
 
 
-def _freeze_snr(cfg, cand, pool):
-    """Pick the operating SNR ONCE (median random-construction FER ~0.25, in/before
+def _freeze_snr(cfg, cand, pool, target=0.25):
+    """Pick the operating SNR ONCE (median random-construction FER ~= target, in/before
     the waterfall) and freeze it for every seed -- so multi-seed CI is not muddied
     by a per-run op-point.  Mirrors experiments_construct_big.pick_snr."""
     rng = np.random.default_rng(0)
@@ -89,7 +99,7 @@ def _freeze_snr(cfg, cand, pool):
     usable = [i for i, m in enumerate(meds) if m >= 0.05]
     if not usable:
         return round(cand[0] - 1.0, 2)
-    return cand[min(usable, key=lambda i: abs(meds[i] - 0.25))]
+    return cand[min(usable, key=lambda i: abs(meds[i] - target))]
 
 
 def _champ_stats(cfg, assign):
@@ -134,7 +144,7 @@ def run_cell(label, pool):
     # freeze SNR
     snr = spec["snr"]
     if snr is None:
-        snr = out.get("snr") or _freeze_snr(cfg, spec["cand"], pool)
+        snr = out.get("snr") or _freeze_snr(cfg, spec["cand"], pool, target=spec.get("ftarget", 0.25))
     out["snr"] = snr
     rate = cfg.build().rate
     out["rate"] = rate
