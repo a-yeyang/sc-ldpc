@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
-<rect width="760" height="520" fill="white"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="785" height="520" font-family="DejaVu Sans, Arial, sans-serif" font-size="13">
+<rect width="785" height="520" fill="white"/>
 <text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">Learning curves R=0.875 w=3 (sample efficiency)</text>
 <line x1="78" y1="371.3" x2="590" y2="371.3" stroke="#e0e0e0"/>
 <text x="70" y="375.3" text-anchor="end">1e-2</text>

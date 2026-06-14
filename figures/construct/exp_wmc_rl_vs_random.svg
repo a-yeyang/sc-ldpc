@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
-<rect width="760" height="520" fill="white"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="672" height="520" font-family="DejaVu Sans, Arial, sans-serif" font-size="13">
+<rect width="672" height="520" fill="white"/>
 <text x="319.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">RL vs random search vs w (Monte-Carlo, long Z=32 codes)</text>
 <line x1="78" y1="460.0" x2="560" y2="460.0" stroke="#e8e8e8"/>
 <text x="70" y="464.0" text-anchor="end">-2.90</text>

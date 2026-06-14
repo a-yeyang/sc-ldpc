@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
-<rect width="760" height="520" fill="white"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="815" height="520" font-family="DejaVu Sans, Arial, sans-serif" font-size="13">
+<rect width="815" height="520" fill="white"/>
 <text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">Long SC-LDPC R=0.75 w=2 (BG1 Z=64, L=24)</text>
 <line x1="78" y1="424.3" x2="590" y2="424.3" stroke="#e0e0e0"/>
 <text x="70" y="428.3" text-anchor="end">1e-6</text>

@@ -15,13 +15,29 @@ def _nice_log_ticks(ymin, ymax):
     return [10.0 ** k for k in range(lo, hi + 1)]
 
 
+FONT = "DejaVu Sans, Arial, sans-serif"
+
+
+def _legend_margin(curves, font_size=13, stub=38, pad=22):
+    """Right margin wide enough for the longest legend label.
+
+    The legend draws a colour stub (``stub`` px) followed by the label text.
+    We estimate text width at ~0.58*font_size per character (generous for a
+    sans-serif font) so even the longest label stays inside the canvas.
+    """
+    longest = max((len(str(c.get("label", ""))) for c in curves), default=0)
+    return int(stub + longest * font_size * 0.58 + pad)
+
+
 def semilogy(curves, xlabel="Eb/N0 [dB]", ylabel="BER", title="",
              path="plot.svg", width=760, height=520):
     """curves: list of dicts {x:[...], y:[...], label:str, color:str}."""
     colors = ["#1f77b4", "#d62728", "#2ca02c", "#9467bd", "#ff7f0e", "#17becf",
               "#8c564b", "#e377c2", "#bcbd22", "#393b79", "#7f7f7f", "#aec7e8"]
-    ml, mr, mt, mb = 78, 170, 48, 60
-    pw, ph = width - ml - mr, height - mt - mb
+    ml, mt, mb = 78, 48, 60
+    mr = _legend_margin(curves)
+    pw, ph = width - ml - 170, height - mt - mb  # plot width as before (mr was 170)
+    width = ml + pw + mr  # widen canvas so the longest legend label fits
 
     xs = [x for c in curves for x in c["x"]]
     ys = [y for c in curves for y in c["y"] if y > 0]
@@ -41,7 +57,7 @@ def semilogy(curves, xlabel="Eb/N0 [dB]", ylabel="BER", title="",
         return mt + (lymax - math.log10(v)) / (lymax - lymin) * ph
 
     s = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
-         f'font-family="Helvetica,Arial,sans-serif" font-size="13">']
+         f'font-family="{FONT}" font-size="13">']
     s.append(f'<rect width="{width}" height="{height}" fill="white"/>')
     if title:
         s.append(f'<text x="{ml+pw/2}" y="26" text-anchor="middle" '
@@ -89,8 +105,10 @@ def semilogy(curves, xlabel="Eb/N0 [dB]", ylabel="BER", title="",
 def linear(curves, xlabel="x", ylabel="y", title="", path="plot.svg",
            width=760, height=520):
     """Linear-axis line plot (same curve dict format as `semilogy`)."""
-    ml, mr, mt, mb = 78, 200, 48, 60
-    pw, ph = width - ml - mr, height - mt - mb
+    ml, mt, mb = 78, 48, 60
+    mr = _legend_margin(curves)
+    pw, ph = width - ml - 200, height - mt - mb  # plot width as before (mr was 200)
+    width = ml + pw + mr  # widen canvas so the longest legend label fits
     xs = [x for c in curves for x in c["x"]]
     ys = [y for c in curves for y in c["y"]]
     if not xs or not ys:
@@ -106,7 +124,7 @@ def linear(curves, xlabel="x", ylabel="y", title="", path="plot.svg",
     def Y(v): return mt + (ymax - v) / (ymax - ymin) * ph
 
     s = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
-         f'font-family="Helvetica,Arial,sans-serif" font-size="13">',
+         f'font-family="{FONT}" font-size="13">',
          f'<rect width="{width}" height="{height}" fill="white"/>']
     if title:
         s.append(f'<text x="{ml+pw/2}" y="26" text-anchor="middle" '
@@ -165,7 +183,7 @@ def heatmap(M, row_labels, col_labels, title="", path="heatmap.svg",
         return f"rgb({r},{g},{b})", txt
 
     s = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" '
-         f'font-family="Helvetica,Arial,sans-serif" font-size="12">',
+         f'font-family="{FONT}" font-size="12">',
          f'<rect width="{W}" height="{H}" fill="white"/>']
     if title:
         s.append(f'<text x="{ml + nc*cell/2}" y="24" text-anchor="middle" '

@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" font-family="Helvetica,Arial,sans-serif" font-size="13">
-<rect width="760" height="520" fill="white"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="778" height="520" font-family="DejaVu Sans, Arial, sans-serif" font-size="13">
+<rect width="778" height="520" fill="white"/>
 <text x="334.0" y="26" text-anchor="middle" font-size="16" font-weight="bold">4-cycles vs chain length L (w=3)</text>
 <line x1="78.0" y1="48" x2="78.0" y2="460" stroke="#eee"/>
 <text x="78.0" y="480.0" text-anchor="middle">30.0</text>

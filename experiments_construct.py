@@ -19,6 +19,7 @@ Figures (dependency-free SVG):
 """
 from __future__ import annotations
 import json
+import os
 import sys
 import time
 import multiprocessing as mp
@@ -283,11 +284,25 @@ def make_plots(res=None):
                       title=f"RL construction search vs baselines @ {res['config']['train_snr']} dB",
                       path="exp_construct_learn.svg")
     # ---- BER vs SNR ----------------------------------------------------------
-    if "curves" in res:
-        order = ["rl_feature", "cem", "random_search", "round_robin", "seed0_default", "component"]
+    # Prefer the high-precision floor sweep (4000 frames/point, SNR grid to 4.0 dB)
+    # if present; fall back to the 2000-frame search curves otherwise.
+    order = ["rl_feature", "cem", "random_search", "round_robin", "seed0_default", "component"]
+    cur = None
+    try:
+        floor_path = os.path.join(OP.ROOT, "results", "construct", "results_floor_snr.json")
+        fl = json.load(open(floor_path))
+        grid = fl["snr_grid"]
+        cur = [{"x": grid,
+                "y": [fl["curves"][n][f"{x}"]["ber"] for x in grid],
+                "label": LABELS[n], "color": COLORS[n]}
+               for n in order if n in fl["curves"]]
+    except (FileNotFoundError, KeyError):
+        cur = None
+    if cur is None and "curves" in res:
         cur = [{"x": res["curves"][n]["x"], "y": res["curves"][n]["y"],
                 "label": LABELS[n], "color": COLORS[n]}
                for n in order if n in res["curves"]]
+    if cur:
         plotting.semilogy(cur, xlabel="Eb/N0 [dB]", ylabel="info BER",
                           title="RL-optimised SC-LDPC construction vs baselines (BPSK/AWGN, windowed)",
                           path="exp_construct_ber.svg")
