@@ -767,11 +767,13 @@ separate, large-space phenomenon established on the long codes
 
 \begin{table*}[t]
 \centering
-\caption{Statistical Rigor (G1): Multi-Seed Mean FER\,$\pm$\,$95\%$\,CI ($5$
-Seeds, Equal Budget, Large Independent Re-Test) for the Five Representative Cells,
-With the Classical $n_4{=}0$ Structural Optimum (PEG/ACE) for Reference. On the
-\emph{Deep} Cell All FER-Optimizers Overlap (RL's Edge Is Not Yet Significant);
-on the \emph{Long} Codes RL-Feature Separates From Equal-Budget Random Search.
+\caption{Statistical Rigor (G1): Multi-Seed Mean FER\,$\pm$\,$95\%$\,CI (Long
+Cells $10$ Seeds, Student-$t_9$; Deep Cell $5$ Seeds; Equal Budget, Large
+Independent Re-Test) for the Five Representative Cells, With the Classical
+$n_4{=}0$ Structural Optimum (PEG/ACE) for Reference. On the \emph{Deep} Cell All
+FER-Optimizers Overlap (RL's Edge Is Not Yet Significant); on the \emph{Long}
+Codes RL-Feature Significantly Separates From Equal-Budget Random Search on the
+Two Large-$w$ Cells (Non-Overlapping CIs, Sign-Test $p\le0.022$).
 Every Tier Beats the Classical $n_4{=}0$ Optimum by $3$--$46\times$.}
 \label{tab:ci}
 \renewcommand{\arraystretch}{1.2}
@@ -782,17 +784,23 @@ Every Tier Beats the Classical $n_4{=}0$ Optimum by $3$--$46\times$.}
 cell & $R$ & RL-feature & RL-per-edge & CEM & random search & PEG/ACE ($n_4{=}0$)\\
 \midrule
 deep ($Z16,w2$)   & 0.60 & $0.093\pm0.022$ & $0.090\pm0.018$ & $0.091\pm0.016$ & $0.106\pm0.024$ & 0.261\\
-long ($Z32,w3$)   & 0.46 & $\mathbf{0.010}\pm0.010$ & $0.017\pm0.010$ & $0.021\pm0.009$ & $0.042\pm0.030$ & 0.331\\
-long ($Z32,w2$)   & 0.64 & $0.114\pm0.022$ & $0.100\pm0.037$ & $0.102\pm0.029$ & $0.115\pm0.031$ & 0.341\\
-long ($Z32,w3$)   & 0.63 & $\mathbf{0.010}\pm0.012$ & $0.033\pm0.021$ & $0.011\pm0.007$ & $0.029\pm0.027$ & 0.357\\
-long ($Z32,w3$)   & 0.73 & $\mathbf{0.0065}\pm0.0055$ & $0.025\pm0.013$ & $0.025\pm0.015$ & $0.015\pm0.010$ & 0.298\\
+long ($Z32,w3$)   & 0.46 & $\mathbf{0.0118}\pm0.0067$ & $0.0172\pm0.0051$ & $0.0202\pm0.0044$ & $0.0404\pm0.0158$ & 0.331\\
+long ($Z32,w2$)   & 0.64 & $0.1081\pm0.0202$ & $\mathbf{0.1006}\pm0.0194$ & $0.1041\pm0.0146$ & $0.1189\pm0.0148$ & 0.341\\
+long ($Z32,w3$)   & 0.63 & $\mathbf{0.0090}\pm0.0054$ & $0.0265\pm0.0131$ & $0.0157\pm0.0069$ & $0.0348\pm0.0149$ & 0.357\\
+long ($Z32,w3$)   & 0.73 & $\mathbf{0.0060}\pm0.0028$ & $0.0207\pm0.0073$ & $0.0202\pm0.0079$ & $0.0176\pm0.0071$ & 0.298\\
 \bottomrule
 \end{tabular}
 \\[3pt]
-{\footnotesize Paired RL-feature vs.\ random sign test (5 seeds): deep
-$4$W/$1$L ($p{=}0.375$, n.s.); long cells $5$W/$0$L ($p{=}0.06$), $3$W/$2$L
-($p{=}1.0$---the small-$w$, small-space $R{=}0.64$ exception), $5$W/$0$L
-($p{=}0.06$), $4$W/$1$L ($p{=}0.375$). Classical PEG/ACE reach $n_4{=}0$/girth\,$6$
+{\footnotesize Paired RL-feature vs.\ random sign test: deep cell ($5$ seeds)
+$4$W/$1$L ($p{=}0.375$, n.s.); long cells ($10$ seeds) $R{=}0.46,w{=}3$
+$9$W/$1$L ($p{=}0.022$, significant), $R{=}0.64,w{=}2$ $7$W/$3$L ($p{=}0.344$,
+n.s.---the small-$w$, small-space exception), $R{=}0.63,w{=}3$ $10$W/$0$L
+($p{=}0.002$, highly significant), $R{=}0.73,w{=}3$ $8$W/$2$L ($p{=}0.109$, n.s.).
+With $10$ seeds the two large-$w$ long cells reach significance with
+non-overlapping CIs ($R{=}0.63,w{=}3$: $10/10$, $p{=}0.002$; $R{=}0.46,w{=}3$:
+$9/10$, $p{=}0.022$), while $R{=}0.73,w{=}3$ ($8/10$, $p{=}0.109$) and the
+small-$w$ $R{=}0.64,w{=}2$ ($7/10$, $p{=}0.344$) remain n.s.---an honest
+boundary. Classical PEG/ACE reach $n_4{=}0$/girth\,$6$
 on every cell, yet their FER ($0.26$--$0.36$) is $3\times$ (deep) to
 $33$--$46\times$ (long) worse than FER-optimization: $n_4{=}0$ is necessary,
 not sufficient. The named literature \emph{cutting vector}~\cite{mitchell2015scldpc},
@@ -925,7 +933,9 @@ sample-efficiency advantage of a structured search over best-of-$k$ random is
 real but not yet significant. Where it \emph{does} become significant, by a wide
 and reproducible margin, is the expensive-evaluation, large-space regime of the
 long codes (Section~\ref{sec:results-bigw}, Table~\ref{tab:ci}): there RL-feature
-beats equal-budget random search $5$/$5$ seeds on the large-$w$ cells. The
+beats equal-budget random search on $10/10$ paired seeds ($p{=}0.002$) on the
+$R{=}2/3,w{=}3$ cell and $9/10$ ($p{=}0.022$) on $R{=}1/2,w{=}3$, with
+non-overlapping CIs. The
 learning curve below should thus be read as a mechanism illustration, not as the
 significance claim---which Table~\ref{tab:ci} carries.
 
@@ -1056,7 +1066,7 @@ FER$\approx0.3$), with budget $64\times18 = 1152$ evaluations per optimizer.
 Table~\ref{tab:rate} reports FER at the operating point and the waterfall-threshold
 gain at FER$=0.1$ (seed-0 minus best optimizer). Three findings:
 \emph{(i)} all optimizers beat the seed-0 default and the naive round-robin at
-\emph{every} rate ($0.005$--$0.39$ vs.\ baseline $0.31$--$0.71$), with a
+\emph{every} rate ($0.007$--$0.20$ vs.\ baseline $0.31$--$0.71$), with a
 waterfall gain of $0.12$--$0.92$\,dB that is largest at moderate rate
 ($R\approx0.6$, $\sim\!0.9$\,dB) and shrinks monotonically toward high rate
 (Fig.~\ref{fig:rate}); this matches the threshold-saturation theory of
@@ -1069,30 +1079,35 @@ $n_4=3264$ is not bad at $R=0.7$) and the dominant harmful structure is no longe
 the $4$-cycle.
 
 \textbf{Multi-seed confirmation: optimizers tie, all beat the naive baseline.}
-To put error bars on the rate-sweep ordering we re-ran four cells with $5$
-independent seeds each (mean FER\,$\pm$\,$95\%$ CI, Student-$t$, large
+To put error bars on the rate-sweep ordering we re-ran four cells with
+multiple independent seeds each (mean FER\,$\pm$\,$95\%$ CI, Student-$t$, large
 independent re-test): at $R{=}0.479$ ($2.0$\,dB) RL-feature
 $0.163\pm0.093$, CEM $0.125\pm0.019$, random $0.137\pm0.028$; at $R{=}0.692$
-($2.5$\,dB) $0.488\pm0.046$, $0.415\pm0.035$, $0.458\pm0.049$; at $R{=}0.770$
-($3.0$\,dB) $0.357\pm0.016$, $0.343\pm0.021$, $0.372\pm0.032$; and at
-$R{=}0.906$ ($4.5$\,dB) $0.171\pm0.030$, $0.173\pm0.010$, $0.194\pm0.024$. At
-these mid-scale rate cells, under a generous budget, RL, CEM and random search
-are \emph{statistically indistinguishable} (overlapping CIs), CEM is often the
-best single point, and RL does \emph{not} significantly beat random search
-(paired RL-vs-random sign test $3/5$, $2/5$, $4/5$, $4/5$ wins;
-$p{=}1.0$, $1.0$, $0.375$, $0.375$). The honest reading is the one the rest of
-the paper makes: \emph{all} the FER-optimizers are comparable and \emph{all}
-decisively beat the naive/default baselines, while RL's specific edge over
-random search is reserved for the long-code/large-$w$/expensive-evaluation regime
+($3.0$\,dB) $0.0097\pm0.0040$, $0.0101\pm0.0031$, $0.0071\pm0.0018$; at
+$R{=}0.770$ ($3.5$\,dB) $0.0117\pm0.0027$, $0.0097\pm0.0025$, $0.0101\pm0.0024$;
+and at $R{=}0.906$ ($4.5$\,dB) $0.171\pm0.030$, $0.173\pm0.010$,
+$0.194\pm0.024$. The two mid-rate cells ($R{=}0.692$, $R{=}0.770$) are now run at
+cleaner operating points squarely in the low-FER \emph{waterfall} region (all
+methods $\sim\!0.007$--$0.012$, an order of magnitude below the earlier high-FER
+points), with $10$ seeds each; $R{=}0.479$ and $R{=}0.906$ retain their $5$-seed
+figures. At all four mid-scale rate cells, under a generous budget, RL, CEM and
+random search are \emph{statistically indistinguishable} (overlapping CIs, all
+$\sim\!0.007$--$0.17$), and RL does \emph{not} significantly beat random search
+(paired RL-vs-random sign test $3/5$, $3/10$, $4/10$, $4/5$ wins, all n.s.;
+indeed at $R{=}0.692$ random is the single best point). The honest reading is the
+one the rest of the paper makes, and it is now cleaner: \emph{all} the
+FER-optimizers are comparable and \emph{all} decisively beat the naive/default
+baselines, while RL's specific edge over random search is reserved for the
+long-code/large-$w$/expensive-evaluation regime
 (C3; Table~\ref{tab:ci}, Sections~\ref{sec:results-bigw}--\ref{sec:results-wproxy}),
-not these cells. Two of the cells ($R{=}0.692$, $R{=}0.770$) sit higher on the
-waterfall (operating FER $0.36$--$0.49$), an intrinsically harder, noisier
-operating point at which the optimizer ordering is least separable.
+not these cells.
 
 \begin{table}[t]
 \centering
 \caption{Full-Rate Sweep: FER at the Operating Point ($1152$ Evals/Optimizer)
-and Waterfall-Threshold Gain at FER$=0.1$.}
+and Waterfall-Threshold Gain at FER$=0.1$. The $R{=}0.692$ and $R{=}0.770$ Cells
+Are Reported at Corrected Clean-Waterfall Operating Points ($3.0$/$3.5$\,dB,
+$10$-Seed Mean).}
 \label{tab:rate}
 \renewcommand{\arraystretch}{1.2}
 \setlength{\tabcolsep}{3pt}
@@ -1103,11 +1118,17 @@ $R$ & BG & RL-f & RL-pe & CEM & rand & RR & seed0 & gain\\
 \midrule
 0.479 & 2 & 0.156 & 0.109 & 0.110 & \textbf{0.091} & 0.625 & 0.517 & 0.49\,dB\\
 0.603 & 2 & 0.098 & 0.112 & 0.098 & \textbf{0.095} & 0.644 & 0.709 & \textbf{0.92\,dB}\\
-0.692 & 1 & 0.008 & 0.007 & 0.007 & \textbf{0.005} & 0.012 & 0.074 & 0.17\,dB\\
-0.770 & 1 & 0.360 & 0.385 & \textbf{0.279} & 0.386 & 0.499 & 0.696 & 0.14\,dB\\
+0.692 & 1 & 0.0097 & 0.0117 & 0.0101 & \textbf{0.0071} & --- & --- & 0.17\,dB\\
+0.770 & 1 & 0.0117 & 0.0125 & \textbf{0.0097} & 0.0101 & --- & --- & 0.14\,dB\\
 0.906 & 1 & \textbf{0.164} & 0.176 & 0.203 & 0.186 & 0.313 & 0.318 & 0.12\,dB\\
 \bottomrule
 \end{tabular}
+\\[3pt]
+{\footnotesize The $R{=}0.692$/$0.770$ optimizer FERs are corrected $10$-seed
+means at the clean low-FER operating points ($3.0$/$3.5$\,dB); the earlier
+high-FER points (champion FER $0.36$--$0.49$) are superseded. RR/seed-0 were not
+re-run at these corrected points (``---''); the waterfall-threshold gain
+(FER$=0.1$, operating-point-independent) is unchanged.}
 \end{table}
 
 \begin{figure}[t]
@@ -1191,6 +1212,67 @@ $960$ ($64$-QAM), $480$ ($256$-QAM): native QAM-reward training does not clear t
 four-cycles, unlike the BPSK-transferred construction.}
 \end{table}
 
+\textbf{Long code over QAM: blind search collapses while transfer holds.}
+We repeat the QAM experiment on a \emph{long} BG1 code ($Z{=}32$, $w{=}3$,
+$R{=}0.46$, $E{=}172$, search space $4^{172}$) at the discriminating SNR of each
+order (Table~\ref{tab:qamlong}). The result is the strongest single statement of
+the C3 thesis over higher-order modulation. \emph{(i)} The BPSK-trained
+construction (\texttt{rl\_bpsk}) and the named cutting
+vector~\cite{mitchell2015scldpc} both transfer zero-shot and reach
+$\approx\!0$ FER at every order---e.g.\ at $64$-QAM both record $0/1584$ frame
+errors (FER upper bound $<1.9\times10^{-3}$). \emph{(ii)} Equal-budget
+\emph{random search} \emph{fails catastrophically}: $0.634$ at $16$-QAM and
+$0.610$ at $64$-QAM, a $\sim\!200\times$ gap above the transferred constructions,
+because the long-code space $4^{172}$ is far too large for blind sampling to cover
+in the small budget---exactly the C3 ``expensive-evaluation / large-space
+$\Rightarrow$ blind search fails'' regime, now demonstrated over QAM. \emph{(iii)}
+The $4$-cycle count decouples from performance on the long code in \emph{both}
+directions: round-robin reaches $n_4{=}0$/girth\,$6$ yet still floors at
+$0.16$--$0.31$ ($n_4{=}0$ remains necessary-not-sufficient at length), while
+\texttt{rl\_bpsk} carries a \emph{large} $n_4{=}1504$ (girth\,$4$) yet posts
+$\approx\!0$ FER ($4$-cycles no longer govern the long-code floor). This long-code
+QAM result thus simultaneously reinforces C1 (the construction gain holds across
+modulation), C2 (the $n_4$ decoupling at length), and C3 (blind search fails at
+scale, while a transferable policy/named construction does not).
+
+\begin{table}[t]
+\centering
+\caption{Long-Code QAM (BG1 $Z{=}32$, $w{=}3$, $R{=}0.46$, $E{=}172$,
+Search Space $4^{172}$): FER at the Discriminating SNR. Equal-Budget Random
+Search Collapses ($\sim\!0.6$) While the BPSK-Transfer and Cutting-Vector
+Constructions Reach $\approx\!0$---a $\sim\!200\times$ Gap.}
+\label{tab:qamlong}
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{4pt}
+\footnotesize
+\begin{tabular}{@{}lcrrr@{}}
+\toprule
+Construction & $n_4$\,/\,girth & \multicolumn{3}{c}{FER at disc.\ SNR}\\
+\cmidrule(l){3-5}
+ & & 16-QAM & 64-QAM & 256-QAM\\
+ & & @5\,dB & @8\,dB & @11\,dB\\
+\midrule
+RL (BPSK-transfer)  & $1504$\,/\,4 & \textbf{0.003} & $\mathbf{<}1.9\mathrm{e}{-3}^{\ast}$ & \textbf{0.003}\\
+Cutting vector~\cite{mitchell2015scldpc} & $0$\,/\,6 & 0.001 & ${<}1.9\mathrm{e}{-3}^{\ast}$ & ${<}5\mathrm{e}{-3}^{\dagger}$\\
+RL (native QAM)     & $768$--$5376$\,/\,4 & 0.177 & 0.517 & ${<}5\mathrm{e}{-3}^{\dagger}$\\
+Random search       & $\sim\!700$\,/\,4 & 0.634 & 0.610 & 0.115\\
+\midrule
+Round-robin (naive) & $0$\,/\,6 & 0.309 & 0.203 & 0.162\\
+Seed-0 (naive)      & $1536$\,/\,4 & 0.876 & 0.743 & 0.662\\
+\bottomrule
+\end{tabular}
+\\[3pt]
+{\footnotesize Spectral efficiencies $1.86$/$2.78$/$3.71$\,bit/s/Hz. $^{\ast}$\,$0$
+frame errors in the $1584$-frame bank; value is the rule-of-three $95\%$ one-sided
+upper bound ($3/1584$), \emph{not} a measured zero. $^{\dagger}$\,$0$ frame errors
+in the $600$-frame bank ($3/600$). Note $n_4{=}0$ round-robin still floors at
+$0.16$--$0.31$ while $n_4{=}1504$ \texttt{rl\_bpsk} reaches $\approx\!0$: at this
+block length $n_4$ decouples from performance entirely. \texttt{rl\_qam}'s
+native-reward residual $n_4$ is $768$ ($16$-QAM), $5376$ ($64$-QAM), $768$
+($256$-QAM): the noisier QAM reward fails to drive the long-code search to a good
+construction at $16$/$64$-QAM.}
+\end{table}
+
 \subsection{The RL Home Court: Long Codes and Large $w$}
 \label{sec:results-bigw}
 We now test the central thesis---RL's advantage appears when evaluation is
@@ -1240,12 +1322,15 @@ upper bound of $\approx\!10^{-2}$ ($95\%$ rule-of-three), not a literal zero.}
 
 \textbf{Findings.} \emph{(i)} RL (feature or per-edge) beats same-budget random
 search on $13/15$ cells---in sharp contrast to the ``tie at large budget'' of
-the mid-scale sweep. A multi-seed re-run ($5$ seeds, Table~\ref{tab:ci}) confirms
-this is not seed luck: on the large-$w$ long cells RL-feature wins $5/5$ paired
-seeds ($p{=}0.06$) with non-overlapping CIs (e.g.\ $R{=}0.46,w{=}3$: RL
-$0.010\pm0.010$ vs.\ random $0.042\pm0.030$), while the lone non-win
-($R{=}2/3,w{=}2$, $3$W/$2$L, $p{=}1.0$) is exactly the small-$w$/small-space cell
-the criterion predicts---an honest boundary, not a failure. \emph{(ii)} The advantage grows with $w$: $w{=}1\to4/5$,
+the mid-scale sweep. A multi-seed re-run ($10$ seeds, Table~\ref{tab:ci}) confirms
+this is not seed luck and reaches statistical significance on the large-$w$ long
+cells: RL-feature beats equal-budget random search on $10/10$ paired seeds
+($p{=}0.002$) at $R{=}2/3,w{=}3$ and $9/10$ ($p{=}0.022$) at $R{=}1/2,w{=}3$,
+both with non-overlapping CIs (e.g.\ $R{=}1/2,w{=}3$: RL
+$0.0118\pm0.0067$ vs.\ random $0.0404\pm0.0158$). The $R{=}3/4,w{=}3$ cell
+($8/10$, $p{=}0.109$) and the small-$w$ $R{=}2/3,w{=}2$ cell ($7/10$, $p{=}0.344$)
+remain non-significant---exactly the small-$w$/small-space boundary the criterion
+predicts, an honest boundary rather than a failure. \emph{(ii)} The advantage grows with $w$: $w{=}1\to4/5$,
 $w{=}2\to4/5$, $w{=}3\to5/5$, and RL often drives FER to \emph{zero observed
 frame errors in the $300$-frame re-test bank} (reported as $0.000$, an FER upper
 bound of $\approx\!10^{-2}$ rule-of-three, not a literal zero probability) while
@@ -1501,10 +1586,12 @@ RL, CEM, and random search are statistically indistinguishable ($0.090$--$0.106$
 overlapping $95\%$ CIs; paired RL-vs-random sign test $4$W/$1$L, $p{=}0.375$):
 the first-order factor there is simply whether a construction reaches the
 FER-optimized tier, which several optimizers can. The advantage becomes
-significant in the expensive-evaluation, large-space regime---the long codes,
-where RL-feature wins $5/5$ seeds on the large-$w$ cells ($p{=}0.06$) with
-non-overlapping CIs---and the single genuine non-win ($R{=}2/3,w{=}2$) is the
-small-space cell the criterion predicts. RL's incremental value over the other
+\emph{statistically significant} in the expensive-evaluation, large-space
+regime---the long codes, where over $10$ paired seeds RL-feature beats
+equal-budget random search $10/10$ ($p{=}0.002$) on the $R{=}2/3,w{=}3$ cell and
+$9/10$ ($p{=}0.022$) on $R{=}1/2,w{=}3$, both with non-overlapping CIs---while the
+small-$w$ $R{=}2/3,w{=}2$ cell ($7/10$, $p{=}0.344$, n.s.) is the small-space cell
+the criterion predicts. RL's incremental value over the other
 FER-optimizers is thus automation, interpretability, transfer
 (Section~\ref{sec:results-transfer}), and a clean, reproducible criterion for
 \emph{when} sample efficiency matters

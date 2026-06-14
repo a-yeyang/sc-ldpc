@@ -71,10 +71,13 @@ CELLS = {
     # landed too high on the waterfall (champion FER 0.36-0.49, poor discrimination).
     # Re-pick at a lower target FER (0.15) over a higher SNR grid + more probe frames
     # so the comparison sits in the clean waterfall region.  Fresh run (no resume).
+    # FIXED operating SNR (the auto-freeze overshot to FER~1.0 on these steep
+    # high-rate waterfalls): 3.0/3.5 dB put the optimized champions in the clean
+    # waterfall region (~0.05-0.2) and the naive baselines well above.
     "R0.7hi": dict(cfg=R.Config(bg=1, ils=0, Z=16, mp=11, w=2, L=30, W=6, max_iter=12),
-                   snr=None, cand=[3.0, 3.5, 4.0, 4.5, 5.0, 5.5], ftarget=0.15, final=1500),
+                   snr=3.0, cand=None, final=1500),
     "R0.8hi": dict(cfg=R.Config(bg=1, ils=0, Z=16, mp=8, w=2, L=30, W=6, max_iter=12),
-                   snr=None, cand=[3.5, 4.0, 4.5, 5.0, 5.5, 6.0], ftarget=0.15, final=1500),
+                   snr=3.5, cand=None, final=1500),
 }
 
 # equal budget for every method (steps x batch evaluations); modest so 5 cells x
